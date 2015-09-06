@@ -1,0 +1,355 @@
+\chapter{Distanzverteilungskomplexit"at}
+
+
+% gcc
+% Gnuplot
+% PostScript
+
+\section{Distanzverteilungen}
+\label{ddistr-method}
+
+\subsection{Ansatz der Distanzverteilungsanalyse und formale Definition}
+
+Die Lebensformen, die derzeit auf der Erde beobachtet werden,
+bilden auf mehreren Ebenen deutlich voneinander abgegrenzte Gruppen, die als Taxons bezeichnet werden.
+Diese taxonomische Struktur wird durch die Klassifizierung der Lebensformen 
+in verschiedenen \introdef{taxonomische Kategorien} (Spezies,
+Gattung, Familie, Ordnung, Klasse, Abteilung bzw.\ Stamm, Reich)
+wiedergegeben. Die Spezies ist dabei die speziellste taxonomische
+Kategorie, die "ubergeordneten Kategorien sind zunehmend allgemeiner,
+das Reich schlie"slich ist die umfassendste, allgemeinste Kategorie.
+
+Jede taxonomische Kategorie ist durch charakteristische Gemeinsamkeiten
+gekennzeichnet. Je umfassender die Kategorie ist, desto geringer ist das
+charakteristische Ausma"s an Gemeinsamkeiten, desto gr"o"ser ist also
+auch die Variabilit"at und Diversit"at in den Taxons der entsprechenden
+Kategorie. In einem Taxon einer allgemeinen taxonomischen Kategorie k"onnen Organismen
+also nur entfernt miteinander verwandt sein, Organismen, die
+in einer speziellen taxonomischen Kategorie zu einem gemeinsamen Taxon
+geh"oren, sind dagegen eng miteinander verwandt.
+
+Die "Ahnlichkeit bzw.\ Unterschiedlichkeit von verschiedenen Organismen oder
+von Teilkomponenten verschiedener Organismen kann quantitativ durch ein
+geeignetes Distanzma"s ausgedr"uckt werden. Je enger zwei Organismen miteinander
+verwandt sind, desto kleiner ist die Distanz zwischen beiden. Zwei Organismen,
+die zu einem Taxon einer speziellen taxonomischen Kategorie geh"oren,
+werden somit eine charakteristische, geringe Distanz zueinander haben.
+Eine ebenfalls charakteristische, gr"o"sere Distanz wird man dagegen
+zwischen Organismen ermitteln, die verschiedenen Taxons der speziellen
+Kategorie angeh"oren und nur auf einer allgemeinen Ebene dem gleichen
+Taxon zugerechnet werden.
+% hier ggfs. Beispiele
+
+Betrachtet man nun eine Population verschiedener Lebensformen, so kann man nach dieser
+"Uberlegung einen Eindruck von der taxonomischen Struktur in dieser Population erhalten,
+indem man die Verteilung der Werte in einer Matrix der paarweisen Distanzen untersucht.
+Eine H"aufung von Distanzwerten in einem bestimmten Bereich deutet darauf hin, da"s in der
+Population Paare von Lebensformen existieren, deren speziellste gemeinsame taxonomische
+Kategorie einen in diesem Bereich liegenden charakteristischen Distanzwert hat. Existiert
+also nur eine taxonomische Kategorie, ist mit einer H"aufung aller Distanzwerte im Bereich
+des entsprechenden einen charakteristischen Distanzwerts zu rechnen. Mehrere Peaks weisen
+dagegen auf eine komplexe taxonomische Struktur mit mehreren Kategorien hin. Die Verteilung
+der Distanzwerte kann somit als Indiz f"ur die taxonomische Struktur einer Population dienen
+(vgl.\ \cite{Higgs92}).
+Abb.\ \ref{taxcat-fig} illustriert die Beziehung
+zwischen taxonomischen Kategorien und charakteristischen Distanzen.
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,5.5)
+\put(0,0.5){\makebox(8,5)[bl]{\epsfxsize=7cm \epsffile{h.eps}}}
+\put(9,0.5){\makebox(7,5)[br]{\epsfxsize=6cm \epsffile{h_distr.eps}}}
+\put(0,0){\makebox(16,0.5){(a) Randomisierte Taxonomie}}
+\end{picture}
+
+\unitlength1cm
+\begin{picture}(16,5.5)
+\put(0,0.5){\makebox(8,5)[bl]{\epsfxsize=7cm \epsffile{l.eps}}}
+\put(9,0.5){\makebox(7,5)[br]{\epsfxsize=6cm \epsffile{l_distr.eps}}}
+\put(0,0){\makebox(16,0.5){Konvergierte Taxonomie}}
+\end{picture}
+
+\unitlength1cm
+\begin{picture}(16,5.5)
+\put(0,0.5){\makebox(8,5)[bl]{\epsfxsize=7cm \epsffile{m.eps}}}
+\put(9,0.5){\makebox(7,5)[br]{\epsfxsize=6cm \epsffile{m_distr.eps}}}
+\put(0,0){\makebox(16,0.5){Komplexe Taxonomie}}
+\end{picture}
+
+\caption[Beziehung zwischen taxonomischen Kategorien und Distanzenverteilungen]
+{\label{taxcat-fig}
+Beziehung zwischen taxonomischen Kategorien und Distanzenverteilungen. Die Abbildungen zeigen
+links Verwandtschaftsb"aume, die zu Populationen unterschiedlicher Charakteristik konstruiert wurden.
+Die Skala neben jedem Baum zeigt den Ma"sstab f"ur die L"ange der Kanten. L"angen werden nur in
+der senkrechten Richtung dargestellt.
+Rechts ist jeweils die Verteilung der Werte in der Distanzmatrix des entsprechenden Baums dargestellt.
+(a) Eine Population aus
+zufallsgesteuert generierten Genomen weist eine randomisierte Taxonomie auf. Alle Genome sind verwandtschaftlich
+weit voneinander entfernt. Die Distanzwerte h"aufen sich in einem engen Bereich um den Erwartungswert
+f"ur die Distanz zwischen unkorrelierten Genomen. (b) In einer Population, die in einem kleinen
+Teilraum des Sequenzraums konvergiert ist, sind alle Genome paarweise eng miteinander verwandt.
+Gr"o"sere Cluster von Genomen sind sogar vollst"andig identisch. Die Distanzen h"aufen sich im
+Bereich kleiner Werte. (c) Verwandtschaftsbaum einer Population mit komplexer Taxonomie. Zwei verschiedene
+taxonomische Kategorien sind in dem Baum deutlich unterscheidbar. Es existieren drei Cluster mit
+engerer Verwandtschaft zwischen den Genomen, die die Ebene einer spezielleren taxonomischer Kategorie
+repr"asentieren. Die Verwandtschaftsstruktur der Cluster untereinander stellt eine "ubergeordnete
+taxonomische Kategorie dar; Genome, die zu unterschiedlichen Clustern geh"oren, haben eine erheblich
+geringere Verwandtschaft als solche, die dem gleichen Cluster angeh"oren. Dementsprechend sind in der
+Distanzverteilung zwei klar getrennte Peaks zu sehen. Die Distanzwerte sind deutlich gleichm"a"siger verteilt
+als bei einer randomisierten oder einer konvergierten Population.
+}
+\end{figure}
+
+Die Abbildung zeigt, da"s Distanzverteilungen von randomisierten und von konvergierten Populationen
+von einer Verschiebung abgesehen "ahnlich sind, in beiden konzentrieren sich die h"aufigen Distanzwerte
+in einem kleinen Bereich, wo sie einen hohen Peak bilden. Diese Gemeinsamkeit kann auf eine strukturelle
+"Ahnlichkeit zwischen beiden Populationstypen zur"uckgef"uhrt werden. Eine konvergierte Population befindet
+sich vollst"andig in einem kleinen Teilraum des gesamten Sequenzraums, ihre Individuen sind in diesem Teilraum jedoch
+relativ gleichm"a"sig verteilt. Sowohl randomisierte als auch konvergierte Populationen k"onnen also als
+gleichm"a"sig verteilte Populationen bezeichnet werden, wobei der Streubereich der Verteilung bei
+randomisierten Populationen maximal, bei konvergierten Populationen hingegen klein ist. Populationen mit
+komplexer Taxonomie geh"oren dagegen nicht zu den gleichm"a"sig verteilten Populationen. Vielmehr zerfallen
+sie in mindestens zwei Subpopulationen, die jeweils als gleichm"a"sig verteilte Populationen charakterisiert
+werden k"onnen. Das Beispiel in Abb.\ \ref{taxcat-fig}c zeigt eine in drei Subpopulationen eingeteilte
+Population. Weitere taxonomische Kategorien entstehen, wenn derartige Subpopulationen ihrereseits in eine
+charakteristische Clusterstruktur zerfallen.
+
+Die formale Definition einer \introdef{Distanzverteilung} lautet:
+Sei $P = \{g_0, g_1, \ldots , g_{n-1}\}$ eine Population aus $n$ Individuen
+und $D$ ein diskretes Distanzma"s. Dann ist die Distanzverteilung $F$ definiert
+durch:
+
+\begin{equation}
+\label{ddistr-eq}
+F(d) := | \{(g_i, g_j) : g_i, g_j \in P, D(g_i, g_j) = d, i < j\} |
+\end{equation}
+
+Durch die Bedingung $i < j$ wird erreicht, da"s jede Distanz nur
+einmal gez"ahlt wird.
+
+Aus jedem realwertigen Distanzma"s $D$ kann durch die Unterteilung des Wertebereichs
+in Intervalle einer Gr"o"se $\delta$ ein diskretes Distanzma"s $D_{\delta}$
+abgeleitet werden:
+
+\begin{equation}
+D_{\delta}(g_i, g_j) := \left\lfloor \frac{D(g_i, g_j)}{\delta} \right\rfloor
+\end{equation}
+
+Damit k"onnen auch mit realwertigen Distanzma"sen Distanzverteilungen
+berechnet werden, deren Gestalt nat"urlich durch die Gr"o"se des
+Diskretisierungsintervalls $\delta$ ma"sgeblich mitbestimmt wird.
+
+
+\subsection{Distanzverteilung molekularer Sequenzen}
+
+\begin{figure}
+\centerline{\epsfxsize=8cm \epsffile{publ-fullmads-raw.eps}}
+\caption[Distanzverteilung der Aminos"auresequenzen von MADS-Boxen]
+{\label{mads-ddistr}
+Distanzverteilung der Aminos"auresequenzen von MADS-Boxen. Von einer Sequenzmenge aus 95  MADS-Box-Sequenzen
+wurde eine Matrix der Hamming-Distanzen erzeugt und von dieser die Distanzverteilung ermittelt. Die MADS-Box-Sequenzen
+sind 60 Aminos"auren lang. Der Datensatz stammt aus \protect\cite{Theissen95a}.
+}
+\end{figure}
+
+Da die Lebensformen der Erde eine komplexe taxonomische Struktur mit mehreren Kategorien bilden, sollten
+auch die in S"atzen molekularer Sequenzen gemessenen Distanzwerte eine entsprechend gleichm"a"sige Verteilung
+aufweisen. Um dies zu belegen, wurde die Verteilung der Hamming-Distanzen von 95 Aminos"auresequenzen
+von MADS-Boxen (s.\ \ref{modellansatz}) berechnet. Der Datensatz der MADS-Boxen stammt aus \cite{Theissen95a}.
+Abb.\ \ref{mads-ddistr} zeigt die Distanzverteilung der MADS-Boxen. Ihre Charakteristik kann
+eindeutig einer komplexen taxonomischen Struktur zugeordnet werden. Die Werte verteilen sich auf einem relativ
+ausgedehnten Bereich, mehrere Peaks sind deutlich erkennbar. Da in diesem Datensatz, der aus \cite{Theissen95a}
+entnommen ist, das gesamte Spektrum der taxonomischen Kategorien vertreten ist, sind die Peaks nicht so deutlich
+separiert wie in Abb.\ \ref{taxcat-fig}c, sondern sie "uberlagern sich gegenseitig. Eine weitere Gemeinsamkeit
+zwischen Abb.\ \ref{taxcat-fig}c und Abb.\ \ref{mads-ddistr} ist das Fehlen extrem hoher Distanzwerte.
+
+
+% Einfache Distanzmasse: Hamming-Distanz, Editierabstand,
+% Komplexe Masse: -> PHYLIP, dnadist, protdist (JC, K2P, ...)
+% Sinnvolle Wahl: Normierung diskreter Masse -> kontinuierliches Mass
+%    -> Diskretisierung s.d. Groessenordnung in der des diskreten
+%    Masses wieder erreicht wird.
+
+\subsection{Visualisierung von Distanzverteilungen}
+
+Einzelne Distanzverteilungen k"onnen als Histogramme graphisch dargestellt
+werden. Zur Visualisierung der zeitlichen Entwicklung der Distanzverteilungen
+beim Ablauf eines Evolutionsprozesses ist die Histogrammdarstellung jedoch
+nicht mehr praktikabel. Stattdessen wird eine Grauwertdarstellung verwendet,
+die in Abb.\ \ref{ddistrs-fig} erl"autert wird.
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,6)
+\put(0,1){\makebox(8,5)[b]{\epsfxsize=8cm \epsffile{hgram.eps}}}
+\put(9,1){\makebox(7,5)[b]{\epsfxsize=5cm \epsffile{hgpro.eps}}}
+{\ttfamily
+\put(0,0){\makebox(8,1){(a)}}
+\put(9,0){\makebox(7,1){(b)}}
+}
+\end{picture}
+
+\caption[Darstellung von Zeitserien von H"aufigkeitsverteilungen mithilfe von Grauwerten.]{\label{ddistrs-fig}
+Darstellung von Zeitserien von H"aufigkeitsverteilungen mithilfe von Grauwerten.
+(a) zeigt eine Serie von 10 Verteilungen in S"aulendiagrammform. Die Stirnfl"achen
+der S"aulen sind in Abh"angigkeit von der H"ohe der S"aule gef"arbt; eine dunklere
+F"arbung zeigt einen h"oheren H"aufigkeitswert an. \newline
+(b) zeigt dieselbe Serie, es wurde jedoch ausschlie"slich die Farbcodierung
+verwendet. Anschaulich gesprochen, erh"alt man (b) aus (a), indem man das
+S"aulendiagramm (a) von oben betrachtet. Einzelne Werte k"onnen der Grauwertcodierung
+nur schwer und mit geringer Genauigkeit entnommen werden. Globale Strukturen
+treten in der Grauwertcodierung dagegen deutlicher hervor; die diagonale Streifenstruktur
+ist in (b) erheblich besser zu erkennen als in (a).
+}
+\end{figure}
+
+% dies bei erster Diskussion bei lndga
+
+% Die speziellste taxonomische Kategorie in einer Population kann als
+% Quasispecies \cite{Eigen71} aufgefa"st werden. Eine Population, in der
+% mehrere Quasispecies koexisitieren, hat daher eine Distanzverteilung
+% mit mindestens zwei Peaks, wobei ein Peak bei kleineren Werten von den
+% intraspezifischen Distanzen, der andere Peak bei gr"o"seren Werten von
+% den interspezifischen Distanzen herr"uhrt. Eine Distanzverteilung mit
+% nur einem Peak zeigt dagegen eine Population mit nur einer Quasispecies
+% an. Der Distanzbereich, in dem der Peak liegt, h"angt in diesem Fall von
+% der Variationsbreite innerhalb der Quasispecies ab; ein Peak im Bereich
+% gro"ser Distanzen weist auf gro"se intraspezifische Variablilit"at hin.
+
+% Zeitserien von Distanzverteilungen
+
+% Randomisierte Population -> 1 Quasispecies
+% Uniforme Population -> 1 Quasispecies.
+
+% Editierabstand als geeignetes Distanzmass
+
+
+\section{Distanzverteilungskomplexit"at}
+\label{ddc-method}
+
+Aus den in (\ref{ddc-method}) dargelegten "Uberlegungen folgt, da"s die Werte
+in der Distanzverteilung umso gleichm"a"siger verteilt sind, je mehr taxonomische
+Kategorien die Population aufweist. Wenn alle Individuen einer Population ungef"ahr
+gleich eng miteinander verwandt sind, wenn sie also alle eine Quasispecies bilden,
+sind die Distanzwerte in dem Distanzbereich, der dem charakteristischen Verwandtschaftsgrad
+der Quasispecies entspricht, konzentriert. Sind dagegen mehrere Quasispecies in der
+Population, verteilen sich die Distanzwerte in einem breiteren Spektrum. Die
+weiteste Verteilung tritt dann auf, wenn die Quasispecies in einer mehrstufigen
+Hierarchie taxonomischer Kategorien organisiert sind.
+
+Die Gleichm"a"sigkeit der Verteilung von Werten kann mithilfe der Shannon-Entropie \cite{Shannon}
+quantitativ charakterisiert werden. Je gleichm"a"siger die Verteilung der Werte in einer Verteilung
+ist, desto h"oher ist die Shannon-Entropie der entsprechenden Verteilung. Da eine gleichm"a"sige
+Verteilung der Distanzwerte auf eine komplexe taxonomische Struktur schlie"sen l"a"st, wird
+die Shannon-Entropie der Distanzverteilung als \introdef{Distanzverteilungskomplexit"at} (DVK) \cite{Kim95,Kim95a}
+definiert:
+
+Sei $F$ eine Distanzverteilung. Die Verteilung der relativen H"aufigkeiten der Distanzwerte $f$
+kann dann berechnet werden durch:
+
+\begin{equation}
+f(d) := \frac{F(d)}{\sum_i F(i)} = \frac{2 \cdot F(d)}{n(n-1)}
+\end{equation}
+
+Dabei ist $n$ die Gr"o"se der Population, die Anzahl der $(i, j)$ mit $j < n$ und $i < j$ (also die
+Anzahl Elemente in einem Dreieck der Distanzmatrix ausschlie"slich der Hauptdiagonalen, die entsprechend
+Gl.\ \ref{ddistr-eq} in die Distanzverteilung eingehen) ist dann
+$n(n-1) / 2$. Mit dieser Normierung der Verteilung ist nun die Definition
+der Distanzverteilungskomplexit"at $C_d$:
+
+\begin{equation}
+C_d := -\sum_d f(d)\, \log(f(d))
+\end{equation}
+
+Eine hohe DVK zeigt eine gleichm"a"sige Verteilung der Distanzwerte in der Distanzmatrix
+an und weist somit auf eine komplexe taxonomische Struktur der Population hin.
+
+% Konvergenz und Randomisierung
+
+
+\section{Technische Ausf"uhrung der Distanzverteilungsanalyse}
+
+Um die taxonomische Struktur einer Population durch die Distanzverteilung und die DVK charakterisieren
+zu k"onnen, ist, wie in (\ref{ddistr-method}) gefordert, ein Distanzma"s erforderlich, das den
+Verwandtschaftsgrad zweier Individuen quantitativ beschreibt. In der Evolution kommt es zur
+Entfernung der Verwandtschaft dadurch, da"s die Menge der mutationsbedingten Unterschiede zwischen
+zwei Arten gr"o"ser wird. Ein auf der Ebene genomischer Sequenzen operierendes Distanzma"s sollte
+also mit der Anzahl der Mutationen, die zum beobachteten Ausma"s der Unterschiedlichkeit zweier
+Sequenzen gef"uhrt haben, korreliert sein.
+
+Bei den Mutationsoperatoren, die in dieser Arbeit bei der Entwicklung der Evolutionsmodelle verwendet
+wurden, erf"ullt der Editierabstand (Levenshtein-Distanz) dieses Kriterium. Der Editierabstand zwischen
+zwei Sequenzen gibt an, wieviele Zeichen ersetzt, eingef"ugt oder gel"oscht werden m"ussen, um die
+eine Sequenz in die andere zu transformieren. Austauschmutationen, Insertionen und Deletionen entsprechen
+gerade diesen elementaren Editieroperationen. Die Genduplikation kann in diesem Zusammenhang als
+spezielle Form der Insertion betrachtet werden.
+Aus diesem Grund wurde der Editierabstand in dieser Arbeit f"ur die Erstellung von Distanzverteilungen
+evolvierender Populationen verwendet.
+
+Zur Berechnung von DVK-Werten ist die Verteilung der Editierabst"ande jedoch nicht geeignet. Der
+Grund hierf"ur ist, da"s der Wert des Editierabstands zweier Sequenzen auch von der L"ange der
+Sequenzen abh"angt. Bei konstanter Mutationsrate nimmt somit die absolute Menge der Unterschiede
+zwischen zwei Sequenzen umso schneller zu, je l"anger die Sequenzen sind. Zum Ausgleich dieses
+Effekts wurde bei der Berechnung von DVK-Werten stets der mit einer Intervallgr"o"se von 0.01 diskretisierte
+relative Editierabstand (s.\ \ref{glossary} verwendet.
+
+Die Ausf"uhrung von Distanzverteilungsanalysen ist bei gr"o"seren Populationen sehr rechenzeitaufwendig, weil
+sie stets die Erstellung einer Distanzmatrix erfordert. Der Zeitaufwand hierf"ur ist proportional zum Quadrat
+der Gr"o"se der untersuchten Population. Weil auch die Berechnung des Editierabstands eine aufwendige Operation
+ist, deren Zeitbedarf proportional zum Produkt der L"angen der untersuchten Sequenzen ist, macht sich die
+quadratische Abh"angigkeit des Zeitbedarfs von der Populationsgr"o"se bereits bei Populationen von 50 Individuen
+sehr deutlich bemerkbar. Bei erheblich gr"o"seren Populationen erwies sich der Zeitbedarf als prohibitiv.
+
+Um Distanzverteilungsanalysen in der Praxis realisieren zu k"onnen, wurden daher bei Populationen mit mehr als 50
+Individuen Stichproben gebildet, indem zufallsgesteuert 50 Individuen ausgew"ahlt wurden. Die Distanzverteilungsanalyse
+wurde mit diesen Stichproben durchgef"uhrt. Da auch bei Populationsgr"o"sen von 50 der Rechenzeitbedarf f"ur
+die Erstellung einer Distanzmatrix erheblich ist, wurden Distanzverteilungsanalysen nicht in jedem Zeitschritt
+ausgef"uhrt. Die Anzahl von Zeitschritten zwischen den Analysen wurde so gew"ahlt, da"s w"ahrend eines Laufs
+einige hundert Analysen stattfanden. Durch dieses Vorgehen erkl"art sich die in einigen Diagrammen deutlich wahrnehmbare
+Rasterung bei den Ergebnissen der Distanzverteilungsanalyse.
+
+
+\section{Andere Ma"se und Indikatoren der Komplexit"at}
+
+Zur Messung und Charakterisierung der Komplexit"at verschiedener biologischer Systeme existieren in der Literatur
+unterschiedliche Ans"atze, von denen sich die meisten mit der Untersuchung der Komplexit"at individueller Lebewesen
+besch"aftigen.
+
+Die morphologische Komplexit"at einer Lebensform kann zun"achst durch blo"se Betrachtung 
+intuitiv eingesch"atzt werden.
+Durch die Klassifizierung und Abz"ahlung der einzelnen morphologischen Strukturen
+kann dieser Eindruck "uberpr"uft und quantifiziert werden. Auf zellul"arer Ebene kann die Anzahl unterschiedlicher
+Zelltypen als Komplexit"atsma"s dienen \cite{Bonner88}.
+
+Auch die Molekulargenetik bietet eine Vielzahl von M"oglichkeiten zur Quantifizierung der Komplexit"at. Als erster
+Anhaltspunkt kann die Gesamtzahl der Basenpaare im Genom eines Organismus dienen. Diese liefert jedoch aufgrund der
+bei verschiedenen Lebensformen sehr unterschiedlich gro"sen Anteilen an repetitiver DNA ein stark verzerrtes Bild.
+Eine Korrektur kann auf der Grundlage der Reassoziationskinetik der fragmentierten genomischen DNA erfolgen, die eine
+Absch"atzung der Menge nicht repetitiver DNA erm"oglicht ($c_0t$-Messung, s.\ \cite{Kornberg80}). Auf der Sequenzebene
+kann die strukturelle oder die algorithmsiche Komplexit"at bestimmt werden \cite{Speicher89}. Die Absch"atzung der
+Anzahl der Gene eines Organismus ist eine weitere M"oglichkeit zur Bewertung seiner Komplexit"at.
+
+Bei Computersimulationen der Evolution wurden unter anderem die Shannon-Entropie der H"aufigkeitsverteilung der Zeichen
+eines Genoms \cite{Thearling94} und Analysen der Komplexit"at genetisch codierter Funktionalit"at zur Komplexit"atsanalyse
+\cite{Horn92} eingesetzt.
+
+Die Komplexit"at von "Okosystemen kann mittels der genetischen Diversit"at charakterisiert werden. Diese ist definiert
+als die Shannon-Entropie der relativen H"aufigkeiten der im "Okosystem vorkommenden Species. Diese Analyse wurde bereits
+bei Computermodellen der Evolution eingesetzt \cite{Ray94}. Die Analyse des Informationsgehalts der Zeichenpositionen
+in \textsl{alignments} \cite{Schneider90} kann ebenfalls als Komplexit"atsanalyse auf der Ebene von Kollektionen von Individuen
+eingeordnet werden.
+
+Komplexit"at wird oft als ein Ph"anomen eingeordnet, das in einem Bereich zwischen starrer Ordnung und chaotischer Randomisierung
+zu beobachten ist. Dieser Bereich wird als \textsl{edge of chaos} bezeichnet. F"ur Zellularautomaten wurde die 
+\textsl{edge of chaos} mithilfe des $\lambda$-Parameters charakterisiert \cite{Langton92}.
+
+Die Beziehung zwischen der DVK und den anderen hier genannten Komplexit"atsma"sen und -in\-di\-ka\-to\-ren werden in den folgenden
+Kapiteln anhand von mit verschiedenen Modellen der LindEvol-Familie erhaltenen Ergebnisse untersucht. Zu diesem Zweck
+werden verschiedene in LindEvol-Modellen beobachtete Pflanzen hinsichtlich ihrer morphologischen Komplexit"at verglichen.
+Weiterhin werden die Anzahl aktiver Gene, die bei LindEvol-Modellen der Anzahl unterschiedlicher Zelltypen entspricht,
+sowie die genetische Diversit"at w"ahrend der Simulationsl"aufe protokolliert. Bei den einfacheren Modellen wird zus"atzlich
+die Existenz einer \textsl{edge of chaos} gezeigt und mit der DVK in Beziehung gesetzt.
+
+

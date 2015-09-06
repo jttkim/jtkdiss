@@ -1,0 +1,47 @@
+\chapter{Arbeitsmaterial}
+
+\section{Hard- und Firmware}
+\label{material-hardware}
+
+Zur Entwicklung der Programme und zur Durchf"uhrung der Simulationen wurden folgende Systeme eingesetzt:
+
+\bigskip
+\begin{tabular}{lll}
+{\bfseries Hardware} & {\bfseries Betriebssystem} & {\bfseries Hersteller} \\
+Atari TT030 & TOS 3.06 / MiNT 1.12 & Atari Corp.  (ATC) \\
+Alpha AXP 3000, Modell 800 & OSF1 3.0 & Digital Equipment Corp. \\
+			   &          & (DEC) \\
+Indigo XS   & IRIX 4.0.5F & Silicon Graphics, Inc. \\
+	    &             & (SGI) \\
+\end{tabular}
+
+
+\section{Software}
+\label{material-software}
+
+\subsection{Programmentwicklung}
+
+S"amtliche im Rahmen dieser Arbeit erstellte Software wurde in der Programmiersprache
+ANSI C \cite{Harbison91} erstellt. Als Compiler diente GNU C (\verb|gcc|), der C-Compiler des
+GNU-Projekts, in der Version 2.7.0 und in fr"uheren Versionen. Zur Entwicklung wurden weiterhin
+der GNU Debugger (\verb|gdb|, Version 4.13 und fr"uhere) und GNU Make (\verb|make|, Version 3.71
+und fr"uhere) eingesetzt.
+Die Entwicklungsinstrumente wurden, nebst zugeh"origer Dokumentation, in elektronischer Form "uber
+{\slshape ftp} bezogen.
+
+
+\subsection{Datenanalyse und Visualisierung}
+
+Zur Visualisierung numerischer Ergebnisse aus Simulationsl"aufen wurde
+das Programm \verb|gnuplot| von den Autoren Thomas Williams und Colin Kelley
+verwendet. \verb|gnuplot| kann von vielen {\slshape ftp}-Servern
+bezogen werden (s.\ Anhang \ref{electronicsources}). Es dient zur interaktiven Darstellung numerischer Daten
+in unterschiedlichen Formen sowie zur Anfertigung entsprechender
+Computergraphiken.
+Zur Stammbaumanalyse wurde das Programmpaket PHYLIP \cite{PHYLIP} verwendet.
+
+Zur weitergehenden graphischen Darstellung von Daten aus Simulationsl"aufen
+wurde das Programm \verb|proplot| erstellt, zu dem sich weitere Informationen
+im Anhang \ref{technicalstuff} finden.
+
+

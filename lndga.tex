@@ -1,0 +1,2525 @@
+\chapter[LindEvol-GA]{LindEvol-GA: Modell auf der Basis eines genetischen Algorithmus}
+\label{lindevol-ga}
+
+
+\section{Definition von LindEvol-GA}
+\label{lndga-def}
+
+\subsection{Modellkomponenten}
+
+In LindEvol-GA werden die folgenden in (\ref{modeldef}) definierten Komponenten
+eingesetzt:
+
+\begin{itemize}
+\item Topologie: Zweidimensionales Gitter (\protect\ref{topo2d}).
+\item Zellparameter: Nur Energieparameter (\protect\ref{celldef}). Der Zustand eine
+    Zelle ist also durch die sie umgebende lokale Struktur vollst"andig bestimmt
+    (Gl.\ \ref{stateq-nointernal}).
+\item Zellaktionen: \verb|divide|, \verb|mut-| und \verb|mut+| (\protect\ref{cellactiondef}).
+    Aktionen zur Samenproduktion werden nicht ben"otigt, weil die Vermehrung durch den
+    Selektionsmechanismus des genetischen Algorithmus und nicht unmittelbar
+    durch Pflanzenaktivit"at erfolgt.
+    Die Aktion \verb|divide| scheitert in LindEvol-GA immer, wenn die Zielposition f"ur die
+    Tochterzelle bereits besetzt ist.
+\item Genominterpretation: LindEvol-GA arbeitet mit blockorientierter
+    Genominterpretation (\protect\ref{blockinterdef}).
+\item Mutation: In LindEvol-GA kommen byteweise Austauschmutationen sowie
+    Insertionen und Deletionen von Bl"ocken aus zwei Bytes vor (\protect\ref{mutationdef}).
+\end{itemize}
+
+
+\subsection{Vegetationsperiode}
+
+Eine Generation von Pflanzen w"achst jeweils eine \introdef{Vegetationsperiode} lang
+gemeinsam in der Welt. Eine solche Vegetationsperiode besteht aus
+einer Anzahl von Tagen (s.\ \ref{timedef}).
+Die Anzahl Tage pro Vegetationsperiode wird durch den Kontrollpamamter $V$ (\verb|num_days|)
+bestimmt. Zu Beginn der
+Vegetationsperiode bestehen die Pflanzen aus einzelnen, energielosen Zellen,
+die mit randomisierter Reihenfolge "aquidistant am Boden der Welt plaziert werden.
+Nach dem Ablauf der Vegetationsperiode wird jedem Genom die Anzahl der energiereichen
+Zellen der entsprechenden Pflanze (s.\ \ref{plantdef}) als Fitnesswert
+zugewiesen.
+
+
+\subsection{Der genetische Algorithmus}
+
+Der in LindEvol-GA verwendete genetische Algorithmus besteht im Kern aus einer
+Schleife, in der nacheinander Fitnessbewertung, Selektion (Tod und Reproduktion)
+und Mutation stattfinden. Abb.\ \ref{lndga-flowchart} verdeutlicht die Abl"aufe.
+Zu Beginn einer Simulation wird die eine Population
+von Genomen zufallsgesteuert generiert. Die Gr"o"se der Population wird dabei
+durch den Kontrollparameter \verb|psize| festgelegt, der Kontrollparameter
+\verb|glen_init| bestimmt die L"ange der generierten Genome.
+
+Die Ermittlung der Fitnesswerte erfolgt, wie oben beschrieben, durch die Simulation
+einer Vegetationsperiode.
+Beim Selektionsschritt werden die Genome in der Population
+zun"achst nach ihren Fitnesswerten absteigend geordnet. Dann werden die Genome mit 
+geringen Fitnesswerten, die im hinteren Bereich dieser Liste stehen, durch zuf"allig aus 
+dem "uberlebenden Teil der Population ausgew"ahlte Genome ersetzt. Die Selektionsrate 
+\verb|srate| ist der Kontrollparameter, der dabei die Gr"o"se des zu ersetzenden Anteils
+der Population angibt. Dieser Selektionsvorgang simuliert eine rein vegetative (asexuelle)
+Vermehrung.
+
+Nach dem Selektionsschritt werden alle Genome mutiert. Mutation findet in LindEvol-GA also
+nur nach jeder Vegetationsperiode, nicht nach jedem Tag statt. Aus diesem Grund haben
+nur die \verb|mut-|- und \verb|mut+|-Aktionen, die am letzten Tag einer Vegetationsperiode
+ausgef"uhrt werden, einen Einflu"s auf die effektiven Mutationsraten.
+
+
+\begin{figure}
+
+\unitlength0.5cm
+\begin{picture}(16,17)
+\thicklines
+
+\put(8,16){\framebox(14,1){Initialisierung der Population}}
+\put(15,16){\line(0,-1){2}}
+
+\put(8,11){\framebox(14,3){
+\parbox{14cm}{
+\centerline{Ermittlung der Fitnesswerte}
+\centerline{der Genome durch Simulation}
+\centerline{der Vegetationsperiode}}}}
+\put(15,11){\vector(0,-1){1}}
+
+\put(8,5){\framebox(14,5){
+\parbox{14cm}{
+\centerline{Selektion: $p*s$ Genome mit den}
+\centerline{niedrigsten Fitnesswerten werden}
+\centerline{entfernt und durch Kopien von}
+\centerline{Genomen des "uberlebenden Teils}
+\centerline{der Population ersetzt}}}}
+\put(15,5){\vector(0,-1){1}}
+
+\put(8,3){\framebox(14,1){Mutation der Genome}}
+\put(15,3){\vector(0,-1){1}}
+
+\put(8,1){\framebox(14,1){Inkrementieren der Generation}}
+\put(15,1){\line(0,-1){0.5}}
+\put(19,0.5){\oval(8,1)[b]}
+\put(23,14.5){\line(0,-1){14}}
+\put(19,14.5){\oval(8,1)[t]}
+\put(15,14.5){\vector(0,-1){0.5}}
+\end{picture}
+
+\caption{\label{lndga-flowchart}
+Flu"sdiagramm f"ur LindEvol-GA
+}
+\end{figure}
+
+% Pflanzen ueberleben nur eine Generation, nur Genome werden
+% zwischen Generationen vererbt.
+
+% 
+
+Das Konzept von LindEvol-GA entspricht in weiten Teilen den Entw"urfen von
+Wilson \cite{Wilson89}. Anders als bei einem traditionellen genetischen Algorithmus,
+bei dem der Fitnesswert eines Genoms nicht durch die restliche Population
+beeinflu"st wird, haben bei LindEvol-GA r"aumliche und zeitliche Interaktionen
+zwischen den Pflanzen erhebliche Auswirkungen auf die Fitness der Genome.
+Daher findet bei LindEvol-GA keine Adaptation an eine von au"sen definierte
+Fitnessfunktion, sondern vielmehr eine intrinsische Adaptation \cite{Packard89} statt.
+Tabelle \ref{lndga-controlparams} zeigt eine Zusammenfassung der Kontrollparameter von
+LindEvol-GA.
+
+% \subsection{Kontrollparameter von LindEvol-GA}
+% \label{lndga-controlparams}
+
+\begin{table}[tb]
+\noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+Formel- & Bezeichner & Beschreibung \\
+buchstabe & & \\ \hline
+$p$ & \verb|psize| & Populationsgr"o"se \\
+$l_s$ & \verb|glen_init| & L"ange der am Simulationsstart zuf"allig generierten Genome \\
+$s$ & \verb|srate| & Selektionsrate \\
+$M_r$ & \verb|m_replacement| & Basiswert der Austauschrate \\
+$M_i$ & \verb|m_insertion| & Basiswert der Insertionsrate \\
+$M_d$ & \verb|m_deletion| & Basiswert der Deletionsrate \\
+$m_f$ & \verb|m_factor| & Modifikationsfaktor f"ur Mutationsraten \\
+$w$ & \verb|world_width| & Breite der Welt \\
+$h$ & \verb|world_height| & H"ohe der Welt \\
+$V$ & \verb|num_days| & Anzahl Tage pro Vegetationsperiode \\
+ & \verb|num_divide| & Anzahl Codewerte f"ur \verb|divide| \\
+ & \verb|num_mutminus| & Anzahl Codewerte f"ur \verb|mut-| \\
+ & \verb|num_mutplus| & Anzahl Codewerte f"ur \verb|mut+| \\
+ & \verb|random_seed| & {\slshape seed} zur Initialisierung des Zufallsgenerators \\ \hline
+\end{tabularx}
+
+\caption{\label{lndga-controlparams}
+Tabelle der Kontrollparameter von LindEvol-GA.
+}
+\end{table}
+
+
+Der folgende Pseudocode verdeutlicht die Abl"aufe bei einer LindEvol-GA--Simulation:
+
+\begin{verbatimcmd}
+\pcodemeta{Generiere zufallsgesteuert eine Anfangspopulation}
+WHILE \pcodemeta{Abbruchkriterien nicht erf{\"u}llt}
+  \pcodemeta{Erzeuge f{\"u}r jedes Genom eine einzellige Pflanze}
+  \pcodemeta{Plaziere Pflanzen in randomisierter Reihenfolge {\"a}quidistant am Boden der Welt}
+  FOR d = 0 TO num_days - 1
+    \pcodemeta{Simuliere Lichtbestrahlung}
+    \pcodemeta{Erzeuge randomisierte Abarbeitungsreihenfolge \begin{math}r\sb{0}, r\sb{1}, \ldots, r\sb{p - 1}\end{math}  der Pflanzen}
+    FOR i = 0 TO psize - 1
+      \pcodemeta{Simuliere Wachstum der Pflanze \begin{math}r\sb{i}\end{math}}
+    NEXT i
+  NEXT d
+  FOR i = 0 TO psize
+    \pcodemeta{Fitness \begin{math}f\sb{i}\end{math} des i-ten Genoms} = \pcodemeta{Anzahl energiereicher Zellen der i-ten Pflanze}
+  NEXT i
+  \pcodemeta{Sortiere Genome nach absteigenden Fitnesswerten}
+  FOR i = psize - 1 DOWNTO psize - psize * srate
+    q = \pcodemeta{Ganzzahlige Zufallszahl zwischen 0 und} psize * srate - 1
+    \pcodemeta{Ersetze i-tes Genom durch eine Kopie des q-ten Genoms}
+  NEXT i
+  FOR i = 0 TO psize - 1
+    \pcodemeta{Mutiere i-tes Genom}
+  NEXT i
+WEND
+\end{verbatimcmd}
+
+
+\subsection{Kontrollsimulationen mit randomisierten Fitnesswerten}
+\label{lndga-neutral}
+
+Die in (\ref{modellansatz}) beschriebenen Ansatzpunkte zur Modellierung der Evolution
+morphogenetischer Systeme sind bei LindEvol-GA ausschlie"slich in der Fitnessbewertung
+durch die Simulation einer Vegetationsperiode enthalten. Die Verfahren zur Selektion
+und Mutation sind dagegen Standardkomponenten der genetischen Algorithmen. Somit ist
+k"onnen Kontrollmodelle konstruiert werden, bei denen andere Fitnessfunktionen
+verwendet werden. Anhand solcher Kontrollen kann festgestellt werden, ob ein in
+LindEvol-GA beobachtetes Ph"anomen auf die komplexe Form der Fitnessberechnung
+zur"uckgeht, oder ob es sich um eine generelle Eigenschaft des verwendeten
+genetischen Algorithmus handelt.
+
+Zur Durchf"uhrung solcher Kontrollen wurde das LindEvol-GA--Simulationsprogramm
+so ver"andert, da"s nach der Simulation einer Vegetationsperiode Zufallszahlen
+als Fitnesswerte der Genome verwendet werden. Wachstum und Gesamtenergie einer
+Pflanze bleiben also ohne jede Auswirkung auf die Fitness ihres Genoms. Alle anderen
+Komponenten der Simulation blieben unver"andert. Dieses Kontrollmodell mit
+randomisierten Fitnesswerten simuliert eine vollst"andig neutrale Evolution,
+weil jede Mutation des Genoms keinerlei Folgen f"ur den Fitnesswert des
+betroffenen Genoms hat. Daher wird dieses Modell auch kurz als \introdef{neutrale
+Kontrolle} bezeichnet.
+
+
+% \section{Vergleich mit anderen Simulationsmodellen}
+
+\section{Mutationsfolgenabsch"atzung}
+\label{mutconsequences}
+
+In LindEvol-GA werden beim Selektionsschritt Kopien von Genomen aus dem "uberlebenden
+Teil der Population erzeugt. Diese werden im anschlie"senden Mutationsschritt in ungerichteter
+Weise ver"andert. Somit haben sowohl die Selektionsrate als auch die Mutationsraten ihren
+Einflu"s auf die Anzahl der unver"anderten Kopien eines Genoms, das beim Selektionsschritt
+"uberlebt hat.
+
+Der Erwartungswert dieser Anzahl gibt eine Obergrenze f"ur die Geschwindigkeit an, mit der
+sich der Bestand eines Genotyps in der Population ausbreiten kann. Er wird daher als
+\introdef{Ausbreitungszahl} bezeichnet. Nur wenn die Ausbreitungszahl gr"o"ser als 1 ist,
+kann sich ein Genotyp stabil in der Population etablieren. Eine Ausbreitungszahl, die kleiner
+als 1 ist, zeigt an, da"s der Genotyp sich, auch wenn er "uberlegene Fitnesswerte aufweist,
+nicht in der Population ausbreiten kann, weil beim Selektionsschritt weniger Kopien des
+entsprechenden Genotyps erzeugt werden, als beim Mutationsschritt ver"andert werden.
+Im Folgenden wird eine Formel f"ur die Ausbreitungszahl abgeleitet.
+
+Von einem Genom, das beim Selektionsschritt eliminiert wird, existieren in der Population
+der n"achsten Generation keine Kopien. "Uberlebt ein Genom dagegen bei der Selektion,
+verbleibt das Genom in der Population. Zus"atzlich besteht die M"oglichkeit, da"s Kopien
+des Genoms erzeugt werden. Der Erwartungswert f"ur die Anzahl der erzeugten Kopien ist
+$s/(1-s)$, dabei ist $s$ die Selektionsrate. Der Erwartungswert f"ur die Gesamtzahl von
+Kopien eines Genoms, welches beim Selektionsschritt "uberlebt hat, betr"agt somit:
+
+\begin{equation}
+\label{numoffspring-eq}
+N(s) = 1 + \frac{s}{1-s} = \frac{1}{1-s}
+\end{equation}
+
+Sei nun $l$ die L"ange des Genoms, dann existieren $l$ verschiedene Stellen, an denen eine
+Austauschmutation erfolgen kann, Insertionen k"onnen an $l+1$ verschiedenen Stellen und
+Deletionen an $l-1$ verschiedenen Stellen stattfinden. Die Wahrscheinlichkeit, da"s das Genom
+beim Mutationsschritt von keiner Mutation betroffen wird, betr"agt also:
+
+\begin{equation}
+P_u(m_r, m_i, m_d, l) = (1-m_r)^l \cdot (1-m_i)^{l+1} \cdot (1-m_d)^{l-1}
+\end{equation}
+
+Wenn Austausch- Insertions- und Deletionsrate den gleichen Wert $m_r = m_i = m_d = m$ haben,
+kann diese Formel vereinfacht werden. Es gilt dann:
+
+\begin{equation}
+\label{unchanged-eq}
+P_u(m, l) = (1-m)^{3l}
+\end{equation}
+
+F"ur die Ausbreitungsrate $A$ gilt nun: $A = N \cdot P_u$, wenn alle Mutationsraten den gleichen
+Wert haben, erh"alt man mit den Gleichungen \ref{numoffspring-eq} und \ref{unchanged-eq}:
+
+\begin{equation}
+\label{genomespreadm-eq}
+A(m, s, l) = \frac{(1-m)^{3l}}{1-s}
+\end{equation}
+
+In L"aufen ohne Insertion und Deletion ($m_i = m_d = 0$) gilt dagegen $P_u(m_r, l) = (1-m)^l$
+und f"ur die Ausbreitungszahl erh"alt man:
+
+\begin{equation}
+\label{genomespreadr-eq}
+A(m_r, s, l) = \frac{(1-m_r)^l}{1-s}
+\end{equation}
+
+F"ur die Evolutionsprozesse auf ph"anotypischer Ebene ist in LindEvol-GA jedoch die Ausbreitung
+von Genotypen nicht so interessant wie die Ausbreitung von Entwicklungsprogrammen.
+Genome k"onnen in LindEvol-GA eine gro"se Zahl von Genen enthalten, die bei der Entwicklung
+der Pflanze niemals aktiviert werden. Diese Gene sind f"ur das im Genom codierte
+Entwicklungsprogramm irrelevant, sie k"onnen wegfallen oder auf vielerlei Art variiert
+werden, ohne da"s das Entwicklungsprogramm dadurch ver"andert wird. Die
+\introdef{Ausbreitungszahl eines Entwicklungsprogramms} kann auf der Grundlage der Wahrscheinlichkeit daf"ur,
+da"s kein aktives Gen des Entwicklungsprogramms von einer Mutation betroffen wird,
+abgesch"atzt werden. Ein Gen, das bei der blockorientierten Genominterpretation stets aus
+zwei Bytes besteht, kann ver"andert werden durch:
+
+\begin{itemize}
+\item eine Austauschmutation eines seiner beiden Bytes,
+\item eine Insertion zwischen seinen beiden Bytes,
+\item eine Deletion, wobei drei verschiedene M"oglichkeiten bestehen, es kann entweder
+das gesamte Gen (Deletion bei Position 0 bez"uglich des Gens), sein erstes Byte
+(Deletion bei Position -1) oder sein zweites Byte (Deletion bei Position 1) entfernt
+werden.
+\end{itemize}
+
+Sei $r$ die Anzahl der aktiven Gene des Entwicklungsprogramms.
+Die Wahrscheinlichkeit, da"s kein an der Codierung des Entwicklungsprogramms beteiligtes Gen
+durch eine Mutation der o.g.\ Arten betroffen wird, kann abgesch"atzt werden durch:
+
+\begin{equation}
+\label{prgunchanged-eq}
+P_E(m_r, m_i, m_d, r) \approx (1-m_r)^{2r} \cdot (1-m_i)^{r} \cdot (1-m_d)^{3r}
+\end{equation}
+
+Hierbei handelt es sich um eine Absch"atzung, denn verschiedene Effekte bleiben unber"ucksichtigt.
+Unter anderem ist eine Deletion an Position -1 bez"uglich des ersten Gens im Genom nicht
+m"oglich, ebenso wie eine Deletion an Position +1 bez"uglich des letzten Gens. Weiterhin
+ist die Gesamtanzahl der Deletionsm"oglichkeiten, bei denen das codierte Entwicklungsprogramm
+ver"andert wird, kleiner als $3l$, wenn mehrere Gene des Programms unmittelbar hintereinander
+liegen; in diesem Fall stimmt die Deletion an Position +1 bez"uglich des Gens $n$ "uberein
+mit der Deletion an Position -1 bez"uglich des Gens $n+1$. Die aktiven Gene der Entwicklungsprogramme
+sind in den Genomen, die im Ergebnisteil diskutiert werden, jedoch nicht in derartigen dichten
+Clustern angeordnet, daher ist dieser Effekt in der Praxis unerheblich.
+
+Falls $m_r = m_i = m_d = m$ gilt, vereinfacht sich diese Formel zu:
+
+\begin{equation}
+\label{prgunchangedm-eq}
+P_E(m, r) = (1-m)^{6r} = P_u(m, 2r)
+\end{equation}
+
+Die Ausbreitungszahl eines Entwicklungsprogramms aus $r$ aktiven Genen kann somit abgesch"atzt werden durch:
+
+\begin{equation}
+\label{programspreadm-eq}
+A_E(m, s, r) \approx \frac{(1-m)^{6r}}{1-s}
+\end{equation}
+
+Beim Fehlen von Insertion und Deletion ergibt sich entsprechend:
+
+\begin{equation}
+\label{programspreadr-eq}
+A_E(m_r, s, r) \approx \frac{(1-m_r)^{2r}}{1-s}
+\end{equation}
+
+Auch hier mu"s der Absch"atzungscharakter betont werden. Zum einen wurde 
+vernachl"assigt, da"s ein Gen, welches von einer Mutation betroffen wird, mit einer kleinen
+Wahrscheinlichkeit dabei nicht ver"andert wird. Zum anderen wurde auch die M"oglichkeit, da"s
+ein Wachstumsprogramm durch Mutationen im inaktiven Bereich des Genoms ver"andert werden
+kann, au"ser acht gelassen. Die Wahrscheinlichkeiten f"ur diese Prozesse sind jedoch klein
+im Vergleich zu den Wahrscheinlichkeiten daf"ur, da"s durch die bei der Ableitung ber"ucksichtigten
+Mutationsvorg"ange "Anderungen des Entwicklungsprogramms zustandekommen.
+Nur bei sehr langen Genomen k"onnen Mutationen im inaktiven Bereich eine signifikante Rolle
+spielen.
+
+Auf der Grundlage der hier hergeleiteten Gleichungen f"ur die Ausbreitungszahl eines Genoms (bzw.\ eines
+Entwicklungsprogramms) kann eine Absch"atzung der Obergrenze der Mutationsraten, bis zu der die Ausbreitung
+eines Genoms fester L"ange bei gegebener Selektionsrate m"oglich ist, vorgenommen werden.
+Entsprechend der Definition der Ausbreitungszahl mu"s, damit ein Genom sich ausbreiten
+kann, seine Ausbreitungszahl gr"o"ser als 1.0 sein.
+Die Mutationsrate, bei der ein Genom fester L"ange $l$ bei gegebener Selektionsrate $s$ gerade eine Ausbreitungszahl
+von 1.0 hat, stellt die \introdef{kritische Fehlergrenze} $t(s,l)$ ({\slshape critical error threshold}) dieses Genoms dar
+(vgl.\ \cite{Maynard89}). Es gilt also $A(t(s,l), s, l) = 1$. Wenn $m_r = m_i = m_d$ gilt, kann
+Gl.\ \ref{genomespreadm-eq} hier eingesetzt werden.
+Nach Aufl"osung nach $t(s,l)$ erh"alt man f"ur die kritische Fehlergrenze:
+
+\begin{equation}
+\label{errthresholdm-eq}
+t(s,l) = 1-\sqrt[3l]{1-s}
+\end{equation}
+
+F"ur Simulationsl"aufe, in denen nur Austauschmutationen vorkommen, erh"alt man unter Verwendung von Gl.\ \ref{genomespreadr-eq}
+auf analogem Wege:
+
+\begin{equation}
+\label{errthresholdr-eq}
+t(s,l) = 1-\sqrt[l]{1-s}
+\end{equation}
+
+In entsprechender Weise kann auch die kritische Fehlergrenze eines Entwicklungsprogramms der L"ange $r$ im Falle $m_r = m_i = m_d$
+errechnet werden:
+
+\begin{equation}
+\label{errthresholdprgm-eq}
+t_E(s,r) = 1-\sqrt[6r]{1-s}
+\end{equation}
+
+und, falls $m_i = m_d = 0$ gilt:
+
+\begin{equation}
+\label{errthresholdprgr-eq}
+t_E(s,r) = 1-\sqrt[2r]{1-s}
+\end{equation}
+
+
+\section{Ergebnisse und Diskussion}
+\label{lndga-results}
+
+Der Ergebnisteil ist in drei Abschnitte unterteilt. Zun"achst werden in (\ref{lndga-individualsims}) sechs
+Simulationsl"aufe detailliert beschrieben und diskutiert. Damit wird ein Eindruck von den Pflanzenformen,
+die in LindEvol-GA evolvieren, vermittelt, ein "Uberblick "uber die in LindEvol-GA auftretenden
+evolution"aren Prozesse gegeben, und schlie"slich wird die Bedeutung der Mutationsraten und der Selektionsrate
+f"ur den Evolutionsvorgang schlaglichtartig beleuchtet.
+
+Im zweiten Abschnitt (\ref{lndga-parameterscan}) wird das Zusammenspiel von Mutation und Selektion systematisch anhand globaler,
+einen Simulationslauf charakterisierender Me"sgr"o"sen untersucht. Der Schwerpunkt bei dieser Analyse ist
+die Entstehung morphologischer und taxonomischer Komplexit"at.
+
+Der dritte Abschnitt (\ref{lndga-phylogeny}) besch"aftigt sich mit den M"oglichkeiten zur Verwendung von LindEvol-GA als
+System zum Testen der Leistungsf"ahigkeit von Stammbaumrekonstruktionsmethoden. Hier werden verschiedene
+Experimente beschrieben und diskutiert, mit denen die Auswirkungen verschiedener Evolutionsprozesse,
+die in LindEvol-GA auftreten, auf die Stammbaumrekonstruktion untersucht wurden.
+
+
+\subsection{Einzelsimulationen}
+\label{lndga-individualsims}
+
+Zur Beleuchtung der evolution"aren Prozesse in LindEvol-GA und ihrer Abh"angigkeit von den
+Mutationsraten und der Selektionsrate wurde ein Satz von L"aufen durchgef"uhrt. Bei den Kontrollparametern
+der einzelnen L"aufe unterscheiden sich nur Selektionsrate und Mutationsraten, die anderen
+Kontrollparameter wurden konstant auf folgende Werte gesetzt:
+
+\medskip
+\begin{tabular}{ll}
+Populationsgr"o"se: & 50 \\
+Mutationsfaktor: & 2.0 \\
+Breite der Welt: & 150 \\
+H"ohe der Welt: & 30  \\
+Genoml"ange der Startpopulation: & 20 Gene (40 Bytes) \\
+L"ange einer Vegetationsperiode: & 30 Tage \\
+Anzahl Generationen:             & 5000 \\
+\verb|num_divide| & 224 \\
+\verb|num_mutminus| & 16 \\
+\verb|num_mutplus| & 16 \\
+\verb|random_seed| & 12345 \\
+\end{tabular}
+\medskip
+
+Die Werte f"ur die Populationsgr"o"se und die Ausdehnung der Welt erlauben einerseits die Ausbildung
+interessanter morphologischer und phylogenetischer Strukturen. Andererseits sind sie so klein, da"s
+die Durchf"uhrung von Serien mit vielen L"aufen und von aufwendigen Analysen wie der Distanzverteilungsanalyse
+und der Stammbaumrekonstruktion mit vertretbarem Rechenzeitaufwand m"oglich sind.
+
+Durch den Mutationsfaktor ist die Halbierung der Mutationsraten durch \verb|mut-| und ihre
+Verdopplung durch \verb|mut+| m"oglich, was eine signifikante "Anderung bedeutet. Erheblich
+gr"o"sere Werte f"ur den Mutationsfaktor sind problematisch, weil dann bei extremen Werten
+des Mutationsexponenten der Wertebereich der Flie"skommaarithmetik bei der Berechnung des
+effektiven Faktors zur Modifikation der Mutationsraten "uber- bzw.\ unterschritten werden kann.
+
+Alle drei Mutationsraten (Austausch-, Insertions- und Deletionsrate) wurden stets auf den
+gleichen Wert gesetzt, wobei die Werte 0.1 (hohe Mutationsraten), 0.01 (moderate Mutationsraten)
+und 0.001 (niedrige Mutationsraten) verwendet wurden. F"ur die Selektionsrate wurden die
+Werte 0.5 (moderate Selektion) und 0.8 (scharfe Selektion) verwendet. Insgesamt wurden sechs
+L"aufe durchgef"uhrt, deren Namen aus der folgenden Tabelle zu entnehmen sind:
+
+\medskip
+\begin{tabular}{|c||c|c|} \hline
+ & moderate & scharfe \\
+ & Selektion & Selektion \\ \hline \hline
+niedrige Mutationsraten & \runname{xlong00105} & \runname{xlong00108} \\ \hline
+moderate Mutationsraten & \runname{xlong0105}  & \runname{xlong0108}  \\ \hline
+hohe Mutationsraten     & \runname{xlong1005}  & \runname{xlong1008}  \\ \hline
+\end{tabular}
+\medskip
+
+
+
+\subsubsection{Lauf \runname{xlong0105}: Moderate Mutationsraten und moderate Selektion}
+\label{xlong0105section}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,17)
+\put(0,0){\makebox(16,17){\epsfxsize=16cm \epsffile{xlong0105.eps}}}
+\end{picture}
+\caption{\label{xlong0105results}
+LindEvol-GA Lauf \runname{xlong0105} mit moderaten Mutationsraten (0.01) und moderater Selektion (0.5).
+Die mit "`Distanzverteilungen"' beschriftete Box zeigt die Abfolge der Distanzverteilungen in
+der in (\protect\ref{ddistr-method}) beschriebenen Grauwertdarstellung.
+}
+\end{figure}
+
+
+Dieser Lauf wurde mit Mutationsraten von 0.01 und einer Selektionsrate von 0.5 durchgef"uhrt.
+Abb.\ \ref{xlong0105results} zeigt die Entwicklung verschiedener numerischer Werte in
+diesem Lauf.
+
+
+% \begin{figure}[p]
+% 
+% \unitlength1cm
+% \begin{picture}(16,21)
+% \put(0,20.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0000004w.eps}}}
+% \put(0,20){\makebox(16,0.5){{\bfseries a:} Generation 4}}
+% \put(0,18.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0000040w.eps}}}
+% \put(0,17.5){\makebox(16,0.5){{\bfseries b:} Generation 40}}
+% \put(0,15.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0000120w.eps}}}
+% \put(0,15){\makebox(16,0.5){{\bfseries c:} Generation 120}}
+% \put(0,13.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0000500w.eps}}}
+% \put(0,12.5){\makebox(16,0.5){{\bfseries d:} Generation 500}}
+% \put(0,10.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0002200w.eps}}}
+% \put(0,10){\makebox(16,0.5){{\bfseries e:} Generation 2200}}
+% \put(0,8.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0002207w.eps}}}
+% \put(0,7.5){\makebox(16,0.5){{\bfseries f:} Generation 2207}}
+% \put(0,5.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0002400w.eps}}}
+% \put(0,5){\makebox(16,0.5){{\bfseries g:} Generation 2400}}
+% \put(0,3.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0003608w.eps}}}
+% \put(0,2.5){\makebox(16,0.5){{\bfseries h:} Generation 3608}}
+% \put(0,0.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0004999w.eps}}}
+% \put(0,0){\makebox(16,0.5){{\bfseries i:} Generation 4999}}
+% \end{picture}
+% 
+% \caption{\label{xlong0105worlds}
+% Gesamtaufnahmen der Welt in verschiedenen Abschnitten des Laufs \runname{xlong0105}. Es wurde jeweils
+% die gesamte Welt am Ende der Vegetationsperiode dargestellt.
+% }
+% \end{figure}
+
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,20)
+\put(4,17.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0105-0000004p.eps}}}
+\put(4,17.0){\makebox(7,0.5){{\bfseries a:} Generation 4}}
+\put(0,14.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0105-0000040p.eps}}}
+\put(0,13.5){\makebox(7,0.5){{\bfseries b:} Generation 40}}
+\put(8,14.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0105-0000120p.eps}}}
+\put(8,13.5){\makebox(7,0.5){{\bfseries c:} Generation 120}}
+\put(0,9.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0105-0000500p.eps}}}
+\put(0,9.0){\makebox(7,0.5){{\bfseries d:} Generation 500}}
+\put(8,9.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0105-0002200p.eps}}}
+\put(8,9.0){\makebox(7,0.5){{\bfseries e:} Generation 2200}}
+\put(0,5.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0105-0002207p.eps}}}
+\put(0,4.5){\makebox(7,0.5){{\bfseries f:} Generation 2207}}
+\put(8,5.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0105-0002400p.eps}}}
+\put(8,4.5){\makebox(7,0.5){{\bfseries g:} Generation 2400}}
+\put(0,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0105-0003608p.eps}}}
+\put(0,0.0){\makebox(7,0.5){{\bfseries h:} Generation 3608}}
+\put(8,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0105-0004999p.eps}}}
+\put(8,0.0){\makebox(7,0.5){{\bfseries i:} Generation 4999}}
+\end{picture}
+
+\caption{\label{xlong0105genomes}
+Genome von Pflanzen aus den in Abb.\ \protect\ref{xlong0105worlds} dargestellten Welten. Oben ist jeweils
+der Ph"anotyp der Pflanze dargestellt, darunter ihr Genom in graphischer Form. Schwarze Pfeile bedeuten
+starke, graue Pfeile schwache Aktivierung. Es sind nur die aktiven Gene dargestellt
+(vgl.\ Abb.\ \protect\ref{lnd1-graphgenom})
+}
+\end{figure}
+
+
+\paragraph{Evolution von Fitness und Ph"anotypen}
+\label{xlong0105-pheno}
+
+Der Verlauf der Fitnesswerte zeigt deutlich verschiedene Stadien des Evolutionsprozesses an.
+Anhand der Darstellung der Wuchsformen in repr"asentativen Generationen der verschiedenen
+Phasen, die in Abb.\ \ref{xlong0105worlds} (Seite \pageref{xlong0105worlds})
+dargestellt sind, k"onnen die einzelnen Phasen
+folgenderma"sen charakterisiert werden:
+
+In der Anfangsphase sind die Fitnesswerte niedrig, und die maximale
+Fitness hat einen Wert, der jeweils w"ahrend einer Reihe von Generationen strikt konstant bleibt.
+Die Pflanzen wachsen nur zu einer genetisch festgelegten Gr"o"se heran, sie
+entwickeln hier nur wenige Zellen. Die Zellteilungen finden zu Anfang der Vegetationsperiode
+statt. Am Ende der Vegetationsperiode sind fast alle Zellen energiereich. Die erste Form dieser
+Art, die sich aus der Anfangspopulation heraus durchsetzt, ist eine zweizellige Pflanze
+(Abb.\ \ref{xlong0105worlds}a), sp"ater entwickeln sich aus dieser Form drei- und vierzellige
+Pflanzen.
+
+Etwa bei Generation 30 findet ein steiler Anstieg der Fitnesswerte statt. Dieser evolution"are
+Sprung kennzeichnet den "Ubergang vom beschr"ankten zum unbeschr"ankten Wachstum. Beim unbeschr"ankten
+Wachstum stellt die Pflanze ihre Wachstumsaktivit"at w"ahrend der gesamten Vegetationsperiode
+nicht ein. Typisch f"ur die Wachstumsprogramme solcher Pflanzen ist ein apikales Wachstum: Zellen
+in lokalen Strukturen, die am oberen oder "au"seren Bereich der Pflanze liegen, teilen sich
+und produzieren Zellen noch weiter oben oder au"sen.
+Zellen, die rundherum von weiteren Zellen umgeben sind, deren lokale Struktur also typisch f"ur eine
+im Inneren der Pflanze gelegene Zelle ist, teilen sich nicht, sondern sie erhalten ihre Energie
+zur Erh"ohung des Fitnesswerts der Pflanze. Abb.\ \ref{xlong0105worlds}b zeigt, da"s die Pflanzen
+hier senkrecht nach oben wachsende Formen entwickelt haben.
+
+Bei Generation 100
+kommt es zu einem weiteren Anstieg der Fitnesswerte. Wie die Abbildung \ref{xlong0105worlds}c
+zeigt, r"uhrt dieser Anstieg daher, da"s von den senkrechten Sprossen aus seitlich Zellen
+gebildet werden, die zus"atzlich Energie absorbieren und speichern k"onnen.
+
+Die n"achste auffallendere "Anderung der Fitnesswerte ist eine kleine Spitze der Maximalwerte
+bei Generation 500. Anstelle der einzelnen seitlichen Zellen entwickeln in dieser Phase
+einzelne Pflanzen unbeschr"ankt wachsende, diagonale Seitentriebe (Abb.\ \ref{xlong0105worlds}d).
+Mit dieser Wuchsform k"onnen h"ohere Fitnesswerte als die Form mit seitlichen Einzelzellen erreicht
+werden. Anders als bei den bisher beobachteten Formen besteht bei der Wuchsform mit seitlichen
+Trieben jedoch die Gefahr der Kollision mit anderen Pflanzen. Hier tritt also erstmals eine echte
+Konkurrenz und eine gegenseitige Beeinflussung der Fitnesswerte zwischen den Pflanzen ein.
+Kollisionen f"uhren zur Verschwendung von Energie, da Teilungsversuche scheitern, wenn die
+Zielposition f"ur die Tochterzelle bereits besetzt ist. Weiterhin schr"anken sich die Pflanzen
+nun gegenseitig in ihrem Wachstum ein, indem sie einander "uberwuchern. Aus diesem Grund geht der
+hier beobachtete Anstieg der maximalen Fitnesswerte nicht, wie bei den bisher betrachteten
+evolution"aren Spr"ungen, mit einem Anstieg der durchschnittlichen Fitness einher. Die nachteiligen
+Auswirkungen der Kollisionen erkl"art auch, weshalb die neue Wuchsform sich nicht dauerhaft
+durchsetzt. Nach weniger als hundert Generationen verdr"angen Formen, bei denen nur das vertikale,
+nicht aber das horizontale Wachstum unbeschr"ankt ist, die Formen mit diagonalen Seitentrieben
+vollst"andig aus der Population.
+
+Nach diesem Vorgang ist eine mehr als 1000 Generationen lange Phase relativer Stasis zu beobachten.
+Lediglich leichte Ver"anderungen in der Dynamik der Fluktuation der maximalen Fitnesswerte weisen
+darauf hin, da"s es Ver"anderungen in Details des Wachstumsverhaltens gibt. Nach dieser Periode
+der Stasis ist, etwa bei Generation 2200, wieder ein sprunghafter Anstieg sowohl der maximalen als
+auch durchschnittlichen Fitness zu verzeichnen. Die Abbildungen \ref{xlong0105worlds}e und
+\ref{xlong0105worlds}f zeigen, da"s diesem Sprung eine grundlegene "Anderung des Bauplans der
+Pflanzen zugrundeliegt: Statt eines vertikal wachsenden Hauptsprosses bilden sie nun einen
+diagonalen Hauptspro"s aus.
+
+Bei den diagonalen
+Formen ist die Anzahl der Zellen, die an einem Tag ein Photon absorbieren k"onnen, gr"o"ser
+als bei den vertikalen Formen. Daher k"onnen sie erheblich effektiver als vertikal wachsende Pflanzen
+Licht absorbieren. Da"s die diagonal wachsenden Formen sich nicht schon wesentlich fr"uher
+durchgesetzt haben, liegt daran, da"s nicht die prinzipielle Effektivit"at, sondern die
+Effektivit"at im Kontext der Gesamtpopulation letztlich "uber die Vermehrungschancen einer
+Wuchsform entscheidet. Bei einer diagonal wachsenden
+Pflanze in einer Umgebung vertikal wachsender Pflanzen ist die Wahrscheinlichkeit, da"s ihr Wachstum
+vorzeitig durch Kollisionen zum Erliegen kommt, recht hoch. Abb.\ \ref{xlong0105worlds}e zeigt
+einige diagonal wachsende Pflanzen, deren Wachstum durch Kollisionen mit vertikal wachsenden
+Pflanzen vorzeitig zum Stillstand kommt. Nur eine diagonal wachsende Pflanze hat alle ihre
+vertikal wachsenden Nachbarn "uberwuchert. Da"s sich die diagonalen Formen in dieser Phase "uberhaupt
+durchsetzen k"onnen, liegt auch daran, da"s die dominierenden vertikalen Formen hier eine k"urzere,
+gedrungene Gestalt haben. Mit der Zunahme der H"aufigkeit
+diagonaler Formen verringert sich ihr Kollisionsrisiko, w"ahrend es f"ur die vertikal wachsenden
+Formen gleichzeitig steigt (s.\ Abb.\ \ref{xlong0105worlds}f)
+
+% Drop der Anzahl benutzter Gene
+
+Weiterhin ist die vertikale Form bereits durch eine lange Evolution
+seitlicher Verzweigungen gut an die Wachstumsbedingungen in einer von vertikal wachsenden Pflanzen
+dominierten Welt angepa"st. Diese auf dem vertikalen Grundbauplan aufbauenden Modifikationen
+gehen beim "Ubergang zum diagonalen Grundbauplan verloren, weil die Aktivierungsketten
+zwischen dem Keimzellgen und den f"ur die Modifikationen verantwortlichen Genen unterbrochen 
+werden.
+
+In dieser Weise sind die ersten diagonal wachsenden Pflanzen primitive und schlecht adaptierte
+Realisierungen des neuen Bauplans. Offenbar "uberwiegt jedoch der Vorteil der verbesserten
+Effizienz bei der Lichtabsorption, so da"s der neue, diagonale Bauplan sich gegen die vertikal
+wachsenden Formen durchsetzt und letztere dauerhaft verdr"angt.
+
+Nach seiner Etablierung erf"ahrt auch der diagonale Bauplan verschiedene Modifikationen.
+Die erste Adaptation ist die Verdickung des Hauptsprosses durch die Auflagerung weiterer
+Zellschichten (Abb.\ \ref{xlong0105worlds}g). Sp"ater ist die Evolution von Seitentrieben zu beobachten,
+die unbeschr"ankt diagonal nach rechts von der diagonal nach links wachsenden Hauptachse auswachsen.
+In einem Abschnitt, der sich etwa zwischen den Generationen 3500 bis 3800 erstreckt, treten Pflanzen
+auf, die durch die Ausbildung vieler diagonaler Seitentriebe eine stark buschf"ormige Erscheinung
+haben (Abb.\ \ref{xlong0105worlds}h).
+In allzu gro"ser Zahl sind diese Seitentriebe jedoch unvorteilhaft, weil ihre Ausbildung stets mit dem
+Risiko von Kollisionen und daraus resultierender Energievergeudung verbunden ist. Die buschf"ormigen
+Wuchsformen verdr"angen die haupts"achlich diagonal nach links wachsenden Formen daher nicht dauerhaft.
+Zum Ende des Laufs \verb|xlong0105| wird die Population durch Formen, die nur wenige seitliche
+Verzweigungen bilden, dominiert (Abb.\ \ref{xlong0105worlds}i).
+
+
+\paragraph{Evolution der Genome und Wachstumsprogramme}
+\label{xlong0105-geno}
+% Genomlaenge
+
+Die Genoml"angen schwanken relativ stark im Laufe der Simulation, diese Schwankungen weisen jedoch
+eine geringe Korrelation zu der Evolution der Fitness und der Gestalt der Pflanzen auf. Die Genoml"ange
+ist jedoch deutlich mit der Anzahl verschiedener Genotypen korreliert. Dies liegt daran, da"s die
+Mutationsraten pro Zeichen und Generation definiert sind. Ein kurzes Genom wird daher mit geringerer
+Wahrscheinlichkeit beim Mutationsschritt ver"andert als ein langes Genom. Eine Verringerung der
+Anzahl unterschiedlicher Genotypen f"uhrt auch zu einem R"uckgang der genetischen Diversit"at.
+
+% Anzahl aktiver Gene
+
+\begin{sloppypar}
+Abb.\ \ref{xlong0105genomes} zeigt einige f"ur die verschiedenen Phasen des Evolutionsprozesses
+in \verb|xlong0105| charakteristische regulatorische Netzwerke. Beim Wachstum einer zweizelligen
+Pflanze wird nur ein Gen aktiviert, das eine Teilung der Keimzelle ausl"ost
+(Abb.\ \ref{xlong0105genomes}a). Mit der Evolution von 
+Pflanzen mit genetisch beschr"anktem Wachstum in den ersten 30 Generationen nimmt die Anzahl der
+beim Wachstum der Pflanzen aktivierten Gene zun"achst zu. Bei der Ausbreitung der unbeschr"ankt
+wachsenden Pflanzen sinkt die Anzahl aktivierter Gene jedoch wieder ab. Der Grund daf"ur ist,
+da"s die Grundform der vertikal wachsenden Pflanze durch ein regulatorisches Netzwerk von nur
+zwei Genen codiert wird (Abb.\ \ref{xlong0105genomes}b), bei dem ein Gen
+sein eigener Aktivator ist. Dieses Gen (Gen 20 in der Abbildung) veranla"st die Produktion einer
+Tochterzelle, in der wiederum dasselbe Gen aktiviert wird. Mit diesem Selbstregulationsmechanismus
+kann so mit einer geringen Anzahl von Genen das Wachstumsprogramm f"ur eine unbeschr"ankt wachsende
+Pflanze codiert werden, deren Fitness derjenigen beschr"ankt wachsender Formen, deren Wachstum durch gr"o"sere
+regulatorische Netzwerke gesteuert wird, "uberlegen ist.
+\end{sloppypar}
+
+Das Auftreten von Formen mit seitlichen Zellen f"uhrt zum n"achsten evolution"aren Schritt. Diese
+Formen kommen durch eine Erweiterung des Grundprogramms f"ur das unbeschr"ankte Wachstum eines vertikalen
+Sprosses zustande, entsprechend nimmt auch der Umfang des regulatorischen Netzwerks wieder zu
+(Abb.\ \ref{xlong0105genomes}c). Diese Abbildung zeigt, da"s die Evolution der vertikalen
+Formen mit seitlich auswachsenden Zellen einige Gene anf"anglich zur Aktivierung von Genen f"uhrt,
+die Teilungsversuche ausl"osen, die zum Scheitern verurteilt sind. In Abb.\ \ref{xlong0105genomes}c
+steuert Gen 11 den Versuch der Produktion einer Tochterzelle rechts "uber der Mutterzelle bei einer
+lokalen Struktur, in der diese Position bereits durch eine Zelle derselben Pflanze besetzt ist.
+Durch die Aktivierung dieses Gens wird Energie verbraucht, ohne da"s eine neue Zelle produziert werden
+kann, dem Nachteil des Energieverbrauchs steht also kein Vorteil gegen"uber.
+
+Die Formen mit einem prim"aren, vertikalen Spross und sekund"aren, diagonalen Trieben weisen "uberraschend
+komplexe regulatorische Netzwerke auf (Abb.\ \ref{xlong0105genomes}d). Das Keimzellgen 55 und Gen 36
+codieren in bereits bekannter Weise das Wachstum des vertikalen Hauptsprosses. Die Ausbildung des seitlichen
+Triebes wird durch die Aktivierung von Gen 37, das die Produktion einer Zelle seitlich des Hauptsprosses
+ausl"ost, initiiert. Dieses aktiviert Gen 25, was schlie"slich das selbstaktivierende Gen 58 aktiviert,
+das die Elongation des seitlichen Triebes steuert. Durch die Aktivierung von Gen 22 wird dem seitlichen
+Trieb eine weitere Zellschicht aufgelagert. Schlie"slich kommt es durch die Initiierung des seitlichen
+Triebes zur Aktivierung von Gen 3, was durch die Aktivierung der Gene 27 und 30 zur Beendigung des
+Wachstums des Hauptsprosses f"uhrt. Im Unterschied zu den zuvor beobachteten vertikal wachsenden Formen (Abbildungen
+\ref{xlong0105genomes}b und \ref{xlong0105genomes}c) kann so im oberen Bereich des Hauptsprosses Energie
+gesammelt werden.
+
+Der hier beobachtete "Ubergang vom prim"aren, vertikalen zum sekund"aren, diagonalen Wachstum zeigt,
+wie die stochastische Natur der Lichtabsorption durch die deterministischen Entwicklungsprogramme
+genutzt werden kann, um "Uberg"ange der beschriebenen Art mit einer bestimmten Wahrscheinlichkeit
+zu initiieren. Zu dem "Ubergang vom vertikalen zum diagonalen Wachstum kommt es bei dem in
+Abb.\ \ref{xlong0105genomes}d gezeigten Entwicklungsprogramm dann, wenn das Photon in der Spalte,
+in der der vertikale Spro"s w"achst, nicht von der apikalen Zelle, sondern von einer darunterliegenden
+Zelle absorbiert wird. Dies f"uhrt zur Aktivierung des Gens 37 und damit zu der Initiierung des
+diagonalen Seitentriebs.
+
+Am oberen Ende des terminierten Hauptsprosses befindet sich, um
+eine Position gegen"uber dem Hauptspro"s nach links verschoben, eine Zelle, welche die Aktion \verb|mut-|
+ausf"uhrt. Die dadurch erreichte Senkung dient der Verbesserung der Chance, das komplexe Entwicklungsprogramm
+ohne Beeintr"achtigung oder Zerst"orung durch Mutationen in die n"achste Generation zu vererben.
+Das in Abb.\ \ref{xlong0105genomes}d gezeigte Wachstumsprogramm umfa"st neun Gene. Ohne das Gen 30 w"aren es acht
+Gene, und die Ausbreitungszahl (Gl.\ \ref{programspreadm-eq}) betr"uge
+$A_E(0.01, 0.5, 8) = 1/(1-0.5) \cdot (1-0.01)^{3 \cdot 16} \approx 1.23$. Mit dem Gen 30 ist das Wachstumsprogramm ein Gen
+l"anger. Bei rund der H"alfte der Genome mit diesem Entwicklungsprogramm werden jedoch durch die Aktivierung des
+Gens 30 am letzten Tag der Vegetationsperiode die effektiven Mutationsraten halbiert. Die Ausbreitungszahl
+dieses Entwicklungsprogramms betr"agt somit $(A_E(0.01, 0.5, 9) + A_E(0.005, 0.5, 9)) / 2 \approx 1.34$.
+Die Expression von Gen 30 f"uhrt somit zu einem signifikanten Reproduktionsvorteil.
+
+Die hohe Anf"alligkeit des komplexen Wachstumsprogramms in Abb.\ \ref{xlong0105genomes}d ist m"oglicherweise
+einer der Faktoren, die eine dauerhafte Etablierung dieser Wuchsform verhindern. In Generation 2200
+dominieren gedrungene Formen, die seitlich mehrere Zellschichten ausbilden k"onnen
+(Abb.\ \ref{xlong0105genomes}e). Dieses seitliche Wachstum wird in der Regel durch Kollision mit dem
+linken Nachbarn begrenzt. In der Generation 2200 treten bereits die ersten diagonal wachsenden
+Formen auf, die in weniger als 100 Generationen die vertikalen Formen verdr"angen. Abb.\ \ref{xlong0105genomes}f
+zeigt, da"s das Entwicklungsprogramm der diagonal wachsenden Pflanzen extrem einfach ist, es ist analog
+zu dem der einfachen vertikalen Pflanzen (Abb.\ \ref{xlong0105genomes}b). Da keine Zelle einer diagonal
+wachsenden Pflanze eine andere Zelle derselben Pflanze beschattet, haben diagonal wachsende Pflanzen jedoch
+typischerweise erheblich mehr energiereiche Zellen als vertikal wachsende Pflanzen, und somit haben sie
+auch einen h"oheren Fitnesswert.
+
+Auch das Grundprogramm der diagonal wachsenden Pflanze wird im weiteren Verlauf der Evolution erweitert.
+Abb.\ \ref{xlong0105genomes}g zeigt ein Genom, in dem neben den beiden Genen 24 und 16, die das Wachstum
+des prim"aren, diagonalen Sprosses steueren, drei weitere Gene zur Produktion von Zellen in einer diesem
+Hauptspro"s aufgelagerten Schicht aktiviert werden.
+
+Abb.\ \ref{xlong0105genomes}h zeigt das regulatorische Netzwerk im Genom einer buschf"ormigen Pflanze.
+Die Gene 9 und 18 steuern in der zuvor beschriebenen Weise das Wachstum eines diagonalen Prim"arsprosses,
+daher kann diese Form genetisch als auf der diagonalen Grundform basierend charakterisiert werden.
+Zur Entwicklung der buschf"ormigen Gestalt werden insgesamt sieben Gene aktiviert, das Entwicklungsprogramm
+ist also, "ahnlich wie das in Abb.\ \ref{xlong0105genomes}d Dargestellte, relativ komplex.
+Wie bereits bei der Diskussion von Abb.\ \ref{xlong0105genomes}d ausgef"uhrt wurde, werden die
+Reproduktionserfolge bei komplexen Wuchsformen durch die Mutation st"arker geschm"alert als bei
+einfachen Entwicklungsprogrammen; die Verringerung der effektiven Mutationsraten bringt bei komplexen
+Entwicklungsprogrammen dementsprechend einen gr"o"seren Vorteil. Dies erkl"art den Ausschlag des
+durchschnittlichen Mutationsexponenten in den negativen Bereich bei Generation 3600, gegen Ende
+der Periode des Auftretens komplexerer, buschf"ormiger Formen. Trotz dieser Senkung der effektiven
+Mutationsraten sterben die buschf"ormigen Formen aus. Ein Faktor, der dabei eine Rolle spielt, ist,
+wie bereits in \ref{xlong0105-pheno} besprochen, das gr"o"sere Kollisionsrisiko bei buschf"ormigem
+Wachstum. Ein weiteres Problem liegt in der Etablierung einer mutationsratenver"andernden 
+Aktivit"at mit ausreichend feiner Regulierbarkeit. Um optimale Wirkung zu entfalten, mu"s die
+Aktion \verb|mut-| von einer oder von wenigen Zellen am letzten Tag der Vegetationsperiode
+ausgef"uhrt werden, wie dies bei dem in Abb.\ \ref{xlong0105genomes}d gezeigten Wachstumsprogramm
+der Fall ist. Wie Abb.\ \ref{xlong0105genomes}h zeigt, finden
+bei dem buschf"ormigen Wachstum nur Zellteilungen in diagonale Richtungen statt. Dementsprechend
+k"onnen nur die vier diagonalen Nachbarpositionen in einer lokalen Struktur besetzt werden.
+Keine der lokalen Strukturen aus dieser eingeschr"ankten Menge tritt gleichzeitig ausreichend
+zuverl"assig und ausreichend selten auf, um als Ausl"oser f"ur die Aktion \verb|mut-| geeignet zu sein.
+
+Nach dem Aussterben der buschf"ormigen Pflanzen wird die Population von Formen dominiert, die einen
+verdickten, diagonalen Hauptspro"s mit wenigen Verzweigungen ausbilden. Abb.\ \ref{xlong0105genomes}i
+zeigt eine typische Pflanze dieser Art und ihr Genom mit dem regulatorischen Netzwerk. Die Abbildung
+zeigt, da"s bei diesem Entwicklungsprogramm wiederum die Verzweigungsh"aufigkeit unter Ausnutzung der stochastischen
+Natur der Lichtabsorption reguliert wird. Das Gen 1 wird nur dann aktiviert, wenn in der dem Hauptspro"s
+aufgelagerten Zellkette, die durch die Aktivit"at des Gens 22 erzeugt wird, eine Zelle isoliert ist.
+Wenn eine Zelle, die durch Gen 22 produziert wurde, bei ihrer ersten Lichtabsorption bereits einen
+linksoberen oder einen rechtsunteren Nachbarn hat, wird kein diagonal nach rechts wachsender Seitentrieb
+initiiert, sondern die Zelle teilt sich nicht mehr und dient so als Energiespeicher, der der Erh"ohung
+des Fitnesswerts dient. Das Wachstum dieses recht erfolgreichen Ph"anotyps wird von nur vier Genen
+gesteuert, was das entsprechende Entwicklungsprogramm robust gegen Mutationen macht.
+
+
+\paragraph{Evolution der Mutationsraten}
+
+In \runname{xlong0105} kommt es zu keiner Evolution signifikant ver"anderter Mutationsraten. Der
+Durchschnittswert des Mutationsexponenten fluktuiert, ohne das eine Tendenz erkennbar wird. Lediglich
+bei Generation 3600 kommt es zu einer kurzen Episode, in der die Mutationsexponenten deutlich erniedrigt
+sind. Dies steht im Zusammenhang mit dem Auftreten buschiger Pflanzen, wie in (\ref{xlong0105-geno})
+beschrieben wurde.
+
+
+\paragraph{Distanzverteilungen und DVK}
+
+Die Editierabst"ande der Genome sind w"ahrend des gesamten Laufs relativ gleichm"a"sig verteilt, was
+in der Grauwertdarstellung zu einem entsprechend einheitlichen Grauton in dem Intervall, in dem die
+Werte verteilt sind, f"uhrt. Die Gr"o"se dieses Intervalls wird durch die Genoml"angen bestimmt.
+Die Distanzwerte h"aufen sich etwas an der oberen Grenze dieses Intervalls, dies macht sich in einem
+etwas dunkleren Band bemerkbar, das in etwa der Kurve der Genoml"angen, multipliziert mit zwei (weil
+ein Gen aus zwei Bytes besteht) entspricht. Die Feststellung, da"s die Distanzwerte bis hinauf
+in den Maximalbereich relativ gleichm"a"sig verteilt sind, zeigt, da"s die Genome sich stets in weit auseinanderliegenden
+Bereichen im Sequenzraum verteilen. Dies ist m"oglich, weil in den meisten Abschnitten von \runname{xlong0105}
+nur ein kleiner Anteil der Gene eines Genoms w"ahrend der Pflanzenentwicklung aktiviert wird. Beispielsweise
+liegt w"ahrend der gesamten zweiten H"alfte von \runname{xlong0105} die durchschnittliche Genoml"ange stets um 70,
+die durchschnittliche Anzahl der aktivierten Gene bleibt jedoch stets unter 7. Somit bleiben mehr als 90\%
+eines Genoms bei der Pflanzenentwicklung inaktiv.
+
+Die DVK hat in Generation 0 einen Wert von ca.\ 0.5, dieser ist typisch f"ur vollst"andig randomisierte
+Populationen, die bei LindEvol-GA als Startpopulationen verwendet werden. Innerhalb der ersten zehn
+Generationen schnellt die DVK auf Werte im Bereich von 4 hoch. W"ahrend des gesamten Laufs bleiben die
+DVK-Werte in diesem Bereich. Die verschiedenen Evolutionsprozesse, wie evolution"are Spr"unge und "Anderungen
+der Genoml"angen, haben keine signifikanten Auswirkungen auf die DVK der relativen Editierabst"ande.
+Da bei der Diskretisierung des relativen Editierabstands in 100 Intervalle der Maximalwert der DVK
+$-\log(0.01) \approx 4.6$ betr"agt, sind die beobachteten DVK-Werte im Bereich von 4 als hoch anzusehen.
+
+
+% Einzellerei -> beschaenktes Wachstum -> unbeschraenktes Wachstum
+% Genomlaenge: starke Schwankungen bei gleichbleibender Fitness
+% Anzahl benutzter Gene: Tendenz steigend, Einbruch bei Uebergang zu diagonaler Form.
+% Anzahl Arten: Wechselwirkung mit Genomlaenge wg. Mutationsrate pro Zeichen
+% Distanzverteilung: Relativ gleichmaessig
+% DVK: Sprunghafter Anstieg bei Uebergang von randomisierter zu strukturierter Population
+%     Leichter Anstieg bei evolutionaerem Sprung
+% Genetische Diversitaet: Hauptsaechlich abhaengig von Genomlaenge -> Anzahl Arten
+% Mutationsexponent: Keine nennenswerten Entwicklungen
+% Selbstaktivierung -> MADS-zeugs
+% Durchsetzung am ehesten dauerhaft, wenn mit anstieg mittlerer Fitness verbunden.
+
+
+\subsubsection{Lauf \runname{c-xlong0105}: Neutrale Kontrollsimulation mit moderaten Mutationsraten und
+    moderater Selektion}
+\label{c-xlong0105section}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,17)
+\put(0,0){\makebox(16,17){\epsfxsize=16cm \epsffile{c-xlong0105.eps}}}
+\end{picture}
+\caption{\label{c-xlong0105results}
+Lauf der neutralen Kontrollsimulation \runname{c-xlong0105}. Dieser Lauf wurde mit 
+denselben Kontrollparametern wie Lauf \runname{xlong0105} durchgef"uhrt.
+}
+\end{figure}
+
+Abb.\ \ref{c-xlong0105results} zeigt die Ergebnisse der neutralen Kontrolle zum
+Lauf \runname{xlong0105}. Diese Kontrollsimulation zeigt, da"s es in dem Simulationszeitraum von
+5000 Generationen zu erheblichen Schwankungen der Genoml"angen allein aufgrund von {\slshape random
+drift} kommen kann. Die Genome bleiben jedoch k"urzer als in Lauf \runname{xlong0105}, weil
+bei der neutralen Kontrolle keine f"ur die Selektion relevante genetische Information gebildet
+werden kann.
+
+In Abb.\ \ref{c-xlong0105results} kann der Zusammenhang zwischen der Genoml"ange und der
+Anzahl verschiedener Genotypen, die sich wiederum auf die genetische Diversit"at auswirkt,
+deutlich beobachtet werden. In den Generationen 2000 bis 3500, in denen die Genome relativ
+lang sind, ist die Anzahl verschiedener Genotypen maximal oder fast maximal, und die genetische
+Diversit"at ist hoch. Nach Generation 4000 werden die Genoml"angen teils extrem niedrig.
+Kurze Genome werden durch die Mutation mit geringerer Wahrscheinlichkeit ver"andert als
+lange Genome. Entsprechend erh"oht sich bei kurzen Genomen die Wahrscheinlichkeit daf"ur, da"s
+die Nachkommen eines Individuums in der folgenden Generation identische Genotypen haben.
+Dies erkl"art, weshalb es in den Abschnitten mit extrem kurzen Genomen zu starken R"uckg"angen
+bei der Anzahl unterschiedlicher Genotypen und der genetischen Diversit"at kommt.
+
+Die DVK-Werte sind in der neutralen Kontrolle ungef"ahr genauso gro"s wie im Lauf \runname{xlong0105}.
+Dies zeigt, da"s die Bildung einer strukturierten Vielfalt durch den Mechanismus des genetischen
+Algorithmus nicht in entscheidender Weise von der verwendeten Fitnessfunktion abh"angt. Das ausbalancierte
+Zusammenspiel von Mutation und Selektion reicht zur Entstehung der strukturierten Vielfalt aus.
+
+Die R"uckg"ange der DVK in Abschnitten, in denen die Genome extrem kurz werden, liegt an der
+diskreten Natur des relativen Editierabstandes. Die Anzahl der Werte, die der relative Editierabstand
+bei einer maximalen Genoml"ange von $l_{\mathit{max}}$ annehmen kann, ist nach oben beschr"ankt durch die
+Anzahl aller rationaler Zahlen $i/j$ mit $i, j \in \mbox{\bfseries N}_0, i \leq j, 1 \leq j \leq l_{\mathit{max}}$.
+Diese ist nach oben beschr"ankt durch die Anzahl aller Br"uche der Form $i/j$. Mit jedem festen $j$ k"onnen
+$j+1$ Br"uche mit $0 \leq i/j \leq 1$ gebildet werden. Die Gesamtzahl aller Br"uche mit $1 \leq j \leq l_{\mathit{max}}$
+und $0 \leq i/j \leq 1$ betr"agt daher $\sum_{j=1}^{l_{\mathit{max}}}j+1 = l_{\mathit{max}} \cdot (l_{\mathit{max}}+3) / 2$.
+(Die tats"achliche Anzahl unterschiedlicher rationaler
+Zahlen der Form $i/j$ ist kleiner, weil bei dieser Z"ahlung Br"uche, von denen eine gek"urzte Form bereits
+gez"ahlt wurde, nicht ausgelassen werden.) Sinkt die Anzahl der m"oglichen Werte, die
+der relative Editierabstand annehmen kann, unter die Anzahl der Intervalle, mit der bei der Berechnung
+der DVK diskretisiert wird, k"onnen einige Intervalle keine Distanzwerte mehr enthalten, und die entsprechenden
+H"aufikgeitswerte sind 0. Auf diese Weise kommt zu
+einer Ungleichm"a"sigkeit der Verteilung der Werte auf die Diskretisierungsintervalle, die zu einer kleineren
+DVK f"uhrt. Bei $l_{\mathit{max}}=10$ kann der relative Editierabstand nach der obigen Absch"atzung h"ochstens
+$(10 \cdot 13)/2 = 65$ verschiedene Werte annehmen, die DVK kann damit den Maximalwert von $-\log(1/65) \approx 4.17$
+nicht "uberschreiten. Dieser Wert liegt bereits deutlich unterhalb des durch die Anzahl der Diskretisierungsintervalle
+gegebenen Limits von $-\log(0.01) \approx 4.6$.
+Der in Abschnitten mit sehr kurzen Genomen beobachtete starke R"uckgang
+der DVK kann daher nicht allein auf eine Abnahme der Diversit"at infolge der geringen Mutationsaktivit"at zur"uckgef"uhrt
+werden; auch der beschriebene Diskretisierungseffekt tr"agt zu den beobachteten R"uckg"angen bei.
+
+
+% -> neutrale Kontrolle
+
+
+\subsubsection{Lauf \runname{xlong0108}: Moderate Mutationsraten und scharfe Selektion}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,17)
+\put(0,0){\makebox(16,17){\epsfxsize=16cm \epsffile{xlong0108.eps}}}
+\end{picture}
+\caption{\label{xlong0108results}
+LindEvol-GA Lauf \runname{xlong0108} mit moderaten Mutationsraten (0.01) und scharfer Selektion (0.8).
+}
+\end{figure}
+
+\begin{figure}[t]
+
+\unitlength1cm
+\begin{picture}(16,14)
+\put(0,9.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0108-0000400p.eps}}}
+\put(0,9.0){\makebox(7,0.5){{\bfseries a:} Generation 400}}
+\put(8,9.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0108-0000600p.eps}}}
+\put(8,9.0){\makebox(7,0.5){{\bfseries b:} Generation 600}}
+\put(0,5.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0108-0001000p.eps}}}
+\put(0,4.5){\makebox(7,0.5){{\bfseries c:} Generation 1000}}
+\put(8,5.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0108-0002000p.eps}}}
+\put(8,4.5){\makebox(7,0.5){{\bfseries d:} Generation 2000}}
+\put(0,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0108-0004000p.eps}}}
+\put(0,0.0){\makebox(7,0.5){{\bfseries e:} Generation 4000}}
+\put(8,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong0108-0004999p.eps}}}
+\put(8,0.0){\makebox(7,0.5){{\bfseries f:} Generation 4999}}
+\end{picture}
+
+\caption{\label{xlong0108genomes}
+Genome von typischen Pflanzen aus verschiedenen Generationen des Laufs \runname{xlong0108}. Oben ist jeweils
+der Ph"anotyp der Pflanze dargestellt, darunter ihr Genom in graphischer Form mit regulatorischem Netzwerk.
+}
+\end{figure}
+
+Abb.\ \ref{xlong0108results} zeigt die numerischen Ergebnisse des Laufs \runname{xlong0108}, der
+mit der scharfen Selektionsrate von 0.8 und moderaten Mutationsraten (0.01) durchgef"uhrt wurde.
+Die Fitnesswerte erreichen in diesem Lauf h"ohere Maxima als im Lauf \runname{xlong0105}. Die
+durchschnittlichen Fitnesswerte sind hingegen nicht h"oher als in \runname{xlong0105}.
+Abb.\ \ref{xlongworlds} (Seite \pageref{xlongworlds}) zeigt die Ursache f"ur diesen Befund. W"ahrend in \runname{xlong0105}
+Formen mit nur wenigen Verzweigungen dominieren, sind in Generation 4999 von Lauf \runname{xlong0108}
+buschartige Pflanzen vorherrschend. Die Selektionsvorteile derartiger Formen sind bei scharfer Selektion
+st"arker als bei moderater Selektion. Bei scharfer Selektion ist ein Fitnesswert im Spitzenbereich
+zur erfolgreichen Vermehrung erforderlich. Dieser kann nur durch die "Uberwucherung von Nachbarpflanzen
+erreicht werden. Pflanzen, die "uberwachsen werden, haben kaum eine Fortpflanzungschance, auch wenn
+sie die Energieverluste durch Kollisionen durch eine sparsamere Wuchsform begrenzen.
+
+Wie in \runname{xlong0105} lassen sich anhand des Verlaufs der Fitnesswerte einige evolution"are
+Spr"unge identifizieren. Auch in \runname{xlong0108} entwickeln sich zun"achst beschr"ankt wachsende
+Formen. Die ersten unbeschr"ankt wachsenden Formen wachsen vertikal (Abb.\ \ref{xlong0108genomes}a).
+Kurz vor der Generation 500 erfolgt der evolution"are Schritt vom vertikalen zum diagonalen Wachstum
+(Abb.\ \ref{xlong0108genomes}b). Aus der diagonal wachsenden Grundform entwickeln sich in wenigen
+hundert Generationen verzweigte Formen (Abb.\ \ref{xlong0108genomes}c). Gelegentlich treten Phasen
+auf, in denen die buschigen Formen durch stark verzweigte Pflanzen verdr"angt werden (Abb.\ \ref{xlong0108genomes}d).
+Formen mit wenigen Verzweigungen setzen sich jedoch zu keinem Zeitpunkt durch. Am Ende des Laufs dominieren
+wieder buschartige Formen (Abb.\ \ref{xlong0108genomes}e). 
+
+Die Genoml"angen sowie die Anzahl aktivierter Gene erreichen h"ohere Spitzenwerte als in \runname{xlong0105}.
+Dies liegt u.a.\ an den Beschr"ankungen des Genominterpretationssystems. Beim Wachstum einer buschf"ormigen
+Pflanze kommt es an der Wachstumsfront zu vielen "ahnlichen lokalen Strukturen. Um eine stabil fortschreitendes,
+buschf"ormiges Wachstum zu gew"ahrleisten, mu"s f"ur jede dieser lokalen Strukturen eine Regel, die eine die
+Buschform erg"anzende Zellteilung verursacht, im Genom codiert sein. Daher sind z.B.\ zur Codierung der in
+Generation 4999 von \runname{xlong0108} typischen Form (Abb.\ \ref{xlong0108genomes}f) sieben Gene erforderlich, w"ahrend
+die in Generation 4999 von \runname{xlong0105} verbreitete, gering verzweigte Form (Abb.\ \ref{xlong0105genomes}i)
+mit nur vier Genen codiert wird.
+
+\begin{sloppypar}
+Eine dauerhafte Evolution einer aktiven Modifikation der Mutationsraten ist in \runname{xlong0108} nicht
+zu beobachten, wie in \runname{xlong0105} weist die Kurve des durchschnittlichen Mutationsexponenten lediglich
+einige episodische Ausschl"age auf.
+\end{sloppypar}
+
+Auch der Verlauf der DVK entspricht qualitativ demjenigen, der in \runname{xlong0105} beobachtet wurde: Nach einem
+anf"anglichen Anstieg ver"andert sich die DVK w"ahrend des gesamten Verlaufs nicht mehr in signifikanter Weise.
+Die DVK pendelt sich in einem Bereich hoher Werte ein, sie
+ist jedoch etwas niedriger als in \runname{xlong0105}. Aus den Distanzverteilungen
+ist ersichtlich, da"s die H"aufigkeiten der gr"o"seren Distanzwerte geringer sind als die der kleinen Distanzwerte;
+die h"oheren taxonomischen Kategorien sind also unterrepr"asentiert. Dies ist dadurch, da"s bei der scharfen
+Selektionsrate von 0.8 ein Cluster sehr schnell aus der gesamten Population verdr"angt werden kann, zu erkl"aren.
+Durch die scharfe Selektion ist also die Ausbildung einer breitgef"acherten Taxonomie erschwert, das System tendiert
+in Richtung Konvergenz (vgl.\ \ref{ddc-method}). Diese Tendenz ist jedoch nur schwach ausgepr"agt, dies zeigt sich
+darin, da"s die Anzahl der verschiedenen Genotypen und die genetische Diversit"at w"ahrend des gesamten Laufs
+im Maximalbereich liegen, und da"s auch die DVK in einem im Vergleich zu \runname{xlong0105} nur wenig kleinere
+Werte annimmt.
+
+
+
+
+\subsubsection{Lauf \runname{xlong1005}: Hohe Mutationsraten und moderate Selektion}
+\label{xlong1005section}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,17)
+\put(0,0){\makebox(16,17){\epsfxsize=16cm \epsffile{xlong1005.eps}}}
+\end{picture}
+\caption{\label{xlong1005results}
+LindEvol-GA Lauf \runname{xlong1005} mit hohen Mutationsraten (0.1) und moderater Selektion (0.5).
+}
+\end{figure}
+
+% \begin{figure}
+% 
+% \unitlength1cm
+% \begin{picture}(16,5)
+% \put(0,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong1005-0004168p.eps}}}
+% \put(0,0.0){\makebox(7,0.5){{\bfseries a:} Generation 4168}}
+% \put(8,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong1005-0004999p.eps}}}
+% \put(8,0.0){\makebox(7,0.5){{\bfseries b:} Generation 4999}}
+% \end{picture}
+% 
+% \caption{\label{xlong1005genomes}
+% Genome von Pflanzen aus verschiedenen Generationen des Laufs \runname{xlong1005}.
+% Da sich infolge der zu hohen Mutationsraten keine Spezies dauerhaft etablieren kann,
+% stellen diese Beispiele keine charakteristischen Pflanzen dar.
+% }
+% \end{figure}
+
+Bei diesem Lauf, dessen Verlaufsdiagramm in Abb.\ \ref{xlong1005results}
+gezeigt wird, verl"auft der Evolutionsproze"s qualitativ anders als in den beiden zuvor diskutierten
+L"aufen. Obwohl es bei der maximalen Fitness immer wieder zu signifikant erh"ohten Werten kommt, k"onnen
+die entsprechenden Pflanzenformen sich nicht dauerhaft in der Population etablieren. Die stark erh"ohten
+Fitnesswerte verschwinden stets nach einigen Generationen wieder, und es kommt zu keiner Erh"ohung der
+durchschnittlichen Fitness.
+
+Abb.\ \ref{xlongworlds}d zeigt, da"s auch bei den Ph"anotypen keinerlei Entwicklung von Formen mit komplexerer
+Morphologie festzustellen ist. Auch nach 4999 Generationen existieren etliche Pflanzen, die "uberhaupt nicht
+wachsen. Keine der Pflanzen in Abb.\ \ref{xlongworlds}d zeigt unbeschr"anktes Wachstum. Dieses tritt zwar
+immer wieder auf, was jeweils mit einem Peak bei der maximalen Fitness
+einhergeht, die unbeschr"ankt wachsenden Formen verschwinden jedoch trotz ihres Selektionsvorteils wieder
+aus der Population.
+
+Diese Beobachtungen weisen darauf hin, da"s 
+bei den hohen Mutationsraten von 0.1 und der moderaten Selektionsrate von 0.5 
+die kritische Fehlergrenze selbst f"ur elementare Entwicklungsprogramme "uberschritten ist.
+Dies kann auch anhand von Gl.\ \ref{errthresholdprgm-eq} nachgewiesen werden.
+Zur Realisierung einer unbeschr"ankt
+wachsenden Pflanze sind mindestens zwei Gene erforderlich, ein Keimzellgen und ein Gen f"ur das apikale
+Wachstum. Abb.\ \ref{xlong0105genomes}b zeigt ein Beispiel hierf"ur. Die kritische Fehlergrenze f"ur ein solches
+Entwicklungsprogramm betr"agt $t_E(0.5,2) = \sqrt[6 \cdot 2]{1-0.5} \approx 0.056$, dieser Wert wird durch die Mutationsraten
+von 0.1 deutlich "uberschritten.
+Selbst elementarste Entwicklungsprogramme
+f"ur unbeschr"ankt wachsende Pflanzenformen werden also durch die hohen Mutationsraten so schnell wieder zerst"ort,
+da"s ihre Ausbreitung und dauerhafte Etablierung in der Population trotz "uberlegener Fitnesswerte unm"oglich
+ist. Somit ist eine signifikante Zunahme an morphologischer Komplexit"at gegen"uber dem
+vollst"andig randomisierten Startzustand nicht m"oglich. Lediglich eine gewisse H"aufung zweizelliger Pflanzen
+kann festgestellt werden; ihre kritische Fehlergrenze liegt bei $t_E(0.5,1) = \sqrt[6 \cdot 1]{1-0.5} \approx 0.109$ und ist
+somit durch die Mutationsraten von 0.1 nicht "uberschritten.
+
+Wie bei den beiden zuvor besprochenen L"aufen pendelt sich die DVK von Anfang an auf einen Wert ein, auf dem
+sie w"ahrend des gesamten Laufs, abgesehen von statistischen Schwankungen, verbleibt. Dieser Wert liegt mit ca.\ 2.5
+deutlich unterhalb der hohen DVK-Werte um 4, die bei den L"aufen \runname{xlong0105} und \runname{xlong0108}
+beobachtet wurden. Die Distanzverteilungen von \runname{xlong1005} zeigen, da"s kleine Distanzwerte v"ollig
+fehlen, die Werte h"aufen sich im Bereich gro"ser Distanzen, in der N"ahe des Bereichs der Erwartungswerte
+f"ur Distanzen zwischen vollkommen unkorrelierten Genomen. Das System tendiert also stark in Richtung Randomisierung,
+was sich in der Gr"o"se der gemessenen DVK-Werte deutlich niederschl"agt. Derselbe Effekt, der die Evolution
+von Pflanzenformen mit erh"ohten Fitnesswerten verhindert, f"uhrt also auch zu deutlich erniedrigten DVK-Werten.
+
+
+\subsubsection{Lauf \runname{xlong1008}: Hohe Mutationsraten und scharfe Selektion}
+\label{xlong1008section}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,20)
+\put(0,0){\makebox(16,20){\epsfxsize=16cm \epsffile{xlong1008mx.eps}}}
+\end{picture}
+\caption{\label{xlong1008results}
+LindEvol-GA Lauf \runname{xlong1008} mit hohen Mutationsraten (0.1) und scharfer Selektion (0.8).
+}
+\end{figure}
+
+% \begin{figure}[p]
+% 
+% \unitlength1cm
+% \begin{picture}(16,20)
+% \put(0,18.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0000050w.eps}}}
+% \put(0,17.5){\makebox(16,0.5){{\bfseries a:} Generation 50}}
+% \put(0,15.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0000500w.eps}}}
+% \put(0,15){\makebox(16,0.5){{\bfseries b:} Generation 500}}
+% \put(0,13.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0001400w.eps}}}
+% \put(0,12.5){\makebox(16,0.5){{\bfseries c:} Generation 1400}}
+% \put(0,10.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0001700w.eps}}}
+% \put(0,10){\makebox(16,0.5){{\bfseries d:} Generation 1700}}
+% \put(0,8.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0002200w.eps}}}
+% \put(0,7.5){\makebox(16,0.5){{\bfseries e:} Generation 2200}}
+% \put(0,5.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0002400w.eps}}}
+% \put(0,5){\makebox(16,0.5){{\bfseries f:} Generation 2400}}
+% \put(0,3.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0003000w.eps}}}
+% \put(0,2.5){\makebox(16,0.5){{\bfseries g:} Generation 3000}}
+% \put(0,0.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0004999w.eps}}}
+% \put(0,0){\makebox(16,0.5){{\bfseries h:} Generation 4999}}
+% \end{picture}
+% 
+% \caption{\label{xlong1008worlds}
+% Gesamtaufnahmen der Welt in verschiedenen Abschnitten des Laufs \runname{xlong1008}. Es wurde jeweils
+% die gesamte Welt am Ende der Vegetationsperiode dargestellt.
+% }
+% \end{figure}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,20)
+\put(0,14.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong1008-0000050p.eps}}}
+\put(0,13.5){\makebox(7,0.5){{\bfseries a:} Generation 50}}
+\put(8,14.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong1008-0000500p.eps}}}
+\put(8,13.5){\makebox(7,0.5){{\bfseries b:} Generation 500}}
+\put(0,9.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong1008-0001400p.eps}}}
+\put(0,9.0){\makebox(7,0.5){{\bfseries c:} Generation 1400}}
+\put(8,9.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong1008-0001700p.eps}}}
+\put(8,9.0){\makebox(7,0.5){{\bfseries d:} Generation 1700}}
+\put(0,5.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong1008-0002200p.eps}}}
+\put(0,4.5){\makebox(7,0.5){{\bfseries e:} Generation 2200}}
+\put(8,5.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong1008-0002400p.eps}}}
+\put(8,4.5){\makebox(7,0.5){{\bfseries f:} Generation 2400}}
+\put(0,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong1008-0003000p.eps}}}
+\put(0,0.0){\makebox(7,0.5){{\bfseries g:} Generation 3000}}
+\put(8,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong1008-0004999p.eps}}}
+\put(8,0.0){\makebox(7,0.5){{\bfseries h:} Generation 4999}}
+\end{picture}
+
+\caption{\label{xlong1008genomes}
+Genome von typischen Pflanzen aus verschiedenen Generationen in Lauf \runname{xlong1008}.  Oben ist jeweils
+der Ph"anotyp der Pflanze dargestellt, darunter ihr Genom in graphischer Form.
+}
+\end{figure}
+
+Lauf \runname{xlong1008} wurde mit hohen Mutationsraten von 0.1 und der scharfen Selektionsrate von 0.8
+durchgef"uhrt. Bei diesem Lauf kommt es trotz der hohen Mutationsraten zur dauerhaften Etablierung
+unbeschr"ankt wachsender Formen mit komplexer Morphologie (vgl.\ Abb.\ \ref{xlong1008worlds},
+Seite \pageref{xlong1008worlds}). Im Vergleich
+zu den bisher besprochenen L"aufen kommt es in \runname{xlong1008} zu einer deutlichen Evolution negativer
+Mutationsexponenten, die Mutationsraten werden von den Pflanzen also durch Ausf"uhrung des
+Befehls \verb|mut-| aktiv gesenkt.
+
+Anhand der Abbildungen \ref{xlong1008worlds} und \ref{xlong1008genomes} k"onnen die einzelnen evolution"aren
+Schritte in \runname{xlong1008}
+verfolgt werden. Zun"achst treten vertikal wachsende Formen auf (Abb.\ \ref{xlong1008worlds}a), die etwa
+bei Generation 400 durch diagonal nach links wachsende Formen verdr"angt werden (Abb.\ \ref{xlong1008worlds}b).
+Sowohl bei den vertikal wachsenden als auch die diagonal wachsenden Formen ist stets ein gro"ser Anteil
+von einzelligen oder beschr"ankt wachsenden Pflanzen in der Population zu beobachten. Die hohen Mutationsraten
+f"uhren dazu, da"s bei einem gro"sen Teil der Nachkommenschaft der unbeschr"ankt wachsenden Formen das im
+Genom codierte Wachstumsprogramm durch Mutationen ver"andert wird. Aus Abb\ \ref{xlong1008genomes}
+ist ersichtlich, da"s sowohl das Entwicklungsprogramm der vertikal wachsenden als auch dasjenige
+der diagonal wachsenden Form nur zwei Gene umfa"st. Nach Gl.\ \ref{prgunchangedm-eq}
+ist bei den Mutationsraten von 0.1 die Wahrscheinlichkeit, da"s ein solches aus zwei Genen bestehendes
+Entwicklungsprogramm beim Mutationsschritt nicht von mindestens einer Mutation betroffen wird,
+$P_E(0.1,2) = (1 - 0.1)^{6 \cdot 2} \approx 0.282$. Dieser Wert stimmt gut mit der Beobachtung "uberein, da"s in
+Abb.\ \ref{xlong1008worlds}a und \ref{xlong1008worlds}b jeweils nur rund 30\% der Population den
+unbeschr"ankt wachsenden Ph"anotyp aufweisen. Diese "Ubereinstimmung ist ein Beleg f"ur die Praxisg"ultigkeit
+der in (\ref{mutconsequences}) abgeleiteten Absch"atzungen. Der geringe Prozentsatz an unbeschr"ankt wachsenden Pflanzen
+erkl"art auch den ausgesprochen niedrigen Wert der durchschnittlichen
+Fitness.
+
+\begin{sloppypar}
+Die Ausbreitungszahl eines Entwicklungsprogramms aus zwei Genen betr"agt in \runname{xlong1008}
+$A_E(0.1,0.8,2) \approx 1.41$, daher ist die Ausbreitung und Etablierung der elementaren unbeschr"ankt
+wachsenden Formen m"oglich. Bei einem Entwicklungsprogramm mit drei Genen ist die Ausbreitungszahl dagegen
+mit $A_E(0.1, 0.8, 3) \approx 0.75$ kleiner als 1.0; dies erkl"art, weshalb es nicht, wie in den L"aufen mit
+moderaten Mutationsraten, nach dem Auftreten der ersten unbeschr"ankt wachsenden Formen bald die Evolution
+komplexerer, unbeschr"ankt wachsender Formen einsetzt, obwohl
+in Abb.\ \ref{xlong1008worlds}a ein Ansatz hierzu erkennbar ist.
+\end{sloppypar}
+
+Die einfachen, diagonalen Formen dominieren "uber eine ausgedehnte Periode bis etwa zur Generation 1400.
+Hier kommt es zu einem signifikanten Anstieg der mittleren Fitness, der mit einem deutlichen Ausschlag
+der Durchschnittswerte der Mutationsexponenten in den negativen Bereich verbunden ist.
+Abb.\ \ref{xlong1008worlds}c zeigt, da"s die morphologische Komplexit"at der Pflanzen im Vergleich zu
+der elementaren, diagonalen Form zugenommen hat. Gleichzeitig ist auch die Dichte der unbeschr"ankt
+wachsenden Pflanzen gr"o"ser. Abb.\ \ref{xlong1008genomes}c zeigt die bei diesem evolution"aren Sprung
+neu aufgetretene Strategie. Die Gene 15 und 8 sind f"ur die Ausbildung des prim"aren, diagonalen
+Sprosses zust"andig. Gen 27 bewirkt die Auflagerung einer zweiten Zellschicht. Gen 29 dient dazu, diese
+aufgelagerte Zellschicht durch Teilungen von Zellen dieser Schicht selbst zu vervollst"andigen.
+
+Wenn die Zelle, die Gen 29 exprimiert, auf gleicher
+H"ohe mit der apikalen Zelle des diagonal wachsenden Sprosses ist, ver"andert dies die Nachbarschaft
+der apikalen Zelle, so da"s das Wachstum des Prim"arsprosses zum Erliegen kommt. In diesem Fall wird
+jedoch in der bei diesem Vorgang erzeugten Tochterzelle wiederum Gen 29 exprimiert, was dann zur
+Entstehung einer neuen apikalen Zelle f"uhrt. Auf diese Weise kommt der Knick im oberen Bereich
+der in Abb.\ \ref{xlong1008genomes}c dargestellten Pflanze zustande. Das Gen 29 hat also zwei
+unterschiedliche Funktionen, es spielt sowohl beim Wachstum der aufgelagerten Zellschicht als auch
+bei einem recht komplexen Proze"s der Verlagerung der Hauptspro"sachse eine Rolle. Derartige
+Mehrfachfunktionen wurden auch bei verschiedenen molekularen Genen, die die Morphogenese
+bei Pflanzen steuern, festgestellt. F"ur die in der Simulation beobachteten Pflanzen hat die
+Wuchsform mit gelegentlichen Knicken den Vorteil, da"s bei einem Knick jeweils die unterste Zelle,
+die dem Hauptspro"s aufgelagert wird, Energie speichert, anstatt die Aktion \verb|mut-| auszuf"uhren.
+Dies bringt einen geringen Fitnessvorteil, der jedoch bei der scharfen Selektionsrate von 0.8
+entscheidend sein kann.
+
+Die Zellen in der aufgelagerten Zellschicht sind nicht inaktive Energiespeicher, wie dies in
+\runname{xlong0105} beobachtet wurde. Stattdessen f"uhrt Gen 23 dazu, da"s diese Zellen die
+Aktion \verb|mut-| ausf"uhren. Wie aus der Kurve der minimalen Mutationsexponenten in Abb.\ \ref{xlong1008results}
+ersichtlich ist, liegen die mit dieser Strategie erreichten Minimalwerte des Mutationsexponenten bei
+Werten um -5, die effektiven Mutationsraten von Genomen, die diesen Wert erzielen, betragen nur
+$0.1 \cdot 2^{-5} = 0.003125$. Da die Zellen der unteren Zellkette Energie speichern, liegt der
+Fitnesswert bei dieser Strategie in derselben Gr"o"senordnung wie bei der einfachen diagonalen
+Form. Der Pflanzentyp mit einer aufgelagerten Zellschicht, deren Energiegewinn zur Senkung der
+effektiven Mutationsraten eingesetzt wird, kann also mit den einfachen diagonalen
+Formen bei der Selektion konkurrieren, er besitzt aber keinen relevanten Selektionsvorteil.
+Bei den stark verringerten effektiven Mutationsraten von 0.003125 ist die Ausbreitungszahl
+$A_E(0.003125, 0.8, 5) \approx 4.55$, also erheblich gr"o"ser als die der einfachen diagonalen
+Form, die 1.41 betr"agt (s.o.).
+Obwohl die mutationsratensenkenden Formen also keinen Selektionsvorteil im Sinne "uberlegener
+Fitnesswerte aufweisen, erzeugen sie in der Folgegeneration eine gr"o"sere Anzahl von
+Nachkommen, bei denen das Entwicklungsprogramm erhalten ist, und setzen sich daher gegen
+die einfachen diagonalen Formen durch.
+
+Die Phase der Dominanz mutationsratensenkender Formen, die bei Generation 1400 beginnt, geht
+etwa bei Generation 1650 zu Ende. Die Ursachen f"ur diese Entwicklung konnten nicht gekl"art 
+werden. Bei Generation 1700 sind keine Pflanzen mit komplexerer Form mehr in der Population
+vorhanden, es dominieren, wie vor Generation 1400, elementare, diagonal wachsende Pflanzen
+(Abb.\ \ref{xlong1008worlds}d und \ref{xlong1008genomes}d).
+
+Bei Generation 2200 kommt es zu einem erneuten Auftreten von komplexen Wuchsformen
+(Abb.\ \ref{xlong1008worlds}e), die aktiv die effektive Mutationsrate erniedrigen. Die zun"achst
+auftretenden Formen (Abb.\ \ref{xlong1008genomes}e) "ahneln vom Prinzip her den bei Generation
+1400 beobachteten Formen, sie bilden jedoch eine unmittelbar dem Hauptspro"s aufgelagerte
+Zellschicht aus, und sie erzeugen etwas mehr zus"atzliche energiespeichernde Zellen, denn der
+Vorgang, der zur Bildung einer zus"atzlichen energiespeichernden Zelle f"uhrt, kann 
+nicht nur an der Spitze, sondern "uberall am Spro"s ablaufen.
+
+Die mutationsratensenkenden Formen etablieren sich von Generation 2200 an stabil in der Population.
+Sie entwickeln sich weiter zu buschigen Formen (Abb.\ \ref{xlong1008worlds}f und \ref{xlong1008genomes}f),
+bei denen nur die am Rand gelegenen Zellen Energie speichern, w"ahrend s"amtliche im Innern der
+Pflanze gelegenen Zellen der Senkung der effektiven Mutationsraten dienen (Gen 8). Eine andere
+Spielart dieser Strategie kann bei Generation 3000 beobachtet werden (Abb.\ \ref{xlong1008worlds}g und \ref{xlong1008genomes}g),
+hier werden zus"atzlich durch die Zellen an der Oberfl"ache der buschartigen Zellmasse durch die
+Aktivit"at des Gens 5 die effektiven Mutationsraten gesenkt, w"ahrend das Gen 3 zur Ausbildung
+diagonaler Seitentriebe aus energiespeichernden Zellen dient. Bei Generation 4999
+(Abb.\ \ref{xlong1008worlds}h und \ref{xlong1008genomes}h) schlie"slich kann eine verzweigt wachsende
+Form beobachtet werden, in der Triebe mit mehrfacher Zelldicke der Energiespeicherung und Seitentriebe
+einfacher Dicke der Senkung der effektiven Mutationsraten dienen.
+
+In allen Phasen, in denen komplexe, mutationsratensenkende Pflanzenformen auftreten, kommt
+es zu einem deutlichen Anstieg der DVK. Auch bei den Distanzverteilungen k"onnen die
+Auswirkungen der Absenkung der effektiven Mutationsraten beobachtet werden. In den Phasen,
+in denen der durchschnittliche Mutationsexponent um 0 schwankt, sind die Distanzwerte massiv
+im oberen Bereich konzentriert, die Distanzverteilungen "ahneln denen, die in \runname{xlong1005}
+beobachtet wurden. Bei den Ausschl"agen des durchschnittlichen Mutationsexponenten in den negativen
+Bereich ist jeweils eine erheblich gleichm"a"sigere Verteilung der Distanzwerte zu beobachten.
+Bei Generation 3500 wurden die niedrigsten Werte des durchschnittlichen Mutationsexponenten gemessen.
+Hier kommt es zu einem deutlichen R"uckgang der DVK, der, wie die Distanzverteilungen zeigen,
+auf eine starke H"aufung der Distanzwerte im kleinen Bereich zur"uckgeht. Diese Beobachtungen
+zeigen, da"s die Evolution komplexer Wuchsformen und die Absenkung der effektiven Mutationsraten
+zuverl"assig anhand des Auftretens signifikant erh"ohter DVK-Werte charakterisiert werden k"onnen.
+
+
+
+\subsubsection{Lauf \runname{xlong00105}: Geringe Mutationsraten und moderate Selektion}
+\label{xlong00105section}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,17)
+\put(0,0){\makebox(16,17){\epsfxsize=16cm \epsffile{xlong00105.eps}}}
+\end{picture}
+\caption{\label{xlong00105results}
+LindEvol-GA Lauf \runname{xlong00105} mit geringen Mutationsraten (0.001) und moderater Selektion (0.5).
+}
+\end{figure}
+
+Der Verlauf der numerischen Werte, die bei dem mit den geringen Mutationsraten von 0.001 und der moderaten
+Selektionsrate von 0.5 durchgef"uhrten Lauf \runname{xlong00105} ermittelt wurden, sind in Abb.\ \ref{xlong00105results}
+dargestellt. Der Verlauf der Fitnesswerte zeigt zwei deutliche evolution"are Spr"unge. Der erste Sprung kommt durch
+das Auftreten unbeschr"ankt wachsender, diagonaler Formen zustande. Der zweite Sprung, etwa bei Generation 750,
+r"uhrt von einem "Ubergang von einfachen diagonalen Formen zu Formen mit aufgelagerten Zellschichten her.
+Vergleichbare evolution"are Spr"unge
+waren auch in \runname{xlong0105} zu beobachten, insbesondere der "Ubergang zu Formen mit aufgelagerten Zellschichten
+vollzog sich bei den zehnfach h"oheren Mutationsraten erheblich schneller.
+
+Die diagonal wachsenden Formen mit aufgelagerten
+Zellschichten dominieren bis zum Ende des Laufs bei Generation 4999. Wie aus
+Abb.\ \ref{xlongworlds}a (Seite \pageref{xlongworlds}) ersichtlich
+ist, entsprechen diese Formen im Prinzip denjenigen, die bei Generation 2400 in \runname{xlong0105} beobachtet
+wurden. Die Fitnesswerte pendeln sich in "ahnlichen Bereichen wie in \runname{xlong0105} ein, wobei die Schwankungsbreite
+geringer ist. Zu keinem Zeitpunkt treten buschf"ormig wachsende oder verzweigte Formen auf. Eine Evolution der
+aktiven Beeinflussung der effektiven Mutationsraten ist nicht zu beobachten.
+
+Bei den geringen Mutationsraten von 0.001 haben nicht nur Entwicklungsprogramme, sondern auch Genome der in
+\runname{xlong00105} beobachteten L"angen Ausbreitungszahlen, die "uber 1 liegen; bei einer Genoml"ange von
+50 Genen betr"agt die Ausbreitungszahl $A(0.001, 0.5, 100) \approx 1.48$. Dies f"uhrt dazu, da"s von vielen
+"uberlebenden Genotypen einer Generation mehr als eine unver"anderte Kopie in der n"achsten Generation exisitieren,
+so da"s die Anzahl verschiedener Genotypen stets deutlich kleiner als die Populationsgr"o"se ist. Dementsprechend
+bleibt auch die genetische Diversit"at unterhalb des Maximalwerts von 3.91. Mit dem Anstieg der Genoml"angen
+im Verlauf der Simulation steigen die Anzahl verschiedener Genotypen und die genetische Diversit"at, was durch
+ein entsprechendes Absinken der Ausbreitungszahl erkl"art werden kann.
+
+Wie auch in den anderen L"aufen, bei denen keine aktive Mutationsratenver"anderung beobachtet wurde, pendelt
+sich auch in \runname{xlong00105} die DVK in einem Bereich ein, der sich w"ahrend des Laufs nicht ver"andert.
+Die DVK liegt deutlich niedriger als in \runname{xlong0105}, die Schwankungen sind jedoch st"arker als in \runname{xlong0105}.
+In der Abfolge der Distanzverteilungen ist eine ausgepr"agte Wellenstruktur erkennbar, die bei den bisher
+diskutierten Ergebnissen nicht beobachtet wurde. Der Wellenverlauf ist deutlich mit den DVK-Schwankungen
+korreliert.
+
+Die Wellen kommen durch die Divergenz von taxonomischen Clustern zustande. Die Genome eines Clusters codieren
+typischerweise dasselbe Entwicklungsprogramm, sie unterscheiden sich jedoch in den inaktiven Bereichen. Mit
+fortschreitendem Alter eines solchen Clusters w"achst die Anzahl der Unterschiede in den inaktiven Bereichen,
+und dementsprechend nimmt der Maximalwert der Distanz von Genomen innerhalb des Clusters zu. Somit wandert
+der Peak, der durch die Distanzen zwischen Genomen eines Clusters zustandekommt (vgl.\ \ref{ddistr-method}),
+immer weiter in den Bereich h"oherer Distanzwerte. Wenn schlie"slich ein Subcluster innerhalb des divergierenden
+Clusters s"amtliche Schwestergruppen vollst"andig verdr"angt hat, verschwindet der entsprechende Peak, und die
+Welle endet. Damit verschwindet auch ein St"uck Vielfalt aus dem Spektrum der Distanzwerte, was einen R"uckgang
+der DVK nach sich zieht.
+
+Anders als bei den bisher besprochenen L"aufen treten Distanzwerte in der N"ahe des aufgrund der Genoml"ange zu
+erwartenden Maximums in \runname{xlong00105} nur ganz selten auf. Die meisten Wellen enden, bevor sie den Bereich
+der H"alfte dieses Maximalwerts erreichen. Aus dieser Beobachtung ist zu folgern, da"s die Population in
+einem kleinen Teilraum des Sequenzraums konzentriert ist. Zu jedem Zeitpunkt ist somit ein erheblicher Teil
+des gesamten Sequenzraums von allen Genomen der Population aus nur nach einer gr"o"seren Zahl von Mutationsschritten
+erreichbar, so da"s dieser Teil der Exploration durch den genetischen Algorithmus nicht unmittelbar zug"anglich ist.
+
+
+\subsubsection{Lauf \runname{xlong00108}: Geringe Mutationsraten und scharfe Selektion}
+\label{xlong00108section}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,17)
+\put(0,0){\makebox(16,17){\epsfxsize=16cm \epsffile{xlong00108.eps}}}
+\end{picture}
+\caption{\label{xlong00108results}
+LindEvol-GA Lauf \runname{xlong00108} mit moderaten Mutationsraten (0.001) und scharfer Selektion (0.8).
+}
+\end{figure}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,5)
+\put(4,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{xlong00108-0004999p.eps}}}
+\put(4,0.0){\makebox(7,0.5){{\bfseries b:} \runname{xlong00108}, Generation 4999}}
+\end{picture}
+
+\caption{\label{xlong00108genomes}
+Eine typische Pflanze aus \runname{xlong00108} mit ihrem Genom.
+}
+\end{figure}
+
+Als letzte Einzelsimulation wird nun der Lauf \runname{xlong00108} diskutiert, der mit geringen Mutationsraten von
+0.001 und einer scharfen Selektionsrate von 0.8 durchgef"uhrt wurde. Abb.\ \ref{xlong00108results} zeigt die Verlaufsdaten
+dieses Laufs. Im Vergleich zu den restlichen Einzell"aufen f"allt in Abb.\ \ref{xlong00108results} die lange Anfangsperiode
+beschr"ankten Wachstums ins Auge. Auch in \runname{xlong00105} wurde beobachtet, da"s die Perioden evolution"arer Stasis
+im Vergleich zu L"aufen mit h"oheren Mutationsraten stark verl"angert sind. Die Absenkung der Mutationsraten f"uhrt zu
+einer starken Verl"angerung der Zeit, die bis zum Auftreten einer Schl"usselmutation, die einen evolution"aren Sprung
+verursacht, verstreicht.
+
+Trotz der geringen Mutationsraten kann es jedoch auch zu einer schnellen Abfolge evolution"arer Spr"unge kommen.
+Beispielsweise erscheinen fast unmittelbar nach dem "Ubergang zu unbeschr"anktem Wachstum Pflanzen mit aufgelagerten
+Zellen. Im weiteren Verlauf der Simulation entwickeln sich auffallende buschartige Formen mit einem Hauptspro"s, der
+sich aus diagonal aneinandergesetzten Teilst"ucken aus jeweils zwei vertikal "ubereinanderliegenden Zellen zusammensetzt
+(Abb.\ \ref{xlong00108genomes} und \ref{xlongworlds}b, Seite \pageref{xlongworlds}). Dieser Spro"styp ist auf genetischer Ebene bemerkenswert, weil
+zu seiner Codierung zwei Gene, die alternierend das apikale Wachstum steuern (Gene 39 und 40) erforderlich sind. Somit
+erfordert dieser Spro"styp ein h"oheres Ma"s genetischer Komplexit"at als die bisher beobachteten vertikalen oder diagonalen
+Spro"stypen, bei denen jeweils nur ein Gen zur Steuerung des apikalen Wachstums erforderlich ist.
+
+Weiterhin sind an der in Abb.\ \ref{xlong00108genomes} gezeigten Pflanze die aus dem Hauptspro"s nach rechts unten
+ausgewachsenen Zellen auffallend. Sie sind s"amtlich energielos, sie spielen also keine Rolle als
+Energiespeicher. Es ist jedoch denkbar, da"s sie verhindern, da"s der Hauptspro"s der Pflanze von diagonalen Seitentrieben
+der rechten Nachbarpflanze durchdrungen wird. Auch die vertikal-diagonale Mischform des Hauptspro"swachstums kann als
+Strategie zur Verbindung des Schutzes gegen Durchdringung durch andere Pflanzen, den ein vertikaler Spro"s bietet, und der
+Vergr"o"serung der Anzahl der dem Licht ausgesetzten Zellen, die durch diagonales Wachstum erm"oglicht wird, gedeutet
+werden.
+
+Auch in \runname{xlong00108} sind, wie in \runname{xlong00105}, die Ausbreitungszahlen von Genomen gr"o"ser als 1.
+Daher sind in keiner Generation der Simulation alle Genome unterschiedlich. In der Anfangsphase liegt die Anzahl
+unterschiedlicher Genotypen unter 10, sp"ater steigt sie mit anwachsenden Genoml"angen deutlich an. In entsprechender
+Weise nimmt auch die genetische Diversit"at zu.
+
+Ein dauerhafter evolution"arer Trend zur aktiven Modifikation der effektiven Mutationsraten ist nicht zu beobachten.
+Wie auch in den anderen L"aufen, in denen keine signifikante Mutationsratenmodifikation auftritt, pendelt sich auch
+in \runname{xlong00108} die DVK auf einem Wert ein, der sich im Laufe der Simulation nicht wesentlich ver"andert.
+In der Anfangsphase sind allerdings ein leicht verringerter charakteristischer DVK-Wert und erheblich st"arkere
+Schwankumgen zu beobachten als w"ahrend der restlichen Simulation. Dies ist auf Diskretisierungseffekte zur"uckzuf"uhren.
+W"ahrend der ersten 500 Generationen bewegen sich die Genoml"angen im Bereich der initialen Genoml"ange von 20 Genen.
+Dar"uberhinaus liegen minimale und maximale Genoml"ange sehr dicht beieinander. Dies hat, wie bereits in
+(\ref{c-xlong0105section}) beschrieben wurde, zur Folge, da"s die Anzahl der insgesamt m"oglichen Werte des
+relativen Editierabstands kleiner wird als die Anzahl der Diskretisierungsintervalle, was zu einem R"uckgang
+der DVK f"uhrt. Aus der Abfolge der Distanzverteilungen ist ersichtlich, da"s gerade in der Anfangsphase oft nur
+wenige Editierabstandswerte in der Distanzmatrix vertreten sind. Weiterhin existieren in der Anfangsphase durchg"angig weniger als
+zehn verschiedene Genotypen in der Population. Dementsprechend ist ein gr"o"serer Anteil der Distanzwerte 0. Statistische
+Fluktuationen der Gr"o"sen der Best"ande der verschiedenen Genotypen k"onnen die Verteilung der Distanzwerte,
+die gr"o"ser als 0 sind, erheblich beeinflussen. Dies erkl"art die starken Schwankungen der DVK, die in der
+Anfangsphase von \runname{xlong00108} auftreten.
+
+
+\subsubsection{Vergleichende Diskussion der Einzelsimulationen}
+\label{lndga-comparesingle}
+
+% \begin{figure}[p]
+% 
+% \unitlength1cm
+% \begin{picture}(16,15)
+% \put(0,13.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong00105-0004999w.eps}}}
+% \put(0,12.5){\makebox(16,0.5){{\bfseries a:} Generation 4999 von Lauf \runname{xlong00105}}}
+% \put(0,10.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong00108-0004999w.eps}}}
+% \put(0,10.0){\makebox(16,0.5){{\bfseries b:} Generation 4999 von Lauf \runname{xlong00108}}}
+% \put(0,8.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0004999w.eps}}}
+% \put(0,7.5){\makebox(16,0.5){{\bfseries c:} Generation 4999 von Lauf \runname{xlong0105}}}
+% \put(0,5.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0108-0004999w.eps}}}
+% \put(0,5.0){\makebox(16,0.5){{\bfseries d:} Generation 4999 von Lauf \runname{xlong0108}}}
+% \put(0,3.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1005-0004999w.eps}}}
+% \put(0,2.5){\makebox(16,0.5){{\bfseries e:} Generation 4999 von Lauf \runname{xlong1005}}}
+% \put(0,0.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0004999w.eps}}}
+% \put(0,0){\makebox(16,0.5){{\bfseries f:} Generation 4999 von Lauf \runname{xlong1008}}}
+% \end{picture}
+% 
+% \caption{\label{xlongworlds}
+% Aufnahmen der Welt jeweils am Ende der Simulationsl"aufe.
+% }
+% \end{figure}
+
+\paragraph{Emergente Evolution kooperativen Wachstumsverhaltens}
+In den Simulationsl"aufen, die in den Abschnitten \ref{xlong0105section} bis \ref{xlong00108section}
+besprochen wurden, wurde die Evolution einer Vielzahl unterschiedlicher Pflanzenformen und Entwicklungsstrategien
+beobachtet. Die Entstehung und die evolution"are Stabilisierung dieser Pflanzenformen wurde durch vielf"altige,
+komplexe Interaktionen zwischen den Pflanzen in der Welt beeinflu"st. Durch den Ansatz, die Fitness auf
+der Grundlage der Simulation einer Vegetationsperiode zu bewerten, ist es gelungen, intrinsische Adaptationsvorg"ange
+\cite{Packard89} in einem genetischen Algorithmus zu simulieren. Die Umwelt, die die "Uberlebens- und Vermehrungschancen
+eines Individuums bestimmt, hat in LindEvol-GA keinen statischen Charakter, sondern sie wird durch die Pflanzen in
+der Population gestaltet. Mit einer Fitnessfunktion im traditionellen Sinne, die die
+Fitness eines Individuums unabh"angig von den restlichen Individuen in der Population bewertet, kann dies
+nicht simuliert werden.
+
+Bei der intrinsischen Adaptation in LindEvol-GA ist nicht nur die H"ohe der Fitness, die eine Wuchsform
+erzielen kann, entscheidend. Vielmehr spielt die F"ahigkeit einer Pflanze, diesen Fitnesswert im gemeinsamen Wachstum
+mit den anderen Pflanzen in der Welt zu erreichen, eine ma"sgebliche Rolle. Dies f"uhrt zu einer evolution"aren
+Stabilisierung kooperativen Wachstumsverhaltens. Dieser Effekt ist bei geringeren Selektionsraten st"arker,
+wie auch bei der vergleichenden Betrachtung der am Ende der besprochenen L"aufe evolvierten Gemeinschaften
+(Abb.\ \ref{xlongworlds}, Seite \pageref{xlongworlds}) erkennbar wird. Die Abbildung zeigt, da"s sich in allen drei L"aufen mit scharfer
+Selektion buschartige Pflanzenformen durchgesetzt haben. Bei moderater Selektion bewiesen die diagonal
+wachsenden Formen mit mehreren Zellschichten die gr"o"sere evolution"are Stabilit"at. In \runname{xlong0105}
+(\ref{xlong0105section}) traten buschf"ormig wachsende Pflanzen auf, die sich nicht durchsetzen konnten
+und wieder verschwanden. Ebenso konnten sich w"ahrend einer ausgedehnten Phase der Dominanz vertikaler
+Formen keine diagonalen Formen durchsetzen; die diagonalen Formen hatten in einer von vertikal wachsenden
+Pflanzen dominierten Welt ein hohes Kollisionsrisiko und schlechte Wachstumschancen, obwohl sie in einer
+diagonal wachsenden Gemeinschaft h"ohere Fitnesswerte erreichen als die vertikal wachsenden Pflanzen.
+
+Die gr"o"sere Bedeutung kooperativen Wachstumsverhaltens bei niedrigerer Selektionsrate kann durch 
+Unterschiede in der Ausbreitungsdynamik erkl"art werden. Bei der hohen Selektionsrate von 0.8 ist 
+ein herausragender Fitnesswert erforderlich, um das "Uberleben eines Genoms zu sichern. Dies kann durch
+eine buschf"ormige Pflanze am besten erreicht werden. Bei niedrigen und moderaten Mutationsraten
+sind die Ausbreitunszahlen typischer Entwicklungsprogramme gr"o"ser als 4. Daher kann ein Entwicklungsprogramm
+evolution"ar stabil sein, wenn bis zu
+drei von vier Pflanzen mit diesem Entwicklungsprogramm im statistischen Mittel w"ahrend einer
+Vegetationsperiode durch Kollisionen soviel Energie verlieren und in ihrem Wachstum eingeengt
+werden, da"s ihre Genome bei der Selektion nicht "uberleben.
+
+Bei der moderaten Selektionsrate von 0.5 bringt ein Fitnesswert im Spitzenbereich keine signifikanten
+Vorteile bei der Selektion; ein leicht "uberdurchschnittlicher Fitnesswert reicht zur Sicherung des
+"Uberlebens aus. Da von einem "uberlebenden Genom nach der Selektion im statistischen Mittel
+zwei Kopien existieren (Gl.\ \ref{numoffspring-eq}), sind bei einer Selektionsrate von 0.5
+alle Ausbreitungszahlen kleiner als 2. Nun kann in einer Gemeinschaft diagonaler Pflanzen eine
+buschf"ormig wachsende Pflanze nur dann einen "uberdurchschnittlichen Fitnesswert erzielen,
+wenn es ihr gelingt, mindestens einen ihrer Nachbarn zu "uberwuchern. Die Chance, da"s dies
+gelingt, betr"agt ungef"ahr 1:1. W"achst ihr Nachbar
+schneller, kann sich die Pflanze nicht buschf"ormig entfalten. Sie wird in einem diagonalen Bereich
+eingeengt und vergeudet in signifikantem Ausma"s Energie, da es bei Teilungsversuchen
+zur buschf"ormigen Ausdehnung zu Kollisionen mit ihrem Nachbarn kommt. Der Fitnesswert einer
+solchen "`eingeklemmten"' Pflanze ist daher unterdurchschnittlich. Somit "uberleben rund die H"alfte
+der Kopien des Entwicklungsprogramms buschf"ormiger Pflanzen den Selektionsschritt nicht. Der statistische
+Mittelwert der Anzahl "uberlebender Kopien dieses Entwicklungsprogramms liegt damit bei der H"alfte
+der Ausbreitungszahl, und somit unter 1, weil die Ausbreitungszahl kleiner als 2 ist. Ein buschf"ormiges
+Entwicklungsprogramm kann sich also bei moderater Selektion nicht ausbreiten, weil die Nachteile
+bei Kollisionen die Vorteile bei freier Entfaltung der Buschform "uberwiegen. Diese evolution"are
+Stabilisierung kooperativen Wachstumsverhaltens stellt ein emergentes Ph"anomen dar. Da es anhand von
+Absch"atzungen erkl"art, nicht jedoch aus der Spezifikation von LindEvol-GA abgeleitet werden kann,
+kann dieses Ph"anomen nach \cite{Assad92} als stark emergent ({\slshape "`strongly emergent"'}) eingestuft werden.
+"Ahnliche Formen emergenter Evolution kooperativen Verhaltens wurden in der Vergangenheit bei verschiedenen Simulationen
+auf der Basis des \textsl{prisoner's dilemma} beobachtet \cite{Lindgren92,May95}.
+
+\paragraph{Evolution regulatorischer Netzwerke}
+Die Aktivierung von Genen erfolgt im Modell LindEvol-GA durch Aktivit"aten anderer Gene. Diese Aktivierungsbeziehungen
+zwischen Genen bilden in ihrer Gesamtheit ein regulatorisches Netzwerk, das mithilfe der in (\ref{blockinterdef})
+entwickelten Darstellungsmethode visualisiert werden kann. Auch die Enstehung dieser Netzwerke ist ein
+emergentes Ph"anomen. Regulatorische Netzwerke werden derzeit
+auch in der Molekulargenetik als Schl"usselmechanismen der genetischen Steuerung der Morphogenese beschrieben
+\cite{Theissen95}. In den molekulargenetischen Netzwerken wurde in mehreren F"allen beobachtet, da"s ein
+Faktor bei mehreren morphogenetischen Prozessen eine Rolle spielt. Auch in LindEvol-GA k"onnen Gene beobachtet
+werden, die an unterschiedlichen Wachstumsvorg"angen aktiv beteiligt sind.
+Ein Beispiel hierf"ur wurde in der Diskussion der Generation 1400 von \runname{xlong1008}
+beschrieben. Diese Parallelen zwischen molekulargenetischen Systemen und den Modellsystemen in LindEvol auf
+einer emergenten Ebene belegen, da"s die Repr"asentation entscheidender Faktoren der Morphogenese in dem
+Modell LindEvol-GA gelungen ist. In LindEvol-GA entstehen komplexe regulatorische Netzwerke zur Steuerung
+der Morphogenese in einem Evolutionsproze"s. Dies ist ein deutliches Indiz daf"ur, da"s die derzeit diskutierten
+Systeme der genetischen Steuerung der Morphogenese gut mit der Annahme der evolution"aren Genese dieser Systeme
+vereinbar sind.
+
+
+\paragraph{Distanzverteilungsanalyse}
+Beim "Uberblick "uber die L"aufe zeigt sich eine Korrelation zwischen der Evolution komplexer Wuchsformen
+und dem Auftreten hoher Werte der Distanzverteilungskomplexit"at.
+Die niedrigsten DVK-Werte wurden bei moderater Selektion und hohen Mutationsraten (\runname{xlong1005})
+sowie bei scharfer Selektion und geringen Mutationsraten (\runname{xlong00108}) gemessen. In
+\runname{xlong1005} fand keine relevante evolution"are Entwicklung statt, weil
+die kritische Fehlergrenze selbst f"ur elementare Entwicklungsprogramme deutlich "uberschritten war.
+In \runname{xlong00108} ist andererseits
+eine starke Tendenz zur Konvergenz vorhanden, die sich in einer im Vergleich zu anderen L"aufen stark
+verl"angerten Anfangsphase niederschl"agt, in der wenig komplexe, beschr"ankt wachsende Formen dominieren.
+
+In beiden L"aufen mit moderaten Mutationsraten
+wurde eine Vielzahl interessanter und komplexer evolution"arer Prozesse beobachtet. Gleichzeitig
+wurden in diesen L"aufen konstant hohe DVK-Werte gemessen. In \runname{xlong1008} traten Phasen mit
+signifikant unterschiedlichen DVK-Werten auf. In den Phasen niedriger DVK existieren nur elementare,
+unbeschr"ankt wachsende Formen mit Entwicklungsprogrammen geringer Komplexit"at. In den Phasen mit
+hoher DVK ist hingegen eine durch die aktive Absenkung der Mutationsraten erm"oglichte
+Entwicklung komplexer Wuchsformen zu beobachten. Sowohl bei der Betrachtung der DVK-Werte in
+\runname{xlong1008} als auch bei der vergleichenden Betrachtung der DVK-Werte in den verschiedenen
+L"aufen kann also eine Korrelation zwischen effizienter Evolution komplexer Formen und hohen Werten
+der DVK festgestellt werden.
+
+Auch die Untersuchung der Distanzverteilungen erm"oglichte interessante Einblicke in die
+evolution"are Dynamik. Starke Konvergenz und starke Randomisierung f"uhren zu einer Konzentration
+der Distanzwerte in einem engen Bereich, somit k"onnen diese Zust"ande unmittelbar aus der
+Distanzverteilung ersehen werden. Eine dauerhafte Konvergenz fand jedoch selbst bei niedrigen
+Mutationsraten nicht statt. Der zeitliche Verlauf der Distanzverteilungen zeigte, da"s die
+Distanzen zwischen divergierenden Clustern erhebliche Werte erreichen. Die Aufspaltung in zwei
+Cluster, deren Koexistenz sich "uber einen ausreichend langen Zeitraum erstreckt, um die Entwicklung
+einer signifikanten Distanz zwischen den Clustern zu erlauben, ist jedoch bei niedrigen
+Mutationsraten ein seltenes Ereignis, daher f"uhrt jeder dieser Divergenzprozesse zu einer
+charakteristischen Welle in der Abfolge der Distanzverteilungen. Bei den zehnfach h"oheren
+moderaten Mutationsraten entfernen sich divergierende Cluster erheblich schneller voneinander.
+Auch zwischen nur kurze Zeit koexistierenden Clustern entwickelt sich daher eine signifikante
+Distanz. Insgesamt koexistiert daher bei moderaten Mutationsraten stets eine gro"se Menge
+signifikant unterschiedlicher Cluster, was eine gleichm"a"sige Verteilung der Distanzwerte
+zur Folge hat.
+
+In allen L"aufen, in denen komplexe Pflanzenformen entstanden, wurde stets nur ein kleiner Teil der
+Gene in den Genomen beim Wachstum aktiviert. Der restliche Teil des Genoms bleibt inaktiv. Sequenzbereiche
+ohne biologische Funktion sind auch in der Molekulargenetik bekannt (sog.\ {\slshape junk DNA}). In diesen
+Bereichen sind die meisten Mutationen neutral, d.h.\ sie bleiben ohne Auswirkungen auf den Ph"anotyp.
+Somit existiert zu jedem Wachstumsprogramm eine Menge von Genomen, die dieses Programm codieren
+und sich nur in den inaktiven Bereichen unterscheiden. In Analogie zu neutralen Netzen \cite{Forst95} wird eine solche
+Menge als \introdef{neutrale Menge} des entsprechenden Wachstumsprogramms bezeichnet.
+
+Die Distanzverteilungen sind in diesem Zusammenhang als Methode zu verstehen, mit der die Dynamik der
+Ausbreitung der Population in einer neutralen Menge verfolgt werden kann. Eine Wellenstruktur in den
+Distanzverteilungsfolgen, die bei geringen Mutationsraten auftrat,
+zeigt an, da"s die Population in punktuell konzentrierten Clustern innerhalb
+der neutralen Menge verteilt ist. Eine gleichm"a"sigere Verteilung der Distanzwerte, wie sie bei moderaten
+Mutationsraten beobachtet wurde, zeigt dagegen eine
+st"arker diffuse Verteilung der Population in der neutralen Menge an.
+In \cite{Forst95} wird darauf hingewiesen, da"s nur von bestimmten Teilbereichen eines neutralen Netzes
+ein "Ubergang auf ein anderes Netz m"oglich ist. "Ubertragen auf LindEvol-GA bedeutet dies, das
+der "Ubergang von einem Wachstumsprogramm zu einem anderen nur aus einer bestimmten Teilmenge
+der neutralen Menge des Wachstumsprogramms heraus m"oglich ist. Bei einer st"arkeren Diffusion
+der Population innerhalb der neutralen Menge werden auch diese Teilmengen, von denen aus evolution"are
+Schritte erfolgen k"onnen, schneller erreicht. Dies erkl"art, weshalb komplexe, unbeschr"ankt wachsende
+Formen in den L"aufen mit moderaten Mutationsraten erheblich schneller auftraten als bei geringen
+Mutationsraten.  Da gleichm"a"siger verteilte Distanzwerte auch zu einer h"oheren DVK f"uhren, 
+beleuchtet diese Betrachtung des Evolutionsprozesses in LindEvol-GA auch die Korrelation zwischen
+hohen DVK-Werten und komplexen Evolutionsprozessen.
+
+
+% DVK-Ergebnisse koennen durch Diskretisierungseffekte verfaelscht werden.
+% Hohe DVK notwendig, aber nicht hinreichend fuer effektive Evolution (tritt auch bei ungerichteter
+%     Evolution in neutraler Kontrolle auf.
+% Vergleich mit Theissen95 - regulatorische Netzwerke
+% Hinweis auf beschraenkte Leistungsfaehigkeit der blockorientierten Genominterpretation.
+% Multiple Genfunktionen (xlong1008genomes-c)
+% Distanzverteilungen zeigen Perkolation des "neutralen Netzwerks".
+% Korrelation hohe DVK / komplexe Formen.
+
+
+\subsection{Systematische Untersuchung der Eigenschaften von \\
+LindEvol-GA in Abh"angigkeit von Mutationsraten und Selektionsraten}
+\label{lndga-parameterscan}
+
+Bei der Diskussion der L"aufe in (\ref{lndga-individualsims}) wurde die zentrale Bedeutung der Selektionsrate und der
+Mutationsraten f"ur die Dynamik des Evolutionsprozesses in LindEvol-GA an vielen Stellen deutlich. Um die
+Bedeutung dieser Parameter f"ur die Evolution komplexer Strukturen systematisch zu charakterisieren, wurde
+eine Serie von L"aufen durchgef"uhrt, bei der die Selektionsrate von 0.0 bis 0.9 in Schritten von 0.1
+und die Mutationsraten von 0.0 bis 0.1 in Schritten von 0.01 gew"ahlt wurden.
+Alle drei Mutationsraten hatten, wie auch bei den bereits besprochenen L"aufen, den gleichen Wert.
+Es wurden s"amtliche
+Kombinationen der 10 Werte f"ur die Selektionsrate und der 11 Werte f"ur die Mutationsraten verwendet,
+insgesamt wurden somit 110 verschiedene L"aufe durchgef"uhrt.
+Die restlichen Kontrollparameter
+blieben dabei konstant auf denselben Werten, die auch in (\ref{lndga-individualsims}) verwendet wurden.
+
+Jeder Lauf erstreckte sich "uber 5000 Generationen. In jedem Lauf wurden die Mittelwerte der
+durchschnittlichen Fitness, der DVK, der genetischen Diversit"at, des durchschnittlichen Mutationsexponenten,
+der durchschnittlichen Genoml"ange und der durchschnittlichen Anzahl aktivierter Gene jeweils "uber die
+letzten 50 Generationen ermittelt. Die Ergebnisse dieses Experiments, das den Namen \runname{xlong}
+tr"agt, sind in den Abbildungen \ref{xlong-fit} bis \ref{xlong-gdv} in Abh"angigkeit von den Mutationsraten ($m$)
+und der Selektionsrate ($s$) dargestellt.
+
+
+\begin{figure}[p]
+
+\unitlength1cm
+\begin{picture}(16,9)
+\put(0,0){\makebox(16,10)[b]{\epsfxsize=14cm \epsffile{rxlong-fit.eps}}}
+\end{picture}
+\caption{\label{xlong-fit}
+Mittelwert der durchschnittlichen Fitness in Abh"angigkeit von den Mutationsraten (m) und der Selektionsrate (s).
+F"ur jedes Parameterpaar wurde in den Generationen 4950--4999 durchschnittliche Fitness der
+Gesamtpopulation ermittelt. Die Graphik zeigt die Mittelwerte der 50 gemessenen Durchschnittswerte
+in Abh"angigkeit von den Mutationsraten und der Selektionsrate des entsprechenden Laufs.
+Die zehn gr"o"sten Werte sind zus"atzlich durch ein Rautensymbol gekennzeichnet
+}
+\end{figure}
+
+
+\begin{figure}[p]
+
+\unitlength1cm
+\begin{picture}(16,10)
+\put(0,0){\makebox(16,10)[b]{\epsfxsize=14cm \epsffile{rxlong-ent.eps}}}
+\end{picture}
+\caption{\label{xlong-ent}
+Mittelwert der DVK in Abh"angigkeit von den Mutationsraten (m) und der Selektionsrate (s).
+Die Rauten kennzeichnen die L"aufe mit den h"ochsten DVK-Werten.
+}
+\end{figure}
+
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,10)
+\put(0,0){\makebox(16,10)[b]{\epsfxsize=14cm \epsffile{rxlong-nus.eps}}}
+\end{picture}
+\caption{\label{xlong-nus}
+Mittelwert der durchschnittlichen Anzahl aktivierter Gene in Abh"angigkeit von den Mutationsraten (m) und der Selektionsrate (s).
+Die Rauten kennzeichnen die L"aufe mit den H"ochstwerten.
+}
+\end{figure}
+
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,10)
+\put(0,0){\makebox(16,10)[b]{\epsfxsize=14cm \epsffile{xlong-gdv.eps}}}
+\end{picture}
+\caption{\label{xlong-gdv}
+Mittelwert der genetischen Diversit"at in Abh"angigkeit von den Mutationsraten (m) und der Selektionsrate (s).
+}
+\end{figure}
+
+
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,10)
+\put(0,0){\makebox(16,10)[b]{\epsfxsize=14cm \epsffile{rxlong-mflag.eps}}}
+\end{picture}
+\caption{\label{xlong-mflag}
+Mittelwert des durchschnittlichen Mutationsexponenten in Abh"angigkeit von den Mutationsraten (m) und der Selektionsrate (s).
+Die zehn L"aufe mit den niedrigsten Mittelwerten des durchschnittlichen Mutationsexponenten sind durch
+eine Raute hervorgehoben.
+}
+\end{figure}
+
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,9)
+\put(0,0){\makebox(16,10)[b]{\epsfxsize=12cm \epsffile{xlong-fitent.eps}}}
+\end{picture}
+\caption{\label{xlong-fitent}
+Auftragung der Mittelwerte der DVK in den 110 durchgef"uhrten L"aufen in Abh"angigkeit
+von den mittleren Durchschnittswerten der Fitness.
+}
+\end{figure}
+
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,9)
+\put(0,0){\makebox(16,10)[b]{\epsfxsize=12cm \epsffile{xlong-nusent.eps}}}
+\end{picture}
+\caption{\label{xlong-nusent}
+Auftragung der Mittelwerte der DVK in den 110 durchgef"uhrten L"aufen in Abh"angigkeit
+von den mittleren Durchschnittswerten der Anzahl aktivierter Gene.
+}
+\end{figure}
+
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,9)
+\put(0,0){\makebox(16,10)[b]{\epsfxsize=12cm \epsffile{xlong-maxent.eps}}}
+\end{picture}
+\caption{\label{xlong-maxent}
+Auftragung der Mutationsraten ($m$) und Selektionsraten ($s$) der zwanzig L"aufe, in denen die
+h"ochsten Werte der DVK gemessen wurden. Die Kurve zeigt den Graphen von $m=t_E(s,7)$, der kritischen Fehlergrenze von
+Entwicklungsprogrammen aus sieben Genen, Oberhalb der Kurve k"onnen sich solche Entwicklungsprogramme
+nur bei aktiver Absenkung der effektiven Mutationsraten etablieren (s.\ Text). Wertepaare von L"aufen, in denen eine signifikante
+Absenkung des Mutationsexponenten ermittelt wurde, sind zus"atzlich durch ein Kreuz gekennzeichnet.
+}
+\end{figure}
+
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,9)
+\put(0,0){\makebox(16,10)[b]{\epsfxsize=12cm \epsffile{ldetailc00-maxent.eps}}}
+\end{picture}
+\caption{\label{ldetailc00-maxent}
+Auftragung der Mutationsraten ($m$) und Selektionsraten ($s$) der achtzig L"aufe des Experiments \runname{ldetailc00}
+(s.\ Text), in denen die h"ochsten DVK-Werte gemessen wurden.
+In \runname{ldetailc00} war keine aktive Senkung der effektiven Mutationsraten m"oglich.
+Die Kurve zeigt die kritische Fehlergrenze f"ur Entwicklungsprogrammen aus sieben Genen.
+}
+\end{figure}
+
+% LindEvol-spezifischer Effekt: buschf"ormige Pflanzen aktivieren mehr Gene, daher
+%     Zunahme der Anzahl aktivierter Gene bei hoeheren Selektionsraten.
+
+
+\subsubsection{Fitnesswerte}
+
+Abb.\ \ref{xlong-fit} zeigt, da"s die durch die in \runname{xlong} variierten Kontrollparameter
+$m$ und $s$ aufgespannte Ebene im Kontrollparameterraum von LindEvol-GA in zwei Phasen zerf"allt.
+In einer Phase mit hohen Mutationsraten und geringen Selektionsraten liegen die Mittelwerte der
+durchschnittlichen Fitness bei 1. In diesem Bereich kommt keine Evolution von Pflanzenformen mit
+erh"ohten Fitnesswerten zustande, weil die Mutationsraten die kritische Fehlergrenze selbst f"ur
+elementare Entwicklungsprogramme deutlich "uberschreiten. Der zuvor
+besprochene Lauf \runname{xlong1005} (\ref{xlong1005section}) f"allt in diesen Bereich.
+
+Abb.\ \ref{xlong-fit} zeigt auch, da"s ohne Mutation ($m=0$) keine Evolution komplexer Wuchsformen mit
+hohen Fitnesswerten m"oglich ist. Ohne Mutation setzt sich eine in der Startpopulation vorhandene
+zweizellige Pflanzenform vollst"andig durch. Ohne Mutationen k"onnen sich aus dieser Form keine
+komplexeren Formen entwickeln.
+
+Die h"ochsten Mittelwerte der durchschnittlichen Fitness wurden bei gem"a"sigten Mutationsraten von
+0.01 und 0.02 und moderater bis scharfer Selektionsrate zwischen 0.4 und 0.9 beobachtet. Bei h"oheren
+Mutationsraten wurden etwas niedrigere mittlere Durchschnittsfitnesswerte gemessen, dies liegt vor
+allem an der zunehmenden H"aufigkeit von Mutanten mit extrem niedrigen Fitnesswerten. Im Bereich der
+Phasengrenze zwischen hohen und marginalen Fitnesswerten sind einige L"aufe mit nur leicht erh"ohten Fitnesswerten
+zu beobachten. Bei diesen L"aufen entwickeln sich komplexe Pflanzenformen, die einen gro"sen Teil
+ihrer Energie zur Senkung der effektiven Mutationsraten einsetzen. In Abb.\ \ref{xlong-mflag} k"onnen
+die L"aufe, bei denen eine starke Senkung der effektiven Mutationsraten stattfand, identifiziert werden.
+
+
+\subsubsection{Komplexit"at}
+\label{lndgascan-complexity}
+
+Die Fl"ache der mittleren DVK-Werte in Abh"angigkeit von den Mutationsraten und der Selektionsrate
+weist eine "ahnliche Struktur wie die der mittleren Fitnesswerte auf. In einem Bereich mit hohen
+Mutationsrate und geringen Selektionsraten liegen die Mittelwerte der DVK unter 2.0. Ohne Mutation
+betr"agt die DVK 0 in allen L"aufen, in denen die Selektionsrate gr"o"ser als 0.0 ist. In einer
+Population, in der alle Genome identisch sind, ist $f(0) = 1$, und f"ur alle $d>0$ ist $f(d) = 0$,
+somit betr"agt die Shannon-Entropie der Distanzverteilung 0.
+
+Hohe DVK-Werte sind im Bereich gem"a"sigter bis mittlerer Mutationsraten und moderater bis scharfer
+Selektionsrate zu beobachten. Aber auch bei ausgesprochen hohen Mutationsraten und scharfer Selektion
+existiert eine Gruppe von vier L"aufen mit hohen Mittelwerten der DVK. Der Vergleich mit Abb.\ \ref{xlong-mflag}
+zeigt, da"s bei allen vier L"aufen dieser Gruppe eine starke Absenkung der effektiven Mutationsraten stattfand.
+Zu diesen vier L"aufen z"ahlt auch der in (\ref{xlong1008section}) besprochene Lauf \runname{xlong1008}.
+
+Die Korrelation zwischen hohen Fitnesswerten und hohen DVK-Werten wird durch eine Graphik, in der die in den
+110 durchgef"uhrten L"aufen gemessenen mittleren Fitnesswerte und die Mittelwerte der DVK als Wertepaare
+aufgetragen werden, besonders deutlich erkennbar.
+Durch dieses Vorgehen wird die Korrelation ohne die willk"urliche Anordnung der
+L"aufe aufgrund der Kontrollparameterwerte herausgearbeitet (vgl.\ \cite{Langton92}). Abb.\ \ref{xlong-fitent}
+zeigt diese Auftragung. Der Me"spunkt bei einer Fitness von 2 und einer DVK von 0 r"uhrt von den L"aufen
+mit $m=0.0$ und $s>0$ her. Bei DVK-Werten bis etwas mehr als 2 liegen die mittleren Fitnesswerte bei
+1. Diese Me"spunkte geh"oren zu L"aufen, in denen keine Evolution von Pflanzen mit erh"ohten Fitnesswerten
+m"oglich war, weil die kritische Fehlergrenze f"ur elementare Entwicklungsprogramme "uberschritten war.
+Bei h"oheren DVK-Werten werden auch
+erh"ohte Fitnesswerte beobachtet. Dabei ist eine Korrelation zwischen der H"ohe der Fitness und der H"ohe
+der DVK deutlich erkennbar, obwohl die DVK-Werte im Bereich h"oherer Fitnesswerte st"arker streuen.
+
+Ein weiteres Indiz f"ur die Komplexit"at eines Entwicklungsprogramms ist die Anzahl der Gene, in denen
+es codiert ist, und die infolgedessen w"ahrend der Auspr"agung des Programms aktiviert werden.
+Abb.\ \ref{xlong-nus} zeigt die Mittelwerte der durchschnittlichen Anzahl der aktivierten
+Gene. Die Graphik zeigt, da"s  die komplexesten Entwicklungsprogramme bei scharfer Selektion evolvieren.
+Dieser Effekt ist zumindest teilweise auf die Genominterpretation zur"uckzuf"uhren, die dazu f"uhrt,
+da"s die bei scharfer Selektion bevorzugten buschartigen Pflanzenformen zu ihrer Codierung eine gr"o"sere
+Anzahl von Genen ben"otigen. Die H"ochstwerte der mittleren Anzahl aktivierter Gene lagen im Bereich um sieben.
+
+Hinsichtlich der Mutationsraten verteilen sich die Spitzenwerte der Entwicklungsprogramml"angen auf
+zwei Bereiche. Die meisten Spitzenwerte wurden bei L"aufen mit scharfer Selektion und gem"a"sigten
+Mutationsraten gemessen. Ein Bereich hoher Entwicklungsprogramml"angen ist jedoch auch bei scharfer
+Selektion und hohen Mutationsraten zu beobachten. In diesem Bereich kommt es zur Evolution von
+Pflanzenformen, die eine aktive Senkung der effektiven Mutationsraten betreiben, wozu mindestens ein
+weiteres Gen zus"atzlich zu den die Morphogenese steuernden Genen erforderlich ist. Auch die hohen
+Werte der Entwicklungsprogramml"angen, die bei moderaten Selektionsraten und intermedi"aren Mutationsraten
+zustandekommen, gehen auf L"aufe zur"uck, in denen eine Evolution aktiver Reduktion der effektiven
+Mutationsraten abl"auft (vgl.\ Abb.\ \ref{xlong-mflag}).
+
+Abb.\ \ref{xlong-nusent} zeigt eine Auftragung der Mittelwerte der durchschnittlichen Anzahl der aktivierten
+Gene jeweils w"ahrend der letzten 50 Generationen eines Laufs gegen den Mittelwert der DVK. Auch hier wird
+eine Korrelation zwischen hohen DVK-Werten und einer gro"sen Anzahl aktiver Gene in den evolvierten Wachstumsprogrammen
+deutlich. Die Beobachtung, da"s bei einer Evolution von Pflanzen mit komplexer Morphologie und entsprechend
+komplexen Entwicklungsprogrammen auch eine hohe DVK auftritt, wird durch diese Korrelationsanalysen in systematischer
+Weise best"atigt.
+
+Abb.\ \ref{xlong-maxent} zeigt ein Diagramm der Wertepaare der Mutations- und Selektionsrate
+der L"aufe mit den 20 h"ochsten Mittelwerten der DVK. In dem Diagramm ist weiterhin die Kurve der kritischen
+Fehlergrenze von Entwicklungsprogrammen mit sieben aktiven Genen als Funktion der Selektionsrate, $t_E(s,7)$, eingezeichnet
+(Gl.\ \ref{errthresholdprgm-eq}), weil sieben der Bereich der h"ochsten beobachteten L"angen von Entwicklungsprogrammen
+war. Im Bereich unterhalb dieser Kurve ist die Evolution von Entwicklungsprogrammen maximaler Komplexit"at m"oglich,
+w"ahrend oberhalb der Kurve nur bei aktiver Verringerung der effektiven Mutationsraten die Evolution von Entwicklungsprogrammen
+dieser Komplexit"at m"oglich ist. Die Funktion $t_E(s,7)$ kann somit als \textsl{edge of chaos} \cite{Gutowitz95,Kauffman92,Langton92}
+angesehen werden.
+
+Die L"aufe mit hohen DVK-Werten zerfallen bez"uglich der Mutationsraten
+und der Selektionsrate deutlich in zwei Gruppen. Bei einer Gruppe von L"aufen liegen die Mutationsraten
+in der N"ahe der Kurve oder deutlich darunter. Die Basiswerte der Mutationsraten sind also niedrig genug,
+um die Ausbreitung komplexer Entwicklungsprogramme zuzulassen. Es ist eine gewisse H"aufung der L"aufe in
+dieser Gruppe unterhalb der Kurve der kritischen Fehlergrenze, jedoch in ihrer N"ahe zu beobachten.
+
+Bei einer weiteren Gruppe von L"aufen liegen die
+Mutationsraten deutlich oberhalb der Kurve. Bei allen
+L"aufen in dieser Gruppe fand eine signifikante Absenkung des Mutationsexponenten statt, wie auch der
+Vergleich mit Abb.\ \ref{xlong-mflag} deutlich macht. 
+
+Die Evolution komplexer Entwicklungsprogramme bei hohen Mutationsraten durch aktive Verringerung der effektiven
+Mutationsraten ist nicht m"oglich, wenn die Kontrollparameter \verb|num_mutminus| und \verb|num_mutplus| auf
+0 gesetzt werden. Dies war bei der Serie von L"aufen \runname{ldetailc00} der Fall. Sie wurde mit folgenden
+Kontrollparametern durchgef"uhrt:
+
+\medskip
+\begin{tabular}{ll}
+Selektionsrate: & 0.0 bis 0.95, Schrittweite 0.05 \\
+Austauschrate: & 0.0 bis 0.1, Schrittweite 0.005 \\
+Insertionsrate: & 0.0 \\
+Deletionsrate: & 0.0 \\
+Populationsgr"o"se: & 50 \\
+Mutationsfaktor: & 1.0 \\
+Breite der Welt: & 150 \\
+H"ohe der Welt: & 30  \\
+Genoml"ange der Startpopulation: & 20 Gene (40 Bytes) \\
+L"ange einer Vegetationsperiode: & 30 Tage \\
+Anzahl Generationen:             & 350 \\
+\end{tabular}
+
+\begin{tabular}{ll}
+\verb|num_divide| & 256 \\
+\verb|num_mutminus| & 0 \\
+\verb|num_mutplus| & 0 \\
+\verb|random_seed| & 12345 \\
+\end{tabular}
+\medskip
+
+Verschiedene Ergebnisse des Experiments \runname{ldetailc00} wurden in \cite{Kim95} ver"offentlicht.
+Abb.\ \ref{ldetailc00-maxent} zeigt ein zu Abb.\ \ref{xlong-maxent} analoges Diagramm. Da in \runname{ldetailc00}
+nur Austauschmutationen stattfanden, wurde die Kurve der kritischen Fehlergrenze eines Entwicklungsprogramms
+von sieben Genen anhand von Gl.\ \ref{errthresholdprgr-eq} berechnet. Abb.\ \ref{ldetailc00-maxent} zeigt,
+da"s bei fehlender M"oglichkeit zur aktiven Verringerung der effektiven Mutationsraten keine L"aufe mit hoher
+DVK auftreten, bei denen die Austauschrate deutlich "uber dem Wert liegt, ab dem die Ausbreitung eines Entwicklungsprogramms
+aus sieben Genen unm"oglich ist.
+
+In Abb.\ \ref{ldetailc00-maxent} tritt das Ph"anomen der H"aufung von L"aufen mit hoher DVK unterhalb der 
+kritischen Fehlergrenze deutlich zutage, bei L"aufen, in denen die Austauschrate die kritische Fehlergrenze
+weit unterschreitet, wurden submaximale DVK-Werte gemessen. Dieses Ph"anomen trat auch in den L"aufen \runname{xlong00105}
+(\ref{xlong00105section}) und \runname{xlong00108} (\ref{xlong00108section}) deutlich zutage.
+Durch eine hohe DVK werden also solche L"aufe
+charakterisiert, bei denen das Verh"altnis von Selektionsrate und Mutationsraten einerseits die Evolution
+komplexer Entwicklungsprogramme zul"a"st, andererseits aber auch eine m"oglichst schnelle Diffusion innerhalb
+neutraler Mengen erm"oglicht. Dieser Befund, wie auch die gute Korrelation zwischen dem Graphen der Funktion $t_E(s,7)$
+und dem Bereich maximaler DVK-Werte, belegen einen hochsignifikanten Zusammenhang zwischen hohen DVK-Werten
+und Evolution im Bereich der \textsl{edge of chaos} in LindEvol-GA.
+
+Abb.\ \ref{xlong-gdv} zeigt, da"s die genetische Diversit"at in den L"aufen mit Selektion und ohne Mutation
+stets 0 betr"agt, wie dies bei Populationen identischer Individuen zu erwarten ist. In allen anderen L"aufen
+ist die genetische Diversit"at jedoch im Maximalbereich, sowohl bei L"aufen, in denen die h"ochsten Fitnesswerte
+erreicht wurden als auch bei L"aufen, in denen infolge der "Uberschreitung der kritischen Fehlergrenze keinerlei
+Evolution komplexer Pflanzenformen stattfand. Die genetische Diversit"at ist damit zur Charakterisierung der
+evolution"aren Dynamik in L"aufen von LindEvol-GA nicht verwendbar.
+
+% Problem genetische Diversitaet: Kein Rueckgang bei hoher Randomisierung.
+
+
+\subsubsection{Mutationsexponenten}
+
+Auswirkungen der Beeinflussung der effektiven Mutationsraten durch die evolvierenden Individuen wurden bereits
+in verschiedenen Systemen untersucht \cite{Maley94}. Die f"ur LindEvol entwickelte Modellierungsmethode unterscheidet
+sich von anderen Ans"atzen dadurch, da"s die Modifikation der effektiven Mutationsraten durch den Energiebedarf
+der Aktionen \verb|mut-| und \verb|mut+| mit der Fitness gekoppelt ist. Auf diese Weise wird ein intrinsischer
+Mechanismus realisiert, der einer Evolution beliebig kleiner Mutationsraten entgegenwirkt, die ohne diesen
+Mechanismus m"oglicherweise ablaufenen w"urde, weil geringere Mutationsraten eine h"ohere Ausbreitungszahl
+zur Folge haben (s.\ Gl.\ \ref{programspreadm-eq}).
+
+Die Mittelwerte der durchschnittlichen Mutationsexponenten (Abb.\ \ref{xlong-mflag}) zeigen, da"s eine Evolution
+von Pflanzenformen, die ihre effektiven Mutationsraten aktiv absenken, nur in L"aufen stattfindet, bei denen
+die Mutationsraten oberhalb von $t_E(s,3)$ liegen. Durch die aktive Verringerung der effektiven Mutationsraten
+kann in diesem Bereich sowohl eine erhebliche Vergr"o"serung der Ausbreitungszahl als auch eine drastische
+Erh"ohung der Fitness erreicht werden, wie dies in (\ref{xlong1008section}) f"ur den Lauf \runname{xlong1008}
+beschrieben wurde. Im Bereich von Mutationsraten, die im Verh"altnis zu $t_E(s,7)$, dem Bereich der \textsl{edge of chaos},
+hoch sind, kann also eine Evolution hin zur \textsl{edge of chaos} \cite{Kauffman92} beobachtet werden.
+
+
+\subsection{LindEvol-GA als Testsystem f"ur Verfahren zur Rekonstruktion der Phylogenie}
+\label{lndga-phylogeny}
+
+Die am Anfang eines Laufs von LindEvol-GA zufallsgesteuert generierten Genome haben keinerlei Verwandtschaft zueinander,
+sie stellen Anfangsknoten von miteinander nicht verbundenen Stammb"aumen dar. Im Laufe einer Anfangsphase breiten sich
+die Nachkommen eines Genoms der Startpopulation in der ganzen Population aus, w"ahrend alle anderen Linien aussterben.
+Von diesem Zeitpunkt an geh"oren s"amtliche Genome der Population zu einem gemeinsamen Stammbaum. Der Stammbaum 
+(bzw.\ die Stammb"aume in der Anfangsphase) der Genome in einem LindEvol-GA--Lauf k"onnen jederzeit ermittelt werden.
+
+Bei der molekularen Evolution sind dagegen nur die Sequenzen rezenter Lebensformen zug"anglich. Zur Rekonstruktion der
+Phylogenie aus dieser Sequenzinformation existieren verschiedene Verfahren \cite{Felsenstein88}.
+Bei allen Rekonstruktionsmethoden mu"s zun"achst ein \textsl{multiple alignment} \cite{GCG} der Sequenzen erstellt
+werden. Durch dieses wird festgelegt, welche Zeichen in den verschiedenen Sequenzen als zueinander homolog
+angenommen werden sollen. In weiteren Schritten wird dann unter Auswertung der Information "uber Gemeinsamkeiten und
+Unterschiede in den homologen Positionen ein Stammbaum rekonstruiert.
+
+Eine Standardmethode zur Charakterisierung der Leistungsf"ahigkeit und
+Genauigkeit von Verfahren zur Stammbaumrekonstruktion ist es, eine Sequenzmenge durch die Simulation eines Evolutionsprozesses
+zu erzeugen. Dazu wird h"aufig die Simulation eines neutralen Evolutionsprozesses mit fest vorgegebenem Stammbaum
+eingesetzt. Diese Sequenzmenge wird dann mit dem zu testenden Rekonstruktionsverfahren bearbeitet, und die resultierenden,
+rekonstruierten Stammb"aume werden mit dem aus der Simulation bekannten, korrekten Stammbaum verglichen. Eine solche
+Untersuchung wird in \cite{KuhnerFelsenstein} beschrieben.
+
+Die Evolution der Lebensformen auf der Erde ist keine strikt neutrale Evolution. Mutationen k"onnen zwar neutral sein,
+sie k"onnen aber auch drastische Auswirkungen auf die "Uberlebens- und Vermehrungschancen eines Organismus haben.
+In LindEvol-GA kommen sowohl neutrale Mutationen als auch Mutationen, die Auswirkungen unterschiedlichsten Ausma"ses
+auf die Morphologie der simulierten Pflanzen haben, vor. Anders als neutrale Evolutionsvorg"ange stimmt LindEvol-GA also
+in dieser Eigenschaft qualitativ mit der molekularen Evolution "uberein. Insofern ist LindEvol-GA ein realistischeres
+Modell der Evolution als Simulationen neutraler Evolutionsprozesse. Es bietet sich an, die Bedeutung von Abweichungen
+von der Annahme neutraler Evolution auf die Genauigkeit der Stammbaumrekonstruktion zu untersuchen, indem LindEvol-GA
+als Simulation zur Generierung von Testdaten f"ur die Rekonstruktionsverfahren verwendet wird.
+
+Zu diesem Zweck wurden verschiedene L"aufe mit LindEvol-GA durchgef"uhrt.
+In regelm"a"sigen Abst"anden, jeweils alle 20 Generationen, wurden aus den Simulationsl"aufen jeweils gleichzeitig
+der Stammbaum der Population und
+alle Genome der Population abgespeichert.
+Zur Verarbeitung durch Stammbaumanalyseprogramme wurden die Bytesequenzen der Genome in Sequenzen des
+Nucleotidalphabets $\mathrm\{A,C,G,T\}$ (Adenosin, Cytidin, Guanosin und Thymidin)
+"ubertragen. Jedes Byte wurde wurde dazu in vier Bitgruppen zu je zwei
+Bits eingeteilt, jede Bitgruppe wurde entsprechend der folgenden Tabelle in ein Nucleotidzeichen "ubersetzt:
+
+\medskip
+\begin{tabular}{ccc}
+{\ttfamily 00} & $\rightarrow$ & A \\
+{\ttfamily 01} & $\rightarrow$ & C \\
+{\ttfamily 10} & $\rightarrow$ & G \\
+{\ttfamily 11} & $\rightarrow$ & T \\
+\end{tabular}
+\medskip
+
+Der bei einer Generation extrahierte tats"achliche Baum und die bei dieser Generation erhaltene Sequenzmenge
+werden zusammen im Folgenden als ein \introdef{Datensatz} bezeichnet.
+Nur Populationen, bei denen alle Genome von einen gemeinsamen Vorfahren abstammen,
+wurden f"ur die Untersuchungen verwendet; Datens"atze aus der Anfangsphase der Simulationen, bei denen die Genome
+von von mehr als einem Genom aus der Startpopulation abstammten, wurden ignoriert.
+
+Bei den L"aufen wurden jeweils die Insertions- und die Deletionsrate auf Null gesetzt; die Genoml"ange bleibt
+also in den L"aufen konstant.
+Auf diese Weise wird ein Mutationsproze"s simuliert, der dem Jukes-Cantor-Modell der molekularen Uhr
+(vgl.\ Dokumentation zu PHYLIP) entspricht. Ferner sind bei der Beschr"ankung auf Austauschmutationen
+die Zeichen aller Genome, die einen gemeinsamen Vorfahr haben, positionsweise homolog. Ein aufwendiges
+\textsl{alignment}-Verfahren ist somit nicht erforderlich; die Sequenzen k"onnen einfach untereinander
+geschrieben werden. Unzutreffende Homologieannahmen k"onnen daher das Rekonstruktionsergebnis nicht
+beeintr"achtigen.
+
+Die Sequenzdaten wurden mit den Rekonstruktionsverfahren \textsl{parsimony} und \textsl{neighbor joining} untersucht.
+Hierf"ur wurden die entsprechenden Programme aus dem Programmpaket
+PHYLIP \cite{PHYLIP} eingesetzt. Die \textsl{parsimony}-Analyse erfolgte mittels des Programms \prgname{dnapars}.
+Dieses Programm erzeugt unter Umst"anden mehrere Stammb"aume mit maximaler \textsl{parsimony}.
+
+Zur Rekonstruktion
+mit dem \textsl{neighbor joining} Verfahren wurden aus den Sequenzmengen zun"achst mit dem Programm \prgname{dnadist}
+eine Distanzmatrix errechnet, wobei das Jukes-Cantor-Modell der Sequenzevolution als Grundlage der Distanzberechnung
+ausgew"ahlt wurde. Eine Verf"alschung der Rekonstruktion aufgrund von Unterschieden zwischen dem tats"achlichen und
+dem bei der Rekonstruktion angenommenen Mutationsproze"s ist damit ausgeschlossen.
+Die mittels \prgname{dnadist} erhaltenen Distanzmatrizen wurden zur
+Stammbaumrekonstruktion mit dem Programm \prgname{neighbor} verwendet.
+
+Die Distanzberechnung nach dem Jukes-Cantor-Modell ist nur dann m"oglich, wenn die betrachteten Sequenzen mehr
+als 25\% "Ubereinstimmungen haben. Das Jukes-Cantor-Modell sagt voraus, da"s die  Anzahl der Unterschiede zwischen
+zwei verwandten DNA-Sequenzen mit der Zeit exponentiell asymptotisch gegen 75\% konvergiert. Daher kann mithilfe
+des Jukes-Cantor-Modells nur f"ur Sequenzen, die weniger als 75\% Unterschiede aufweisen, die seit ihrer Abstammung
+von einem gemeinsamen Vorfahren vergangene Zeit abgesch"atzt werden. Wenn das Programm \prgname{dnadist} ein
+Paar von Sequenzen findet, die weniger als 25\% "Ubereinstimmungen haben, bricht es ab. In solchen F"allen war die
+Rekonstruktion mittels \textsl{neighbor joining} nicht m"oglich. Die Auswahl einer geringen Mutationsrate hilft,
+dieses Problem zu vermeiden.
+
+Als Ma"s f"ur die Rekonstruktionsgenauigkeit wurde der \textsl{dT score}
+(vgl.\ \ref{glossary} zwischen den jeweils rekonstruierten B"aumen und dem tats"achlichen Stammbaum berechnet;
+diese Methode zur Evaluierung der Rekonstruktionsergebnisse wurde von Kuhner und Felsenstein \cite{KuhnerFelsenstein}
+"ubernommen. Von allen auf der Basis einer Sequenzmenge rekonstruierten B"aumen wurde der \textsl{dT score} zu
+dem tats"achlichen Stammbaum berechnet. Wenn mit einer Sequenzmenge mehrere \textsl{most parsimonious trees}
+gefunden wurden, wurde der Durchschnittswert der \textsl{dT scores} zwischen diesen B"aumen und dem tats"achlichen
+Stammbaum berechnet.
+
+Zu allen LindEvol-GA--L"aufen wurde eine neutrale Kontrolle (\ref{lndga-neutral}) durchgef"uhrt.
+Bei diesen L"aufen wurden, wie bei den LindEvol-GA--L"aufen, alle 20 Generationen der tats"achliche Stammbaum
+und die Genome gespeichert. Mit diesen \introdef{Kontrolldatens"atzen} wurden dieselben Rekonstruktionsverfahren 
+wie mit den aus LindEvol-GA entnommenen Datens"atzen durchgef"uhrt. Die Differenzen zwischen den bei einem
+LindEvol-GA--Lauf und dem entsprechenden Lauf der neutralen Kontrolle gemessenen \textsl{dT scores} gibt
+Aufschlu"s "uber Auswirkungen nichtneutraler Evolutionsprozesse in LindEvol-GA auf die Stammbaumrekonstruktion.
+Abb.\ \ref{phylo-setup} fa"st das experimentelle Verfahren zusammen und verdeutlicht den Datenflu"s.
+
+
+\begin{figure}[t]
+\unitlength1cm
+{
+\begin{picture}(16,10)
+\ttfamily
+\put(0,9.5){\framebox(16,0.5){Kontrollparameter}}
+\put(3.5,9.5){\vector(0,-1){0.5}}
+\put(12.5,9.5){\vector(0,-1){0.5}}
+
+\put(0,8.5){\makebox(7,0.5){\centerline{LindEvol-GA}}}
+\put(3.5,8.75){\oval(7,0.5)}
+\put(1.5,8.5){\vector(0,-1){0.5}}
+\put(5.5,8.5){\vector(0,-1){0.5}}
+
+\put(0,7){\framebox(3,1){
+\parbox{3cm}{
+\centerline{tats"achl.}
+\centerline{Baum}}}}
+\put(1.5,7){\vector(0,-1){3.5}}
+
+\put(4,7){\framebox(3,1){
+\parbox{3cm}{
+\centerline{Sequenz-}
+\centerline{menge}}}}
+\put(5.5,7){\vector(0,-1){0.5}}
+
+\put(4,5.5){\makebox(3,1){
+\parbox{3cm}{
+\centerline{Rekon-}
+\centerline{struktion}}}}
+\put(5.5,6){\oval(3,1)}
+\put(5.5,5.5){\vector(0,-1){0.5}}
+
+\put(4,4){\framebox(3,1){
+\parbox{3cm}{
+\centerline{Rekonst.}
+\centerline{B"aume}}}}
+\put(5.5,4){\vector(0,-1){0.5}}
+
+\put(0,3){\makebox(7,0.5){Baumvergleich}}
+\put(3.5,3.25){\oval(7,0.5)}
+\put(3.5,3){\vector(0,-1){0.5}}
+
+\put(0,2){\framebox(7,0.5){dT scores}}
+\put(3.5,2){\vector(0,-1){0.5}}
+
+%neutrale Kontrolle
+\put(9,8.5){\makebox(7,0.5){\centerline{neutrale Kontrolle}}}
+\put(12.5,8.75){\oval(7,0.5)}
+\put(10.5,8.5){\vector(0,-1){0.5}}
+\put(14.5,8.5){\vector(0,-1){0.5}}
+
+\put(9,7){\framebox(3,1){
+\parbox{3cm}{
+\centerline{tats"achl.}
+\centerline{Baum}}}}
+\put(10.5,7){\vector(0,-1){3.5}}
+
+\put(13,7){\framebox(3,1){
+\parbox{3cm}{
+\centerline{Sequenz-}
+\centerline{menge}}}}
+\put(14.5,7){\vector(0,-1){0.5}}
+
+\put(13,5.5){\makebox(3,1){
+\parbox{3cm}{
+\centerline{Rekon-}
+\centerline{struktion}}}}
+\put(14.5,6){\oval(3,1)}
+\put(14.5,5.5){\vector(0,-1){0.5}}
+
+\put(13,4){\framebox(3,1){
+\parbox{3cm}{
+\centerline{Rekonst.}
+\centerline{B"aume}}}}
+\put(14.5,4){\vector(0,-1){0.5}}
+
+\put(9,3){\makebox(7,0.5){Baumvergleich}}
+\put(12.5,3.25){\oval(7,0.5)}
+\put(12.5,3){\vector(0,-1){0.5}}
+
+\put(9,2){\framebox(7,0.5){dT scores}}
+\put(12.5,2){\vector(0,-1){0.5}}
+
+\put(0,1){\makebox(16,0.5){Vergleich, Differenzbildung}}
+\put(8,1.25){\oval(16,0.5)}
+\put(8,1){\vector(0,-1){0.5}}
+
+\put(0,0){\framebox(16,0.5){Unterschiede zwischen LindEvol-GA und der neutralen Kontrolle}}
+
+\end{picture}
+}
+\caption["Uberblick "uber den Aufbau der Rekonstruktionsexperimente]
+{\label{phylo-setup}
+"Uberblick "uber den Aufbau der Rekonstruktionsexperimente. Daten werden durch eckige Boxen
+dargestellt, Boxen mit abgerundeten Ecken symbolisieren Rechenverfahren.
+Ein LindEvol-GA--Lauf und ein
+Lauf der neutralen Kontrolle werden mit demselben Kontrollparametersatz durchgef"uhrt.
+Zu verschiedenen Zeiten werden aus beiden L"aufen jeweils der tats"achliche Stammbaum der
+Population und die Population der Genome entnommen. Auf der Basis der Genompopulationen werden
+rekonstruierte B"aume erstellt. Diese werden mit dem tats"achlichen Baum verglichen, indem
+der \textsl{dT score} berechnet wird. Unterschiede zwischen den mit LindEvol-GA und der
+neutralen Kontrolle gemessenen \textsl{dT scores} weisen auf nichtneutrale Prozesse, die
+die Rekonstruktionsgenauigkeit beeinflussen, hin.
+}
+\end{figure}
+
+Wenn von einem Genom bei einem Selektionsschritt mehr als eine Kopie erzeugt wird, f"uhrt dies zu einer Multifurkation
+im tats"achlichen Stammbaum. Multifurkationen f"uhren zu Verzerrungen bei der \textsl{dT score} Analyse,
+weil die Rekonstruktionsprogramme stets vollst"andig aufgel"oste, bin"are B"aume erzeugen, und somit der tats"achliche
+Baum mit Multifurkationen au"serhalb des L"osungsbereichs der Rekonstruktionsverfahren liegt. Ferner hat ein
+Baum mit Multifurkationen weniger Kanten als ein vollst"andig aufgel"oster Baum. Der Maximalwert des
+\textsl{dT score} zwischen dem tats"achlichen Baum und rekonstruierten B"aumen verkleinert sich daher,
+wenn der tats"achliche Baum Multifurkationen enth"alt. Die Absolutwerte dieser \textsl{dT scores} sind
+somit bei Datens"atzen mit unterschiedlich vielen Multifurkationen im tats"achlichen Baum nicht vergleichbar.
+Die Wahrscheinlichkeit des Auftretens einer Multifurkation ist umso gr"o"ser, je h"oher die Selektionsrate
+ist. Aus diesem Grund konnten die oben beschriebenen Schwierigkeiten vermieden werden, indem die niedrige
+Selektionsrate 0.2 gew"ahlt wurde.
+
+
+\subsubsection{Rekonstruktion und Evolution komplexer Entwicklungsprogramme}
+\label{slrecsection}
+
+\begin{figure}[t]
+
+\unitlength1cm
+\begin{picture}(16,14)
+\put(0,0){\makebox(16,14)[b]{\epsfxsize=16cm \epsffile{shortgenomes.eps}}}
+\end{picture}
+\caption[Ergebnisse shortgenomes]
+{\label{shortgenomesresults}
+Verlaufsdiagramm des LindEvol-GA--Laufs \runname{shortgenomes}.
+}
+\end{figure}
+
+\begin{figure}
+\unitlength1cm
+\begin{picture}(16,20.5)
+{
+\small
+\put(0,15.5){\makebox(16,5)[b]{\epsfxsize=14cm \epsffile{shortgenomes-nj.eps}}}
+\put(0,15){\makebox(16,0.5){\textbf{a:} \textsl{dT scores} mit \textsl{neighbor joining}
+bei \runname{shortgenomes} und der neutralen Kontrolle}}
+\put(0,10){\makebox(16,5)[b]{\epsfxsize=14cm \epsffile{shortgenomes-dp.eps}}}
+\put(0,9.5){\makebox(16,0.5){\textbf{b:} Durchschnittliche \textsl{dT scores} mit \textsl{parsimony}
+bei \runname{shortgenomes} und der neutralen Kontrolle}}
+\put(0,4.5){\makebox(16,5)[b]{\epsfxsize=14cm \epsffile{shortgenomes-dpdiff.eps}}}
+\put(1,3.5){\makebox(14,1){\parbox{14cm}{\textbf{c:} Differenz der durchschnittlichen \textsl{dT scores} mit \textsl{parsimony}
+bei \runname{shortgenomes} und der neutralen Kontrolle}}}
+\put(0,0.5){\makebox(16,3)[b]{\epsfxsize=14cm \epsffile{shortgenomes-ug.eps}}}
+\put(0,0){\makebox(16,0.5){\textbf{d:} Evolution der durchschnittlichen Anzahl aktivierter Gene in \runname{shortgenomes}}}
+}
+\end{picture}
+\caption[Stammbaumrekonstruktion shortgenomes]
+{\label{shortgenomes-phylo}
+\textsl{dT score} Ergebnisse aus den Datens"atzen aus \runname{shortgenomes} (Boxen) und aus den zugeh"origen neutralen Kontrolle
+(Rauten). Bei einigen Datens"atzen der neutralen Kontrolle war die Erstellung einer Distanzmatrix mit \prgname{dnadist}
+nicht m"oglich (s.\ Text), hier fehlen die entsprechenden Me"spunkte in (a).
+(c) zeigt die Differenz zwischen den jeweils in \runname{shortgenomes} und in der neutralen Kontrolle gemessenen
+\textsl{dT scores} mit \textsl{parsimony}.
+Zum Vergleich die durchschnittliche Anzahl aktivierter Gene (d).
+% Die Zunahme der Komplexit"at der Entwicklungsprogramme
+% ist mit einem deutlichen R"uckgang der Rekonstruktionsgenauigkeit korreliert.
+}
+\end{figure}
+
+\begin{figure}[t]
+
+\unitlength1cm
+\begin{picture}(16,14)
+\put(0,0){\makebox(16,14)[b]{\epsfxsize=16cm \epsffile{medgenomes.eps}}}
+\end{picture}
+\caption[Ergebnisse medgenomes]
+{\label{medgenomesresults}
+Verlaufsdiagramm des LindEvol-GA--Laufs \runname{medgenomes}.
+}
+\end{figure}
+
+\begin{figure}
+\unitlength1cm
+\begin{picture}(16,20.5)
+{
+\small
+\put(0,15.5){\makebox(16,5)[b]{\epsfxsize=14cm \epsffile{medgenomes-nj.eps}}}
+\put(0,15){\makebox(16,0.5){\textbf{a:} \textsl{dT scores} mit \textsl{neighbor joining}
+bei \runname{medgenomes} und der neutralen Kontrolle}}
+\put(0,10){\makebox(16,5)[b]{\epsfxsize=14cm \epsffile{medgenomes-dp.eps}}}
+\put(0,9.5){\makebox(16,0.5){\textbf{b:} Durchschnittliche \textsl{dT scores} mit \textsl{parsimony}
+bei \runname{medgenomes} und der neutralen Kontrolle}}
+\put(0,4.5){\makebox(16,5)[b]{\epsfxsize=14cm \epsffile{medgenomes-dpdiff.eps}}}
+\put(1,3.5){\makebox(14,1){\parbox{14cm}{\textbf{c:} Differenz der durchschnittlichen \textsl{dT scores} mit \textsl{parsimony}
+bei \runname{medgenomes} und der neutralen Kontrolle}}}
+\put(0,0.5){\makebox(16,3)[b]{\epsfxsize=14cm \epsffile{medgenomes-ug.eps}}}
+\put(0,0){\makebox(16,0.5){\textbf{d:} Evolution der durchschnittlichen Anzahl aktivierter Gene in \runname{medgenomes}}}
+}
+\end{picture}
+\caption[Stammbaumrekonstruktion medgenomes]
+{\label{medgenomes-phylo}
+\textsl{dT score} Ergebnisse aus den Datens"atzen aus \runname{medgenomes} (Boxen) und aus den zugeh"origen neutralen Kontrolle
+(Rauten). Wo die Berechnung der Distanzmatrix nicht m"oglich war, fehlen die Me"spunkte f"ur die neutrale Kontrolle in
+(a). (c) zeigt die Differenzen der mit \textsl{parsimony} beobachteten Werte in \runname{medgenomes} und in der
+neutralen Kontrolle. Zum Vergleich die durchschnittliche Anzahl aktivierter Gene (d).
+% Die Evolution komplexer Entwicklungsprogramme
+% bleibt ohne signifikante Auswirkungen auf die Rekonstruktionsgenauigkeit.
+}
+\end{figure}
+
+Bei neutraler Evolution bleibt jede Mutation ohne Auswirkungen auf die Fitness des betroffenen Genoms.
+Diese Annahme gilt nicht f"ur LindEvol-GA. Mutationen in Genen, die beim Wachstum einer Pflanze aktiviert
+werden, f"uhren in aller Regel zu "Anderungen in der Morphologie und der Fitness. Bei inaktiven Genen
+sind dagegen alle Mutationen, die die rechte Seite der codierten Regel ver"andern, neutral, und Mutationen
+an der linken Seite sind neutral, sofern die linke Seite nach der Mutation nicht eine lokale Struktur
+spezifiziert, die beim Wachstum der Pflanze auftritt.
+
+Die Anzahl der beim Wachstum der Pflanzen aktivierten Gene steigt typischerweise im Verlauf eines LindEvol-GA--Laufs,
+die M"oglichkeiten zu neutralen Mutationen nehmen somit ab. Der Raum f"ur neutrale Mutationen wird umso st"arker
+eingeschr"ankt, desto h"oher der Anteil der aktiven Gene an der Gesamtmenge der Gene eines Genoms ist. Bei kurzen
+Genomen ist also eine st"arkere Abweichung von der Annahme der neutralen Evolution zu erwarten. Um die Auswirkungen
+dieser Annahme auf die Rekonstruktionsgenauigkeit zu untersuchen, wurden die
+L"aufe \runname{shortgenomes} mit einer Genoml"ange von 10 und \runname{medgenomes} mit einer Genoml"ange von 20
+durchgef"uhrt.
+
+\medskip
+\begin{tabular}{ll}
+Populationsgr"o"se: & 50 \\
+Selektionsrate: & 0.2 \\
+Austauschrate: & 0.003 \\
+Mutationsfaktor: & 2.0 \\
+Breite der Welt: & 150 \\
+H"ohe der Welt: & 30  \\
+Genoml"ange der Startpopulation: & 10 Gene in \runname{shortgenomes} \\
+				 & 20 Gene in \runname{medgenomes} \\
+L"ange einer Vegetationsperiode: & 30 Tage \\
+Anzahl Generationen:             & 3000 \\
+\verb|num_divide| & 224 \\
+\verb|num_mutminus| & 16 \\
+\verb|num_mutplus| & 16 \\
+\verb|random_seed| & 1 \\
+\end{tabular}
+\medskip
+
+Die L"aufe der neutralen Kontrollen hei"sen \runname{c-shortgenomes} bzw.\ \runname{c-medgenomes}
+Die Abbildungen \ref{shortgenomesresults} und \ref{medgenomesresults} zeigen die Verlaufsdiagramme der L"aufe
+\runname{shortgenomes} und \runname{medgenomes}. Viele der typischen Prozesse von LindEvol-GA--L"aufen mit
+niedrigen Mutationsraten sind auch in diesen Diagrammen zu sehen (vgl.\ \ref{xlong00105section}).
+
+Abb.\ \ref{shortgenomes-phylo} zeigt die Ergebnisse der Rekonstruktionsanalysen mit \runname{shortgenomes}
+und der dazugeh"origen neutralen Kontrolle. Der durchschnittliche \textsl{dT score} zwischen den mit
+\textsl{parsimony} rekonstruierten B"aumen und dem tats"achlichen Stammbaum ist bei den meisten Datens"atzen
+aus \runname{shortgenomes} etwas gr"o"ser als in den entsprechenden Generationen in der neutralen Kontrolle.
+Die Rekonstruktion ist also bei der neutralen Kontrolle genauer. Mit der Zunahme der Anzahl der aktivierten
+Gene vergr"o"sert sich die Differenz zwischen dem bei \runname{shortgenomes} und dem bei der neutralen
+Kontrolle gemessenen Durchschnittswert des \textsl{dT score}. Bei den Messungen mit \textsl{neighbor joining}
+ist ein "ahnlicher Trend erkennbar, wegen der zahlreichen fehlenden Me"spunkte ist er jedoch nicht sehr
+deutlich.
+
+\begin{sloppypar}
+Der Durchschnittswert der Anzahl der aktiven Gene steigt im Verlauf von \runname{shortgenomes} von drei auf acht.
+Die Anzahl der inaktiven Gene sinkt somit von sieben auf zwei, also von 70\% auf 20\% der
+Gesamtgenoml"ange.
+\end{sloppypar}
+
+Ein anderes Bild ergibt sich bei \runname{medgenomes} und \runname{c-medgenomes}, dem entsprechenden Lauf der
+neutralen Kontrolle. Die Rekonstruktionsgenauigkeit mit \textsl{parsimony} ist sowohl in \runname{medgenomes}
+als auch in \runname{c-medgenomes} erheblich besser als in den entsprechenden L"aufen mit kurzen Genomen.
+Der gr"o"sere Informationsgehalt der l"angeren Sequenzen macht eine akkuratere Rekonstruktion m"oglich.
+Weiterhin zeigt die Zunahme der Komplexit"at der Entwicklungsprogramme
+keine signifikante Auswirkungen auf die Rekonstruktionsgenauigkeit. Der Grund hierf"ur wird deutlich, wenn man
+die Anzahl der aktivierten Gene in Relation zur Gesamtl"ange der Genome betrachtet (s.\ Abb.\ \ref{medgenomes-phylo}d).
+Nur rund 25\% der Gene eines Genoms werden aktiviert, die restlichen
+75\% der Gene bleiben inaktiv.
+
+Bei einer nicht aktiven Regel kann der
+Aktionsteil beliebig ver"andert werden, ohne da"s die Gestalt der Pflanze ver"andert wird. Auch der Zustandsteil
+einer nicht aktiven Regel kann ohne Auswirkungen auf das Wachstum der Pflanze ver"andert werden, solange der Zustandsteil
+in der ver"anderten Form nicht einen Zustand, der in der Pflanze tats"achlich auftritt, spezifiziert. Bei einer aktiven
+Regel sind dagegen nur wenige Mutationen des Bytes, das den Aktionsteil codiert, neutral; dies ergibt sich aus der
+Redundanz der Aktionscodierung. Bei fester Genoml"ange ist daher die neutrale Menge (vgl.\ \ref{lndga-comparesingle}),
+zu der ein Genom geh"ort, umso gr"o"ser, je weniger Gene das in dem Genom codierte Entwicklungsprogramm umfa"st.
+
+Aus dem Vergleich der Ergebnisse der L"aufe \runname{shortgenomes} und \runname{medgenomes} geht somit hervor,
+da"s die Stammbaumrekonstruktion umso st"arker beeintr"achtigt wird, desto kleiner die neutrale Menge,
+zu der die Genome geh"oren,
+ist. Bei kurzen Genomen sind die neutralen Mengen kleiner als bei langen Genomen, was zu einer generell schlechteren
+Rekonstruktion bei kurzen Genomen f"uhrt. Das Anwachsen des Anteils aktivierter Gene auf 80\% aller Gene eines Genoms
+in \runname{shortgenomes} hat einen signifikanten R"uckgang der Rekonstruktionsgenauigkeit zur Folge. Eine Beeintr"achtigung
+der Stammbaumrekonstruktion durch nichtneutrale Evolutionseinfl"usse auf bis zu 25\% der Gene eines Genoms in
+\runname{medgenomes} ist dagegen mit der hier verwendeten Methode nicht nachweisbar.
+
+Die Abnahme der Rekonstruktionsgenauigkeit bei wachsender Komplexit"at der Entwicklungsprogramme kann
+als Folge der "Uberlagerung zweier informationsbildender Prozesse interpretiert werden.
+Neutrale Evolution kann als ein Proze"s gesehen werden, bei dem durch die Replikation von Sequenzen
+und durch neutrale Selektion ein Stammbaum als Zufallsgraph generiert wird. Ein Mutationsproze"s bewirkt
+dabei, da"s in den Sequenzen Information, die eine Rekonstruktion der Abstammung erlaubt, gebildet wird.
+Diese Information, die auch als phylogenetisches Signal bezeichnet wird,
+ist umso ausgepr"agter und deutlicher, je l"anger die evolvierenden Sequenzen sind.
+Bei nichtneutraler Selektion bestehen Korrelationen zwischen der genomischen Sequenz eines Individuums
+und seinen Vermehrungschancen. Einige Sequenzen werden dementsprechend systematisch h"aufiger repliziert
+als andere Sequenzen. Dies stellt ebenfalls einen informationsbildenden Proze"s dar, bei dem es sich um die
+evolution"are Optimierung handelt. Sowohl das phylogenetische Signal als auch die durch evolution"are
+Optimierung generierte Information sind in Sequenzen codiert, wozu jeweils bestimmte Sequenzl"angen ben"otigt
+werden. Bei fester Sequenzl"ange f"uhrt die Bildung
+eines ausgepr"agten Signals durch den Proze"s evolution"arer Optimierung daher zu einem R"uckgang der zur
+Codierung des phylogenetischen Signals effektiv verf"ugbaren Sequenzl"ange, was einen Verlust an Qualit"at
+des phylogenetischen Signals nach sich zieht.
+
+
+
+% selektionsrelevante Information verdraengt phylogentisches Signal aus Kanal der Informations"ubertragung
+% Anteil junk entscheidend, Aenderungen der Dynamik bei komplexeren Entwicklungsprogrammen bleiben ohne
+%     Auswirkungen auf Rekonstruktion.
+% phylogenetisches Signal als Effekt der Diffusion in neutraler Menge
+
+% Note: Neutrale Kontrolle ist eine Simulation, bei der alle Genome zu einer gemeinsamen neutralen Menge geh"oren.
+
+
+\subsubsection{Rekonstruktion und Evolution der Mutationsrate}
+\label{mutrecsection}
+
+\begin{figure}[t]
+
+\unitlength1cm
+\begin{picture}(16,14)
+\put(0,0){\makebox(16,14)[b]{\epsfxsize=16cm \epsffile{mutfgenomes.eps}}}
+\end{picture}
+\caption[Ergebnisse mutfgenomes]
+{\label{mutfgenomesresults}
+LindEvol-GA--Lauf \runname{mutfgenomes}, Selektionsrate 0.2, Austauschrate 0.07.
+}
+\end{figure}
+
+\begin{figure}
+\unitlength1cm
+\begin{picture}(16,18.5)
+\put(0,13.5){\makebox(16,5)[b]{\epsfxsize=14cm \epsffile{mutfgenomes-dp.eps}}}
+\put(0,13){\makebox(16,0.5){\textbf{a:} \textsl{dT score} Differenz bei \textsl{parsimony}
+zwischen \runname{mutfgenomes} und neutraler Kontrolle}}
+\put(0,8){\makebox(16,5)[b]{\epsfxsize=14cm \epsffile{mutfgenomes-dpdiff.eps}}}
+\put(1,7){\makebox(14,1){\parbox{14cm}{\textbf{b:} Differenz der durchschnittlichen \textsl{dT scores} mit \textsl{parsimony}
+bei \runname{mutfgenomes} und der neutralen Kontrolle}}}
+\put(0,4){\makebox(16,3)[b]{\epsfxsize=14cm \epsffile{mutfgenomes-avm.eps}}}
+\put(0,3.5){\makebox(16,0.5){\textbf{c:} Evolution des durchschnittlichen Mutationsexponenten in \runname{mutfgenomes}}}
+\put(0,0.5){\makebox(16,3)[b]{\epsfxsize=14cm \epsffile{mutfgenomes-ug.eps}}}
+\put(0,0){\makebox(16,0.5){\textbf{d:} Evolution der durchschnittlichen Anzahl aktivierter Gene in \runname{mutfgenomes}}}
+\end{picture}
+\caption[Stammbaumrekonstruktion mutfgenomes]
+{\label{mutfgenomes-phylo}
+\textsl{dT score} Ergebnisse (a) aus \runname{mutfgenomes} (Boxen) und der zugeh"origen neutralen Kontrolle (Rauten).
+Infolge der hohen Mutationsraten war die Analyse mit \textsl{neighbor joining} nicht m"oglich.
+Zum Vergleich der durchschnittliche Mutationsexponent (c) und die durchschnittliche Anzahl aktivierter
+Gene (d). Trotz der starken Schwankungen der \textsl{dT scores} ist eine Korrelation zwischen
+dem evolution"aren Sprung zur aktiven Senkung der effektiven Mutationsraten und einem Anwachsen der
+\textsl{dT scores} bei den Datens"atzen aus \runname{mutfgenomes} erkennbar.
+}
+\end{figure}
+
+Um die Auswirkungen einer aktiven Absenkung der effektiven Mutationsraten auf die Stammbaumrekonstruktion zu untersuchen,
+wurden an dem Lauf \runname{mutfgenomes} die entsprechenden Untersuchungen durchgef"uhrt. Bei diesem Lauf wurden
+folgende Kontrollparameter gew"ahlt:
+
+\medskip
+\begin{tabular}{ll}
+Populationsgr"o"se: & 50 \\
+Selektionsrate: & 0.2 \\
+Austauschrate: & 0.07 \\
+Mutationsfaktor: & 4.0 \\
+Breite der Welt: & 150 \\
+H"ohe der Welt: & 30  \\
+Genoml"ange der Startpopulation: & 20 Gene \\
+L"ange einer Vegetationsperiode: & 30 Tage \\
+Anzahl Generationen:             & 5000 \\
+\verb|num_divide| & 192 \\
+\verb|num_mutminus| & 32 \\
+\verb|num_mutplus| & 32 \\
+\verb|random_seed| & 12345 \\
+\end{tabular}
+\medskip
+
+Abweichend von den bisher besprochenen L"aufen wurden ein gr"o"serer Mutationsfaktor und gr"o"sere Werte f"ur
+\verb|num_mutminus| und \verb|num_mutplus| gew"ahlt. Der Grund hierf"ur ist, da"s mit den in den anderen L"aufen
+verwendeten Werten und einer konstanten Genoml"ange von 20 Genen keine L"aufe mit ausgepr"agter Evolution einer
+aktiven Absenkung der effektiven Mutationsraten beobachtet werden konnten. Die Auswahl eines gr"o"seren Mutationsfaktors
+verursacht in diesem Lauf keine Probleme durch Extremwerte au"serhalb des Wertebereichs der Flie"skommaarithmetik,
+weil bei der geringen Selektionsrate stark kooperationsorientierte Formen evolvieren (vgl.\ \ref{lndga-comparesingle}),
+und somit keine extrem gro"sen Pflanzen auftreten. Au"ser dem Mutationsfaktor, der Austauschrate und der Konfiguration
+des Genominterpreters wurden die Kontrollparameter so wie in \runname{medgenomes} gew"ahlt, um diese beiden L"aufe
+m"oglichst gut vergleichen zu k"onnen.
+
+Abb.\ \ref{mutfgenomesresults} zeigt das Verlaufsdiagramm von \runname{mutfgenomes}. Der evolution"are Sprung,
+bei dem die aktive Verringerung der effektiven Mutationsraten auftritt ist kurz nach Generation 3500 deutlich zu
+sehen. Er ist, wie dies auch f"ur \runname{xlong1008} beschrieben wurde (vgl.\ \ref{xlong1008section}), mit einem
+Anstieg der DVK und einer qualitativen "Anderung der Distanzverteilungscharakteristik verbunden.
+
+Abb.\ \ref{mutfgenomes-phylo} zeigt die Ergebnisse der Stammbaumrekonstruktion bei \runname{mutfgenomes} und bei der
+zugeh"origen neutralen Kontrolle \runname{c-mutfgenomes}. Wegen der hohen Mutationsraten war eine Rekonstruktion
+mit \textsl{neighbor joining} nur bei wenigen Datens"atzen aus \runname{mutfgenomes} und bei keinem Datensatz aus
+\runname{c-mutfgenomes} m"oglich, daher k"onnen nur Ergebnisse mit \textsl{parsimony} pr"asentiert werden. Die Abbildung
+zeigt, da"s mit dem evolution"aren Sprung, bei dem komplexe Entwicklungsprogramme auftreten, deren evolution"are
+Stabilit"at durch eine aktive Senkung der effektiven Austauschrate erreicht wird, eine deutliche Verschlechterung
+der Rekonstruktionsgenauigkeit einhergeht. Dies stellt einen Unterschied zu den mit \runname{medgenomes} erhaltenen
+Ergebnissen dar.
+
+\begin{sloppypar}
+Der Anteil der aktivierten Gene ist in \runname{medgenomes} sogar etwas gr"o"ser als in \runname{mutfgenomes}. Die
+Rekonstruktion verschlechtert sich also nicht in \runname{mutfgenomes} mehr als in \runname{medgenomes}, weil in
+\runname{mutfgenomes} komplexere Entwicklungsprogramme mit entsprechend kleineren neutralen Mengen evolvieren.
+Es ist somit anzunehmen, da"s der beobachtete R"uckgang auf die aktive Beeinflussung der effektiven Mutationsraten
+zur"uckzuf"uhren ist. Dies wird umso einleuchtender, wenn man bedenkt, da"s das Ausma"s der Absenkung der effektiven
+Mutationsraten auch bei Pflanzen mit identischen Entwicklungsprogrammen individuell verschieden sein kann, weil es
+von der stochastisch gestalteten Lichtabsorption abh"angt. Es kommt somit nicht zu einer gleichm"a"sigen Erniedrigung der
+Austauschrate, sondern vielmehr sind den einzelnen Kanten des tats"achlichen Stammbaums der Population unterschiedliche
+effektive Mutationsraten zuzuordnen. Es ist bekannt, da"s dies zu Beeintr"achtigungen der Stammbaumrekonstruktion
+f"uhren kann \cite{Felsenstein88}.
+\end{sloppypar}
+
+Der beobachtete Anstieg der Differenz der in \runname{mutfgenomes} und in der neutralen Kontrolle gemessenen \textsl{dT scores} 
+kann jedoch nicht quantitativ mit der Evolution der Verringerung der effektiven Mutationsraten korreliert werden. Das Problem
+hierbei ist, da"s die Rekonstruktion in \runname{mutfgenomes} global besser ist als in \runname{medgenomes}, was sich in
+absolut niedrigeren \textsl{dT scores} bei \runname{mutfgenomes} niederschl"agt. Bei absolut niedrigeren \textsl{dT scores}
+ist aber ein st"arkerer Anstieg bei einer Verschlechterung der Rekonstruktionsqualit"at zu erwarten. Zur Kl"arung
+dieser Zusammenh"ange sind weitere Untersuchungen erforderlich.
+
+
+
+
+% \subsubsection{Rekonstruktionsgenauigkeit in Abh"angigkeit von Austausch- und Selektionsrate}
+
+% Baeume mit Multifurkationen bei hoeheren Selektionsraten -> dT-scores bei verschiedenen Selektionsraten
+%     nicht vergleichbar.
+% Aehnlichkeit parsimony - neighbor gutes Qualitaetskriterium.
+
+\subsubsection{Absch"atzung der Rekonstruktionsgenauigkeit durch Vergleich verschiedener Verfahren}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,10)
+\put(0,0){\makebox(16,10)[b]{\epsfxsize=14cm \epsffile{dpvsnjdp.eps}}}
+\end{picture}
+\caption{\label{phylo-dpnj}
+Auftragung der durchschnittlichen \textsl{dT scores} zwischen den \textsl{parsimony}-B"aumen und dem
+\textsl{neighbor joining}-Baum gegen die durchschnittlichen \textsl{dT scores} zwischen den \textsl{parsimony}-B"aumen und
+dem tats"achlichen Stammbaum.
+}
+\end{figure}
+
+Zur Untermauerung der Signifikanz von Rekonstruktionsergebnissen werden die fraglichen Daten regelm"a"sig mit verschiedenen
+Verfahren zur Stammbaumrekonstruktion untersucht. H"aufig werden dabei \textsl{parsimony} und \textsl{neighbor joining}
+eingesetzt (z.B.\ \cite{Doyle94, Purugganan95}). Erh"alt man mit verschiedenen Verfahren "ahnliche oder identische B"aume,
+deutet dies auf eine gute Rekonstruktion hin. Dieses Verfahren kann anhand der in (\ref{slrecsection}) und
+(\ref{mutrecsection}) diskutierten Ergebnisse quantitativ untersucht werden.
+
+Zu diesem Zweck wurden f"ur alle Datens"atze die \textsl{dT scores} zwischen dem mit \textsl{neighbor joining} erhaltenen
+Baum und allen mit \textsl{parsimony} rekonstruierten Stammb"aumen berechnet. Von diesen \textsl{dT scores} wurde der
+Durchschnittswert berechnet. Weiterhin wurde in entsprechender Weise der durchschnittliche \textsl{dT score} zwischen
+dem tats"achlichen Baum und den mit \textsl{parsimony} rekonstruierten Stammb"aumen berechnet. Auf diese Weise wurde von
+jedem Datensatz, bei dem eine Rekonstruktion mit \textsl{neighbor joining} m"oglich war, ein Wertepaar aus dem
+durchschnittlichen \textsl{dT score} zwischen dem tats"achlichen Baum und den \textsl{parsimony}-B"aumen und dem
+durchschnittlichen \textsl{dT score} zwischen dem mit \textsl{neighbor joining} rekonstruierten Baum und den
+\textsl{parsimony}-B"aumen erhalten. S"amtliche Wertepaare dieser Art aus den in den vorangegangenen Abschnitten
+diskutierten L"aufen sind in Abb.\ \ref{phylo-dpnj} zusammengefa"st. Die Abbildung zeigt eine deutliche, lineare Korrelation
+zwischen den beiden gemessenen Gr"o"sen. Eine lineare Regressionsanalyse der 545 Wertepaare  ergibt einen
+Korrelationskoeffizienten von 0.756, die Korrelation ist also signifikant (vgl.\ \cite{Hainzl}, Seite 250). Die Steigung betr"agt 0.658, der
+Achsenabschnitt ist 18.0. Der relativ gro"se Achsenabschnitt deutet darauf hin, da"s der beobachtete lineare Zusammenhang
+bei kleineren \textsl{dT scores} m"oglicherweise nicht besteht. Das Ergebnis zeigt jedoch, da"s der \textsl{dT score}
+zwischen dem mit \textsl{neighbor joining} berechneten Baum und den mit \textsl{parsimony} erhaltenen B"aumen zur
+Absch"atzung der durch den \textsl{dT score} quantifizierten Abweichung zwischen den \textsl{parsimony}-B"aumen 
+und dem tats"achlichen Stammbaum geeignet ist.
+
+
+% deutliche Signale durch Verhinderung von Verzerrungen durch fehlerhaftes Alignment oder Abweichungen zwischen Mutationsmodell
+%     und tatsaechlichem Mutationsprozess.
+% relativ triviale Ergebnisse. Jedoch Demonstration eines grossen Einsatzfeldes fuer LindEvol.
+% Uebertragung auf molekulare Evolution schwierig: Genome sind nicht durchg"angig homolog,
+%     Orthologie-Paralogie-Problem, usw.
+% Neu an Mutationsratenevolution in LindEvol: Energieabhaengigkeit
+
+
+\section{Zusammenfassung der Ergebnisse von LindEvol-GA}
+
+LindEvol-GA ist ein einfaches Evolutionsmodell, bei dem die Evolutionsbedingungen durch die Selektionsrate und die Mutationsraten,
+die extern definierte Kontrollparameter sind, bestimmt werden. Die Bedeutung dieser Kontrollparameter f"ur die Ausbreitung
+von Genomen und Entwicklungsprogrammen in der Population konnte mit mathematischen Methoden charakterisiert werden. Die
+experimentellen Resultate stimmen mit den Ergebnissen der mathematischen Analyse gut "uberein. 
+
+Die Evolution komplexer Entwicklungsprogramme und komplexer Pflanzenformen ist in einem ausgedehnten Parameterbereich von
+LindEvol-GA m"oglich. Das durch die blockorientierte Genominterpretation implementierte System zur Codierung von Entwicklungsprogrammen
+hat sich damit als geeignet f"ur die evolution"are Entwicklung von Wachstumsprogrammen erwiesen. Der Vergleich mit
+\textsl{Tierran} \cite{Ray92}, einem System zur Codierung von Computerprogrammen, das speziell unter dem Gesichtspunkt
+der Eignung f"ur evolution"are Optimierung entwickelt wurde, zeigt, da"s einige der von \textsc{Ray} idendifizierten Schl"usselprinzipien
+zur Gew"ahrleistung der "`Evolvierbarkeit"' eines Codierungssystems auch bei der blockorientierten Genominterpretation
+realisiert sind. Der Befehlssatz von \textsl{Tierran} wurde bewu"st klein gew"ahlt, er umfa"st 32 Befehle. Bei LindEvol-GA
+umfa"st die Menge der m"oglichen Aktionen \verb|divide| mit acht verschiedenen Operanden sowie \verb|mut-| und \verb|mut+|,
+also insgesamt zehn Befehle. Eine weitere Gemeinsamkeit zwischen \textsl{Tierran} und der blockorientierten Genominterpretation
+ist, da"s beide Interpretersysteme keine ung"ultigen Programme kennen.
+
+Die blockorientierte Genominterpretation wurde als Modell f"ur die genetisch gesteuerte Differenzierung in Abh"angigkeit
+der Position einer Zelle im Organismus entwickelt. Als emergentes Ph"anomen tritt eine Evolution regulatorischer Netzwerke
+auf. Derartige Netzwerke wurden auch f"ur molekulare Systeme beschrieben (vgl.\ \cite{Theissen95}). Diese Gemeinsamkeiten
+zwischen LindEvol-GA und molekularbiologischen Systemen im expliziten und im emergenten Bereich berechtigt zu der Annahme,
+da"s weitere emergente Evolutionsprozesse Entsprechungen in der molekularen Evolution haben.
+
+Ein Ph"anomen, bei dem die Vermutung von Parallelen zur molekularen Evolution naheliegt, ist die in LindEvol-GA beobachtete
+emergente Evolution kooperativen Wachstumsverhaltens. Die Tatsache, da"s dieses Ph"anomen aufgrund der
+intrinsischen Gestaltung der Fitnessfunktion in LindEvol-GA zustandekommt (vgl.\ \ref{lndga-comparesingle}), weist
+auf die Schl"usselbedeutung der intrinsischen Adaptation f"ur die Evolution des Lebens auf der Erde hin (vgl.\ \cite{Packard89}).
+
+Ein weiteres Ph"anomen in der Evolution in LindEvol-GA, das auch bei molekularen Organismen beobachtet wird, ist die
+aktive, energieabh"angige Absenkung der effektiven Mutationsraten (vgl.\ \cite{Watson}, Kapitel 12). Es konnten zwei
+f"ur die Evolution der energieabh"angigen Verringerung der Mutationsraten relevante Mechanismen identifiziert werden.
+Zum einen ist der Anteil von Nachkommen, die ein unver"andertes Entwicklungsprogramm erben, bei niedrigeren Mutationsraten
+gr"o"ser, somit k"onnen sich Genome mit kleineren effektiven Mutationsraten bei konstanter Anzahl von Nachkommen schneller
+ausbreiten. Zum anderen erm"oglichen geringere effektive Mutationsraten die Ausbreitung komplexerer Entwicklungsprogramme
+und somit die Evolution von Pflanzenformen mit h"oherer Fitness.
+
+Durch die Analyse von Serien von LindEvol-GA--Simulationen konnte ein Bereich charakterisiert werden, in dem sich durch
+das Zusammenspiel von Mutation und Selektion komplexe taxonomische Strukturen ausbilden, die durch eine hohe DVK charakterisiert
+sind. Es zeigte sich eine "uberraschend deutliche Korrelation zwischen der Ausbildung komplexer taxonomischer Strukturen und
+der Evolution von Pflanzen mit hoher Fitness, die sich durch eine hohe morphologische Komplexit"at auszeichnen.
+Mithilfe der mathematisch abgeleiteten Absch"atzung der kritischen Fehlergrenze f"ur Entwicklungsprogramme wurde
+gezeigt, da"s im Bereich maximaler taxonomischer Komplexit"at eine \textsl{edge of chaos} verl"auft. Die Evolution
+der aktiven Senkung der effektiven Mutationsraten konnte als \textsl{"`evolution to the edge of chaos"'} charakterisiert
+werden. Sie ist stets mit einer deutlichen Zunahme der DVK verbunden.
+
+Schlie"slich wurden die Standardmethoden \textsl{parsimony} und \textsl{neigbor joining} zur Stammbaumrekonstruktion mit
+LindEvol-GA getestet. Dabei wurde eine Beeintr"achtigung der Rekonstruktion durch Selektionsdruck auf einen signifikanten
+Anteil der Gene eines Genoms sowie durch die aktive Verringerung der effektiven Mutationsraten demonstriert. Weiterhin
+zeigte sich, da"s die Anzahl der Unterschiede zwischen den mit \textsl{parsimony} und \textsl{neigbor joining} rekonstruierten
+B"aumen eine gute Absch"atzung f"ur die Anzahl der Unterschiede zwischen den rekonstruierten B"aumen und dem tats"achlichen
+Stammbaum ist.
+
+Die in LindEvol-GA explizit als Kontrollparameter vorgegebene Selektionsrate spielte sowohl bei der emergenten
+Evolution kooperativen Verhaltens als auch bei der Charakterisierung der Bedingungen f"ur die Entstehung komplexer
+taxonomischer Strukturen eine entscheidende Rolle. Als Repr"asentation der biologischen Selektionsvorg"ange ist
+das Verfahren der Simulation von Vegetationsperioden fester L"ange und der Reproduktion von Individuen in Abh"angigkeit
+von ihrem Energiegehalt unbefriedigend. Die starre Modellierung der Selektion la"st weder die Evolution von Pflanzen,
+die unterschiedlich alt, werden zu, noch erm"oglicht sie die Entstehung "okologischer Nischen f"ur kleine Pflanzenformen.
+Zur Aufhebung dieser Beschr"ankungen wurde das Modell LindEvol-B entwickelt, das Gegenstand des n"achsten Kapitels ist.
+

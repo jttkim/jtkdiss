@@ -1,0 +1,2081 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: proplot 1.0 (Aug 23 1995)
+%%Title: hgram.pro:
+%%BoundingBox: 0.0000 0.0000 283.4646 141.7323
+%%EndComments
+%%BeginProlog
+%%BeginResource proplot1.0-header1.0
+/readint
+{ currentfile scratchstr readline pop cvi } def
+/readreal
+{ currentfile scratchstr readline pop cvr } def
+/plothistogram
+{ readreal
+dup -1 eq { pop exit } if
+setgray newpath
+xco yco moveto
+/yco readreal def
+xco yco lineto
+stroke
+} def
+/plothistogram_color
+{ readreal
+dup -1 eq { pop exit } if
+readreal
+readreal
+setrgbcolor newpath
+xco yco moveto
+/yco readreal def
+xco yco lineto
+stroke
+} def
+/showright
+{ /lstr exch def
+lstr stringwidth pop sub
+exch moveto lstr show
+} def
+/plotline
+{newpath dup step sub y moveto
+/y readint def
+y lineto
+stroke
+} def
+/plottic
+{newpath dup y moveto 0 lineto stroke} bind def
+/plotlabel
+{pop newpath x 0 moveto x y lineto stroke
+x y1 moveto currentfile scratchstr readline pop show
+/x x step add def
+} def
+/FSD { findfont exch scalefont def } bind def
+%%EndResource
+%%EndProlog
+save
+/scratchstr 30 string def
+/Courier-Bold findfont 12.000000 scalefont setfont
+gsave
+0.387549 setlinewidth
+1.000 setgray
+newpath 0.0000 14.3670 moveto 12.0000 14.3670 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.996 setgray
+newpath 0.0000 14.7546 moveto 12.0000 14.7546 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.992 setgray
+newpath 0.0000 15.1421 moveto 12.0000 15.1421 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.988 setgray
+newpath 0.0000 15.5297 moveto 12.0000 15.5297 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.984 setgray
+newpath 0.0000 15.9172 moveto 12.0000 15.9172 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.980 setgray
+newpath 0.0000 16.3047 moveto 12.0000 16.3047 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.976 setgray
+newpath 0.0000 16.6923 moveto 12.0000 16.6923 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.973 setgray
+newpath 0.0000 17.0798 moveto 12.0000 17.0798 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.969 setgray
+newpath 0.0000 17.4674 moveto 12.0000 17.4674 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.965 setgray
+newpath 0.0000 17.8549 moveto 12.0000 17.8549 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.961 setgray
+newpath 0.0000 18.2425 moveto 12.0000 18.2425 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.957 setgray
+newpath 0.0000 18.6300 moveto 12.0000 18.6300 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.953 setgray
+newpath 0.0000 19.0176 moveto 12.0000 19.0176 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.949 setgray
+newpath 0.0000 19.4051 moveto 12.0000 19.4051 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.945 setgray
+newpath 0.0000 19.7927 moveto 12.0000 19.7927 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.941 setgray
+newpath 0.0000 20.1802 moveto 12.0000 20.1802 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.937 setgray
+newpath 0.0000 20.5678 moveto 12.0000 20.5678 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.933 setgray
+newpath 0.0000 20.9553 moveto 12.0000 20.9553 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.929 setgray
+newpath 0.0000 21.3429 moveto 12.0000 21.3429 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.925 setgray
+newpath 0.0000 21.7304 moveto 12.0000 21.7304 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.922 setgray
+newpath 0.0000 22.1180 moveto 12.0000 22.1180 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.918 setgray
+newpath 0.0000 22.5055 moveto 12.0000 22.5055 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.914 setgray
+newpath 0.0000 22.8931 moveto 12.0000 22.8931 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.910 setgray
+newpath 0.0000 23.2806 moveto 12.0000 23.2806 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.906 setgray
+newpath 0.0000 23.6682 moveto 12.0000 23.6682 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.902 setgray
+newpath 0.0000 24.0557 moveto 12.0000 24.0557 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.898 setgray
+newpath 0.0000 24.4433 moveto 12.0000 24.4433 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.894 setgray
+newpath 0.0000 24.8308 moveto 12.0000 24.8308 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.890 setgray
+newpath 0.0000 25.2184 moveto 12.0000 25.2184 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.886 setgray
+newpath 0.0000 25.6059 moveto 12.0000 25.6059 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.882 setgray
+newpath 0.0000 25.9935 moveto 12.0000 25.9935 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.878 setgray
+newpath 0.0000 26.3810 moveto 12.0000 26.3810 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.875 setgray
+newpath 0.0000 26.7686 moveto 12.0000 26.7686 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.871 setgray
+newpath 0.0000 27.1561 moveto 12.0000 27.1561 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.867 setgray
+newpath 0.0000 27.5437 moveto 12.0000 27.5437 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.863 setgray
+newpath 0.0000 27.9312 moveto 12.0000 27.9312 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.859 setgray
+newpath 0.0000 28.3188 moveto 12.0000 28.3188 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.855 setgray
+newpath 0.0000 28.7063 moveto 12.0000 28.7063 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.851 setgray
+newpath 0.0000 29.0939 moveto 12.0000 29.0939 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.847 setgray
+newpath 0.0000 29.4814 moveto 12.0000 29.4814 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.843 setgray
+newpath 0.0000 29.8690 moveto 12.0000 29.8690 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.839 setgray
+newpath 0.0000 30.2565 moveto 12.0000 30.2565 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.835 setgray
+newpath 0.0000 30.6441 moveto 12.0000 30.6441 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.831 setgray
+newpath 0.0000 31.0316 moveto 12.0000 31.0316 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.827 setgray
+newpath 0.0000 31.4192 moveto 12.0000 31.4192 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.824 setgray
+newpath 0.0000 31.8067 moveto 12.0000 31.8067 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.820 setgray
+newpath 0.0000 32.1943 moveto 12.0000 32.1943 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.816 setgray
+newpath 0.0000 32.5818 moveto 12.0000 32.5818 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.812 setgray
+newpath 0.0000 32.9694 moveto 12.0000 32.9694 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.808 setgray
+newpath 0.0000 33.3569 moveto 12.0000 33.3569 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.804 setgray
+newpath 0.0000 33.7445 moveto 12.0000 33.7445 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.800 setgray
+newpath 0.0000 34.1320 moveto 12.0000 34.1320 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.796 setgray
+newpath 0.0000 34.5196 moveto 12.0000 34.5196 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.792 setgray
+newpath 0.0000 34.9071 moveto 12.0000 34.9071 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.788 setgray
+newpath 0.0000 35.2947 moveto 12.0000 35.2947 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.784 setgray
+newpath 0.0000 35.6822 moveto 12.0000 35.6822 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.780 setgray
+newpath 0.0000 36.0698 moveto 12.0000 36.0698 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.776 setgray
+newpath 0.0000 36.4573 moveto 12.0000 36.4573 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.773 setgray
+newpath 0.0000 36.8449 moveto 12.0000 36.8449 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.769 setgray
+newpath 0.0000 37.2324 moveto 12.0000 37.2324 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.765 setgray
+newpath 0.0000 37.6200 moveto 12.0000 37.6200 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.761 setgray
+newpath 0.0000 38.0075 moveto 12.0000 38.0075 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.757 setgray
+newpath 0.0000 38.3951 moveto 12.0000 38.3951 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.753 setgray
+newpath 0.0000 38.7826 moveto 12.0000 38.7826 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.749 setgray
+newpath 0.0000 39.1702 moveto 12.0000 39.1702 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.745 setgray
+newpath 0.0000 39.5577 moveto 12.0000 39.5577 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.741 setgray
+newpath 0.0000 39.9453 moveto 12.0000 39.9453 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.737 setgray
+newpath 0.0000 40.3328 moveto 12.0000 40.3328 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.733 setgray
+newpath 0.0000 40.7203 moveto 12.0000 40.7203 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.729 setgray
+newpath 0.0000 41.1079 moveto 12.0000 41.1079 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.725 setgray
+newpath 0.0000 41.4954 moveto 12.0000 41.4954 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.722 setgray
+newpath 0.0000 41.8830 moveto 12.0000 41.8830 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.718 setgray
+newpath 0.0000 42.2705 moveto 12.0000 42.2705 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.714 setgray
+newpath 0.0000 42.6581 moveto 12.0000 42.6581 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.710 setgray
+newpath 0.0000 43.0456 moveto 12.0000 43.0456 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.706 setgray
+newpath 0.0000 43.4332 moveto 12.0000 43.4332 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.702 setgray
+newpath 0.0000 43.8207 moveto 12.0000 43.8207 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.698 setgray
+newpath 0.0000 44.2083 moveto 12.0000 44.2083 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.694 setgray
+newpath 0.0000 44.5958 moveto 12.0000 44.5958 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.690 setgray
+newpath 0.0000 44.9834 moveto 12.0000 44.9834 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.686 setgray
+newpath 0.0000 45.3709 moveto 12.0000 45.3709 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.682 setgray
+newpath 0.0000 45.7585 moveto 12.0000 45.7585 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.678 setgray
+newpath 0.0000 46.1460 moveto 12.0000 46.1460 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.675 setgray
+newpath 0.0000 46.5336 moveto 12.0000 46.5336 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.671 setgray
+newpath 0.0000 46.9211 moveto 12.0000 46.9211 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.667 setgray
+newpath 0.0000 47.3087 moveto 12.0000 47.3087 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.663 setgray
+newpath 0.0000 47.6962 moveto 12.0000 47.6962 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.659 setgray
+newpath 0.0000 48.0838 moveto 12.0000 48.0838 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.655 setgray
+newpath 0.0000 48.4713 moveto 12.0000 48.4713 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.651 setgray
+newpath 0.0000 48.8589 moveto 12.0000 48.8589 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.647 setgray
+newpath 0.0000 49.2464 moveto 12.0000 49.2464 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.643 setgray
+newpath 0.0000 49.6340 moveto 12.0000 49.6340 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.639 setgray
+newpath 0.0000 50.0215 moveto 12.0000 50.0215 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.635 setgray
+newpath 0.0000 50.4091 moveto 12.0000 50.4091 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.631 setgray
+newpath 0.0000 50.7966 moveto 12.0000 50.7966 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.627 setgray
+newpath 0.0000 51.1842 moveto 12.0000 51.1842 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.624 setgray
+newpath 0.0000 51.5717 moveto 12.0000 51.5717 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.620 setgray
+newpath 0.0000 51.9593 moveto 12.0000 51.9593 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.616 setgray
+newpath 0.0000 52.3468 moveto 12.0000 52.3468 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.612 setgray
+newpath 0.0000 52.7344 moveto 12.0000 52.7344 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.608 setgray
+newpath 0.0000 53.1219 moveto 12.0000 53.1219 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.604 setgray
+newpath 0.0000 53.5095 moveto 12.0000 53.5095 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.600 setgray
+newpath 0.0000 53.8970 moveto 12.0000 53.8970 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.596 setgray
+newpath 0.0000 54.2846 moveto 12.0000 54.2846 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.592 setgray
+newpath 0.0000 54.6721 moveto 12.0000 54.6721 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.588 setgray
+newpath 0.0000 55.0597 moveto 12.0000 55.0597 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.584 setgray
+newpath 0.0000 55.4472 moveto 12.0000 55.4472 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.580 setgray
+newpath 0.0000 55.8348 moveto 12.0000 55.8348 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.576 setgray
+newpath 0.0000 56.2223 moveto 12.0000 56.2223 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.573 setgray
+newpath 0.0000 56.6099 moveto 12.0000 56.6099 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.569 setgray
+newpath 0.0000 56.9974 moveto 12.0000 56.9974 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.565 setgray
+newpath 0.0000 57.3850 moveto 12.0000 57.3850 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.561 setgray
+newpath 0.0000 57.7725 moveto 12.0000 57.7725 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.557 setgray
+newpath 0.0000 58.1601 moveto 12.0000 58.1601 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.553 setgray
+newpath 0.0000 58.5476 moveto 12.0000 58.5476 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.549 setgray
+newpath 0.0000 58.9352 moveto 12.0000 58.9352 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.545 setgray
+newpath 0.0000 59.3227 moveto 12.0000 59.3227 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.541 setgray
+newpath 0.0000 59.7103 moveto 12.0000 59.7103 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.537 setgray
+newpath 0.0000 60.0978 moveto 12.0000 60.0978 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.533 setgray
+newpath 0.0000 60.4854 moveto 12.0000 60.4854 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.529 setgray
+newpath 0.0000 60.8729 moveto 12.0000 60.8729 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.525 setgray
+newpath 0.0000 61.2605 moveto 12.0000 61.2605 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.522 setgray
+newpath 0.0000 61.6480 moveto 12.0000 61.6480 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.518 setgray
+newpath 0.0000 62.0356 moveto 12.0000 62.0356 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.514 setgray
+newpath 0.0000 62.4231 moveto 12.0000 62.4231 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.510 setgray
+newpath 0.0000 62.8107 moveto 12.0000 62.8107 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.506 setgray
+newpath 0.0000 63.1982 moveto 12.0000 63.1982 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.502 setgray
+newpath 0.0000 63.5858 moveto 12.0000 63.5858 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.498 setgray
+newpath 0.0000 63.9733 moveto 12.0000 63.9733 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.494 setgray
+newpath 0.0000 64.3609 moveto 12.0000 64.3609 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.490 setgray
+newpath 0.0000 64.7484 moveto 12.0000 64.7484 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.486 setgray
+newpath 0.0000 65.1360 moveto 12.0000 65.1360 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.482 setgray
+newpath 0.0000 65.5235 moveto 12.0000 65.5235 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.478 setgray
+newpath 0.0000 65.9110 moveto 12.0000 65.9110 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.475 setgray
+newpath 0.0000 66.2986 moveto 12.0000 66.2986 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.471 setgray
+newpath 0.0000 66.6861 moveto 12.0000 66.6861 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.467 setgray
+newpath 0.0000 67.0737 moveto 12.0000 67.0737 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.463 setgray
+newpath 0.0000 67.4612 moveto 12.0000 67.4612 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.459 setgray
+newpath 0.0000 67.8488 moveto 12.0000 67.8488 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.455 setgray
+newpath 0.0000 68.2363 moveto 12.0000 68.2363 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.451 setgray
+newpath 0.0000 68.6239 moveto 12.0000 68.6239 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.447 setgray
+newpath 0.0000 69.0114 moveto 12.0000 69.0114 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.443 setgray
+newpath 0.0000 69.3990 moveto 12.0000 69.3990 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.439 setgray
+newpath 0.0000 69.7865 moveto 12.0000 69.7865 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.435 setgray
+newpath 0.0000 70.1741 moveto 12.0000 70.1741 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.431 setgray
+newpath 0.0000 70.5616 moveto 12.0000 70.5616 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.427 setgray
+newpath 0.0000 70.9492 moveto 12.0000 70.9492 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.424 setgray
+newpath 0.0000 71.3367 moveto 12.0000 71.3367 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.420 setgray
+newpath 0.0000 71.7243 moveto 12.0000 71.7243 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.416 setgray
+newpath 0.0000 72.1118 moveto 12.0000 72.1118 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.412 setgray
+newpath 0.0000 72.4994 moveto 12.0000 72.4994 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.408 setgray
+newpath 0.0000 72.8869 moveto 12.0000 72.8869 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.404 setgray
+newpath 0.0000 73.2745 moveto 12.0000 73.2745 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.400 setgray
+newpath 0.0000 73.6620 moveto 12.0000 73.6620 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.396 setgray
+newpath 0.0000 74.0496 moveto 12.0000 74.0496 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.392 setgray
+newpath 0.0000 74.4371 moveto 12.0000 74.4371 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.388 setgray
+newpath 0.0000 74.8247 moveto 12.0000 74.8247 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.384 setgray
+newpath 0.0000 75.2122 moveto 12.0000 75.2122 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.380 setgray
+newpath 0.0000 75.5998 moveto 12.0000 75.5998 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.376 setgray
+newpath 0.0000 75.9873 moveto 12.0000 75.9873 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.373 setgray
+newpath 0.0000 76.3749 moveto 12.0000 76.3749 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.369 setgray
+newpath 0.0000 76.7624 moveto 12.0000 76.7624 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.365 setgray
+newpath 0.0000 77.1500 moveto 12.0000 77.1500 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.361 setgray
+newpath 0.0000 77.5375 moveto 12.0000 77.5375 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.357 setgray
+newpath 0.0000 77.9251 moveto 12.0000 77.9251 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.353 setgray
+newpath 0.0000 78.3126 moveto 12.0000 78.3126 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.349 setgray
+newpath 0.0000 78.7002 moveto 12.0000 78.7002 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.345 setgray
+newpath 0.0000 79.0877 moveto 12.0000 79.0877 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.341 setgray
+newpath 0.0000 79.4753 moveto 12.0000 79.4753 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.337 setgray
+newpath 0.0000 79.8628 moveto 12.0000 79.8628 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.333 setgray
+newpath 0.0000 80.2504 moveto 12.0000 80.2504 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.329 setgray
+newpath 0.0000 80.6379 moveto 12.0000 80.6379 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.325 setgray
+newpath 0.0000 81.0255 moveto 12.0000 81.0255 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.322 setgray
+newpath 0.0000 81.4130 moveto 12.0000 81.4130 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.318 setgray
+newpath 0.0000 81.8006 moveto 12.0000 81.8006 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.314 setgray
+newpath 0.0000 82.1881 moveto 12.0000 82.1881 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.310 setgray
+newpath 0.0000 82.5757 moveto 12.0000 82.5757 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.306 setgray
+newpath 0.0000 82.9632 moveto 12.0000 82.9632 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.302 setgray
+newpath 0.0000 83.3508 moveto 12.0000 83.3508 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.298 setgray
+newpath 0.0000 83.7383 moveto 12.0000 83.7383 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.294 setgray
+newpath 0.0000 84.1259 moveto 12.0000 84.1259 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.290 setgray
+newpath 0.0000 84.5134 moveto 12.0000 84.5134 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.286 setgray
+newpath 0.0000 84.9010 moveto 12.0000 84.9010 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.282 setgray
+newpath 0.0000 85.2885 moveto 12.0000 85.2885 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.278 setgray
+newpath 0.0000 85.6761 moveto 12.0000 85.6761 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.275 setgray
+newpath 0.0000 86.0636 moveto 12.0000 86.0636 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.271 setgray
+newpath 0.0000 86.4512 moveto 12.0000 86.4512 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.267 setgray
+newpath 0.0000 86.8387 moveto 12.0000 86.8387 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.263 setgray
+newpath 0.0000 87.2263 moveto 12.0000 87.2263 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.259 setgray
+newpath 0.0000 87.6138 moveto 12.0000 87.6138 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.255 setgray
+newpath 0.0000 88.0014 moveto 12.0000 88.0014 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.251 setgray
+newpath 0.0000 88.3889 moveto 12.0000 88.3889 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.247 setgray
+newpath 0.0000 88.7765 moveto 12.0000 88.7765 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.243 setgray
+newpath 0.0000 89.1640 moveto 12.0000 89.1640 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.239 setgray
+newpath 0.0000 89.5516 moveto 12.0000 89.5516 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.235 setgray
+newpath 0.0000 89.9391 moveto 12.0000 89.9391 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.231 setgray
+newpath 0.0000 90.3266 moveto 12.0000 90.3266 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.227 setgray
+newpath 0.0000 90.7142 moveto 12.0000 90.7142 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.224 setgray
+newpath 0.0000 91.1017 moveto 12.0000 91.1017 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.220 setgray
+newpath 0.0000 91.4893 moveto 12.0000 91.4893 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.216 setgray
+newpath 0.0000 91.8768 moveto 12.0000 91.8768 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.212 setgray
+newpath 0.0000 92.2644 moveto 12.0000 92.2644 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.208 setgray
+newpath 0.0000 92.6519 moveto 12.0000 92.6519 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.204 setgray
+newpath 0.0000 93.0395 moveto 12.0000 93.0395 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.200 setgray
+newpath 0.0000 93.4270 moveto 12.0000 93.4270 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.196 setgray
+newpath 0.0000 93.8146 moveto 12.0000 93.8146 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.192 setgray
+newpath 0.0000 94.2021 moveto 12.0000 94.2021 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.188 setgray
+newpath 0.0000 94.5897 moveto 12.0000 94.5897 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.184 setgray
+newpath 0.0000 94.9772 moveto 12.0000 94.9772 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.180 setgray
+newpath 0.0000 95.3648 moveto 12.0000 95.3648 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.176 setgray
+newpath 0.0000 95.7523 moveto 12.0000 95.7523 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.173 setgray
+newpath 0.0000 96.1399 moveto 12.0000 96.1399 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.169 setgray
+newpath 0.0000 96.5274 moveto 12.0000 96.5274 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.165 setgray
+newpath 0.0000 96.9150 moveto 12.0000 96.9150 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.161 setgray
+newpath 0.0000 97.3025 moveto 12.0000 97.3025 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.157 setgray
+newpath 0.0000 97.6901 moveto 12.0000 97.6901 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.153 setgray
+newpath 0.0000 98.0776 moveto 12.0000 98.0776 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.149 setgray
+newpath 0.0000 98.4652 moveto 12.0000 98.4652 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.145 setgray
+newpath 0.0000 98.8527 moveto 12.0000 98.8527 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.141 setgray
+newpath 0.0000 99.2403 moveto 12.0000 99.2403 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.137 setgray
+newpath 0.0000 99.6278 moveto 12.0000 99.6278 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.133 setgray
+newpath 0.0000 100.0154 moveto 12.0000 100.0154 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.129 setgray
+newpath 0.0000 100.4029 moveto 12.0000 100.4029 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.125 setgray
+newpath 0.0000 100.7905 moveto 12.0000 100.7905 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.122 setgray
+newpath 0.0000 101.1780 moveto 12.0000 101.1780 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.118 setgray
+newpath 0.0000 101.5656 moveto 12.0000 101.5656 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.114 setgray
+newpath 0.0000 101.9531 moveto 12.0000 101.9531 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.110 setgray
+newpath 0.0000 102.3407 moveto 12.0000 102.3407 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.106 setgray
+newpath 0.0000 102.7282 moveto 12.0000 102.7282 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.102 setgray
+newpath 0.0000 103.1158 moveto 12.0000 103.1158 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.098 setgray
+newpath 0.0000 103.5033 moveto 12.0000 103.5033 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.094 setgray
+newpath 0.0000 103.8909 moveto 12.0000 103.8909 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.090 setgray
+newpath 0.0000 104.2784 moveto 12.0000 104.2784 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.086 setgray
+newpath 0.0000 104.6660 moveto 12.0000 104.6660 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.082 setgray
+newpath 0.0000 105.0535 moveto 12.0000 105.0535 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.078 setgray
+newpath 0.0000 105.4411 moveto 12.0000 105.4411 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.075 setgray
+newpath 0.0000 105.8286 moveto 12.0000 105.8286 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.071 setgray
+newpath 0.0000 106.2162 moveto 12.0000 106.2162 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.067 setgray
+newpath 0.0000 106.6037 moveto 12.0000 106.6037 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.063 setgray
+newpath 0.0000 106.9913 moveto 12.0000 106.9913 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.059 setgray
+newpath 0.0000 107.3788 moveto 12.0000 107.3788 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.055 setgray
+newpath 0.0000 107.7664 moveto 12.0000 107.7664 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.051 setgray
+newpath 0.0000 108.1539 moveto 12.0000 108.1539 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.047 setgray
+newpath 0.0000 108.5415 moveto 12.0000 108.5415 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.043 setgray
+newpath 0.0000 108.9290 moveto 12.0000 108.9290 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.039 setgray
+newpath 0.0000 109.3166 moveto 12.0000 109.3166 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.035 setgray
+newpath 0.0000 109.7041 moveto 12.0000 109.7041 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.031 setgray
+newpath 0.0000 110.0917 moveto 12.0000 110.0917 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.027 setgray
+newpath 0.0000 110.4792 moveto 12.0000 110.4792 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.024 setgray
+newpath 0.0000 110.8668 moveto 12.0000 110.8668 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.020 setgray
+newpath 0.0000 111.2543 moveto 12.0000 111.2543 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.016 setgray
+newpath 0.0000 111.6419 moveto 12.0000 111.6419 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.012 setgray
+newpath 0.0000 112.0294 moveto 12.0000 112.0294 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.008 setgray
+newpath 0.0000 112.4170 moveto 12.0000 112.4170 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.004 setgray
+newpath 0.0000 112.8045 moveto 12.0000 112.8045 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+0.000 setgray
+newpath 0.0000 113.1921 moveto 12.0000 113.1921 lineto stroke
+0 setgray 0.566929 setlinewidth
+newpath 0.0000 14.1732 moveto 12.0000 14.1732 lineto 12.0000 113.3858 lineto 0.0000 113.3858 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+15.6000 14.1732 moveto (0.0) show
+15.6000 113.3858 moveto (10.0) show
+grestore
+/Courier-Bold findfont 12.000000 scalefont setfont
+73.3795 138.1323 (Distanz-) showright
+61.3795 138.1323 (verteilungs-) showright
+49.3795 138.1323 (beispiel) showright
+gsave
+141.7323 14.1732 translate
+gsave
+/xco 7.086614 def
+/step 14.173228 def
+step setlinewidth 0 setlinecap
+1 setgray newpath 0 0 moveto 0 99.2126 lineto 141.7323 99.2126 lineto 141.7323 0 lineto closepath fill
+0 1 9 {pop save /yco 0.0 def {plothistogram} loop restore /xco xco step add def} for
+0.900
+9.9213
+0.600
+19.8425
+0.400
+29.7638
+0.600
+39.6850
+0.900
+49.6063
+1.000
+59.5276
+1.000
+69.4488
+0.800
+79.3701
+0.200
+89.2913
+0.700
+99.2126
+-1
+1.000
+9.9213
+0.900
+19.8425
+0.600
+29.7638
+0.400
+39.6850
+0.600
+49.6063
+0.900
+59.5276
+1.000
+69.4488
+1.000
+79.3701
+0.800
+89.2913
+0.200
+99.2126
+-1
+1.000
+9.9213
+1.000
+19.8425
+0.600
+29.7638
+0.400
+39.6850
+0.500
+49.6063
+0.900
+59.5276
+1.000
+69.4488
+1.000
+79.3701
+0.800
+89.2913
+0.300
+99.2126
+-1
+1.000
+9.9213
+1.000
+19.8425
+0.700
+29.7638
+0.300
+39.6850
+0.800
+49.6063
+0.600
+59.5276
+0.900
+69.4488
+1.000
+79.3701
+0.900
+89.2913
+0.500
+99.2126
+-1
+0.700
+9.9213
+0.800
+19.8425
+1.000
+29.7638
+0.500
+39.6850
+0.300
+49.6063
+0.600
+59.5276
+0.800
+69.4488
+1.000
+79.3701
+0.900
+89.2913
+0.400
+99.2126
+-1
+0.900
+9.9213
+0.700
+19.8425
+0.800
+29.7638
+1.000
+39.6850
+0.500
+49.6063
+0.400
+59.5276
+0.600
+69.4488
+0.800
+79.3701
+1.000
+89.2913
+0.700
+99.2126
+-1
+1.000
+9.9213
+0.800
+19.8425
+0.700
+29.7638
+0.700
+39.6850
+1.000
+49.6063
+0.800
+59.5276
+0.600
+69.4488
+0.600
+79.3701
+0.900
+89.2913
+0.900
+99.2126
+-1
+0.900
+9.9213
+1.000
+19.8425
+0.800
+29.7638
+0.600
+39.6850
+0.700
+49.6063
+0.900
+59.5276
+0.900
+69.4488
+1.000
+79.3701
+0.600
+89.2913
+0.400
+99.2126
+-1
+0.900
+9.9213
+0.700
+19.8425
+0.900
+29.7638
+0.900
+39.6850
+0.500
+49.6063
+0.500
+59.5276
+0.800
+69.4488
+1.000
+79.3701
+1.000
+89.2913
+0.500
+99.2126
+-1
+1.000
+9.9213
+0.700
+19.8425
+0.600
+29.7638
+0.700
+39.6850
+1.000
+49.6063
+0.700
+59.5276
+0.300
+69.4488
+0.600
+79.3701
+0.900
+89.2913
+1.000
+99.2126
+-1
+grestore
+0.566929 setlinewidth
+newpath 0 0 moveto 141.7323 0 lineto 141.7323 99.2126 lineto 0 99.2126 lineto closepath stroke
+/Courier-Bold findfont 10.000000 scalefont setfont
+0 -3.0000 (0.0) showright
+99.2126 -3.0000 (10.0) showright
+grestore
+restore
+%%EOF

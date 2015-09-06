@@ -1,0 +1,7 @@
+latex main
+latex main
+dvips -t landscape -x 0700 -o dviraw.ps main
+# dvipsf -O '-0.8cm,7.8cm' -x 0700 main
+pstops '2:0(1cm,0.6cm)+1(1cm,-14.05cm)' dviraw.ps ~/lindevol/data/doc_a5.ps
+pstops '1:0(1cm,0.6cm)+0(1cm,-14.05cm)' dviraw.ps ~/lindevol/data/doc_dbl.ps
+

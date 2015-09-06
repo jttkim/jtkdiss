@@ -1,0 +1,1843 @@
+\chapter{Beschreibung der Simulationskomponenten}
+
+
+\section{Ansatz der Modellbildung}
+\label{modellansatz}
+
+In einem Computermodell der Evolution k"onnen niemals alle Komponenten und
+Aspekte der Evolution realistisch simuliert werden, sowohl der Zeitbedarf
+f"ur die Entwicklung eines solchen Modells als auch der Rechenzeitbedarf
+f"ur derartige Simulationen verbieten dies. 
+
+Um die evolution"are Entwicklung morphologischer
+und taxonomischer Komplexit"at mit Computermodellen zu beschreiben und zu
+untersuchen, m"ussen die f"ur diese evolution"aren Prozesse
+relevanten Faktoren zun"achst identifiziert und in formal-abstrakter Weise
+beschrieben werden. Die Repr"asentation dieser Faktoren in einem Computermodell
+wird auf dieser Grundlage so gestaltet, da"s sie auf formal-abstrakter Ebene
+dem molekularbiologisch-physikalischen Vorbild entspricht, gleichzeitig aber
+im Computerprogramm effizient realisiert werden kann. Auf diese Weise k"onnen
+Modelle entwickelt werden, die alle relevanten Faktoren f"ur die zu
+untersuchenden Evolutionsprozesse in formaler
+Repr"asentation umfassen, und die gleichzeitig die Durchf"uhrung von Experimenten
+mit den verf"ugbaren Rechnerkapazit"aten erm"oglichen. In den Unterabschnitten
+\ref{genedescr} bis \ref{physicsdescr} werden nun zun"achst die Faktoren, die
+bei der Evolution von Morphologie und der dabei entstehenden Komplexit"at
+zusammenspielen, aufgef"uhrt und die hier gew"ahlten Ans"atze zu ihrer
+Repr"asentation in formalen Modellen dargelegt und diskutiert. In
+(\ref{modeldef}) wird anschlie"send die technische Implementation der Modellkomponenten
+besprochen.
+
+
+\subsection{Genetische Komponenten: Gene, Genome, genetische \\ Mechanismen und Mutationen}
+\label{genedescr}
+
+Die r"aumliche Struktur einer nat"urlichen Pflanze, ihr Ph"anotyp,
+wird durch ihr Entwicklungsprogramm bestimmt, welches in ihrem Genom
+in einer komplexen Form codiert ist.
+Beim Ablauf eines Entwicklungsprogramms werden verschiedene Gene der Pflanze
+in einer r"aumlich und zeitlich exakt definierten Weise aktiviert. Bei diesem
+komplexen Proze"s spielen die Bauplangene der Pflanze die zentrale Rolle.
+Diese sind oft Transkriptionsfaktoren, welche durch die Bindung an spezifische
+DNA-Sequenzen die Expression entsprechender Zielgene aktivieren oder
+reprimieren. Beispiele hierf"ur sind die MADS-Box-Proteine \cite{Shore95} und Hom"oobox-Proteine
+\cite{Carroll95}. Die Transkription beginnt dabei im Regelfall stromabw"arts von der Bindungsstelle
+des Transkriptionsfaktors.
+
+Die MADS-Box-Proteine bilden eine gro"se Familie von Transkriptionsfaktoren.
+Die MADS-Dom"ane bildet dabei den Teil des Proteins, der unmittelbar mit der DNA in Kontakt tritt \cite{Pellegrini95}.
+In Pflanzen spielen MADS-Box-Proteine eine Schl"usselrolle bei der Morphogenese der Bl"ute.
+Die Expression mancher MADS-Box-Proteine wird durch andere Faktoren dieser Familie reguliert, so da"s die MADS-Box-Proteine
+von Pflanzen insgesamt ein regulatorisches Netzwerk ausbilden \cite{Theissen95}. Auch autoregulatorische
+Prozesse wurden beobachtet \cite{Troebner92}. Das gesamte Netzwerk steht wiederum in Wechselwirkung mit Phytohormonen und externen
+Umwelteinfl"ussen.
+
+Mutationen und Neuentwicklungen von Bauplangenen
+k"onnen f"ur einschneidende Ver"anderungen der Morphologie einer Pflanze
+ausreichend sein. Beispiele hierf"ur sind die hom"ootischen
+Mutationen von MADS-Box-Genen, die u.a.\ bei {\slshape Antirrhinum majus},
+{\slshape Arabidopsis thaliana}, {\slshape Petunia hybrida} zu massiven
+Ver"anderungen der Bl"ute f"uhren.
+Derartige Vorg"ange spielen bei der Evolution neuer Formen oft eine entscheidende
+Rolle. Es gibt beispielsweise Hinweise darauf, da"s Mutationen an einigen
+MADS-Box-Genen die Entwicklung von Mais ({\slshape Zea mays ssp.\ mays}) aus
+Teosinte ({\slshape Zea mays ssp.\ parviglumis}) bewirkt haben \cite{Saedler94}. Weiterhin nimmt man an,
+da"s die Entstehung eines komplexen regulatorischen Netzwerks von MADS-Box-Genen
+eine Schl"usselrolle bei der Evolution der Bl"ute gespielt hat \cite{Theissen95}.
+
+Gerade bei Pflanzen h"angt auch die Evolution der Formenvielfalt und Diversit"at
+haupts"achlich von der Neuentwicklung und Modifikation morphologischer Strukturen
+ab. Aus diesen Gr"unden beschr"ankt sich die explizite Repr"asentation genetischer
+Information in den Modellen auf die Ebene der Bauplangene. Repr"asentationen f"ur die
+Grundfunktionen pflanzlicher Zellen wie Energiestoffwechsel, Biosynthese und DNA-Replikation,
+wurden dagegen in die Modelle fest eingebaut. Die Evolution dieser Systeme kann
+somit durch die hier entwickelten Modelle nicht simuliert werden.
+
+% Nur Modellierung von unmittelbar morphologierelevante Genen, keine
+%   housekeeping-Gene etc.
+
+Die Genome werden in den Modellen als Zeichenketten repr"asentiert. Dadurch
+wird die biologische Funktion der DNA als Tr"ager genetischer Sequenzinformation
+realistisch modelliert. Weitere biochemische und biophysikalische Eigenschaften
+der DNA werden dagegen nicht im Modell repr"asentiert. Dies ist nicht m"oglich, weil
+zum einen die derzeit ermittelten Informationen "uber die f"ur genetische Prozesse
+relevanten molekularen Mechanismen nicht f"ur die Entwicklung realistischer formaler
+Modelle ausreichen, und weil zum anderen der Rechenzeitbedarf zur Simulation eines
+einzigen molekularen Prozesses so hoch ist, da"s solche Simulationen aus
+praktischen Erw"agungen nicht als Grundlage f"ur Evolutionsmodelle in Frage kommen.
+
+Als Ansatzpunkt f"ur die Repr"asentation genetischer Information wurde
+daher die abstrakte Beschreibung eines Gens als strukturelle Einheit aus
+einem Operatorteil, in dem Proteine, die die Aktivit"at des Gens regulieren,
+mit dem Gen interagieren, und einem Strukturteil, in welchem die biologische
+Aktivit"at des Gens (bzw.\ seines Genprodukts) codiert ist, gew"ahlt. Dieses
+abstrakte Konzept eines Gens findet sich in Ersetzungsregeln, die in formalen
+Grammatiken und auch in Lindenmayer-Systemen vorkommen, wieder. Die linke Seite
+einer Regel entspricht dabei dem Operatorteil, sie spezifiziert die Konditionen
+f"ur die Aktivierung der Regel. Die rechte Seite codiert die Aktion, die bei der
+Aktivierung der Regel ausgel"ost wird; sie entspricht somit dem Strukturteil
+eines Gens. Die Ausf"uhrung verschiedener Aktionen kann die Aktivierung von Genen
+nach sich ziehen, so da"s die Evolution regulatorischer Netzwerke in den Modellen
+m"oglich ist.
+
+Da die molekulare Struktur der DNA nicht explizit in den Modellen repr"asentiert
+wird, k"onnen auch Mutationen nicht als molekulare Prozesse explizit modelliert
+werden. Die molekularen Details von Mutationen sind f"ur die Evolution jedoch
+auch nicht entscheidend, die wesentliche Bedeutung von Mutationen f"ur die
+Evolution liegt in der Generierung ungerichteter Variationen. In Computermodellen
+der Evolution wird dies traditionell durch die stochastisch kontrollierte Anwendung von
+Modifikationsoperatoren auf die Genome realisiert. In den hier entwickelten
+Modellen werden Operatoren verwendet, die sich informationstechnisch an
+Basenaustauschmutationen, Insertionen, Deletionen und Genduplikationen
+anlehnen.
+
+Mutationen an Genen, die
+w"ahrend des gesamten Wachstums einer Pflanze nicht aktiviert werden, sind neutral.
+Wird dagegen ein Gen betroffen oder erzeugt, welches beim Wachstum der Pflanze
+aktiv wird, kann dies zur Modifikation kleiner Details des Ph"anotyps f"uhren, aber
+auch die Gesamtstruktur der Pflanze "andern, also hom"ootische und pleiotrope
+Effekte haben. Auch letale Mutationen sind m"oglich. Somit ergibt sich aus der
+Modellgestaltung das gesamte Spektrum m"oglicher Mutationsfolgen emergent aus der
+Interpretation der genetischen Information als Regelwerk zur Steuerung der
+Morphogenese.
+
+
+\subsection{Biologische Komponenten: Umwelteinfl"usse, Interaktion zwischen Individuen}
+\label{biodescr}
+
+In der Natur hat die Umwelt eines Individuums vielf"altige
+Einfl"usse auf seine Morphogenese und auf den Verlauf seines gesamten Lebens.
+Diese Umwelteinfl"usse wirken sich auf die Reproduktionschancen des
+Individuums aus und sind somit auch f"ur die Evolution von Bedeutung.
+Ein signifikanter Teil der Umwelteinfl"usse geht von anderen Lebewesen
+aus. Die Umwelteinfl"usse nebst ihren Auswirkungen auf die Fortpflanzungswahrscheinlichkeiten
+von Individuen sind somit nicht von der Evolution unabh"angig; vielmehr werden sie 
+durch evolution"are Adaptationsprozesse ihrerseits beeinflu"st.
+Dieser Aspekt evolution"arer Dynamik, der von Packard {\slshape intrinsic adaptation}
+genannt wurde \cite{Packard89}, wurde bisher nur in wenigen Evolutionsmodellen repr"asentiert.
+Gerade f"ur die Evolution von Diversit"at und Komplexit"at haben biogene Ver"anderungen
+der Umwelt jedoch eine entscheidende Bedeutung. Sie erzeugen und vernichten "okologische
+Nischen und bestimmen dadurch "uber die M"oglichkeiten zur Evolution neuer Arten mit.
+In \cite{Stanley73} wird aufgezeigt, da"s die Wechselwirkungen zwischen R"auber und
+Beute m"oglicherweise bei der evolution"aren Entstehung der Vielfalt multizellul"arer
+Lebensformen eine entscheidende Rolle gespielt hat.
+
+Aus diesem Grund wurde bei der Modellentwicklung im Rahmen dieser Arbeit besonderer
+Wert auf mannigfaltige und komplexe M"oglichkeiten zur Interaktion zwischen Pflanzen
+gelegt. Die Auswirkungen derartiger Interaktionen wurden jedoch, anders als etwa im
+NKC-Modell von Kauffman \cite{Kauffman92}, nicht explizit in den Modellen festgelegt,
+da bei einem solchen Ansatz stets nur eine kleine Menge willk"urlich herausgegriffener
+Interaktionsm"oglichkeiten repr"asentiert werden kann. Stattdessen wurde die Repr"asentation
+der physikalischen Faktoren der Evolution so gestaltet, da"s sich vielf"altige Interaktionsformen
+aus der Modellphysik als emergente Eigenschaften ergeben.
+
+
+\subsection{Physikalische Komponenten: Raum, Zeit und Energie}
+\label{physicsdescr}
+
+Die Morphogenese eines Organismus ist die durch sein genetisch codiertes
+Entwicklungsprogramm gesteuerte Ausbildung seiner r"aumlichen Struktur.
+Zur Modellierung morphogenetischer Prozesse ist daher die Repr"asentation
+morphologischer Ph"anotypen variabler r"aumlicher Gestaltung erforderlich.
+Als Grundlage f"ur die Repr"asentation der r"aumlichen Struktur von Pflanzen
+wurden in den hier entwickelten Modellen diskrete Gitter verwendet.
+Pflanzenzellen werden durch elementare Objekte, die genau eine Gitterposition
+einnehmen, repr"asentiert, eine Pflanze besteht im Modell aus mehreren, mindestens
+jedoch einer Zelle.
+
+Modelle mit diskreten Gittern k"onnen im Vergleich zu Modellen mit kontinuierlichen
+R"aumen erheblich effizienter auf Computern implementiert werden.
+Evolutionsmodelle mit kontinuierlichem Raum erfordern f"ur ihre technische Umsetzung
+Rechner von z.T.\ extremer Leistungsf"ahigkeit (z.B.\ \cite{Sims95}); und in
+keinem derartigen Modell wurden bisher alle Faktoren der Evolution ber"ucksichtigt,
+deren Repr"asentation Zielsetzung bei der Modellentwicklung in dieser
+Arbeit war (vgl.\ auch \cite{Terzopoulos95}).
+Die Realisierung eines Modells mit kontinuierlichem Raum kam somit nicht in Betracht.
+
+Weiterhin wurden diskrete Gitter, trotz ihrer Unterschiede zur kontinuerlichen
+physikalischen Realit"at, in
+verschiedensten Modellen, u.a.\ in Ising-Modellen,
+Verkehrssimulationen und in Modellen katalytischer
+Prozesse \cite{Gerhardt89} eingesetzt. Durch diese Modelle ist belegt, da"s
+es bei allen Unterschieden zwischen diskreten und kontinuierlichen R"aumen
+m"oglich ist, Ph"anomene im kontinuierlichen Raum auf der Basis diskreter
+Gitter zu modellieren. Dies erstreckt sich auch auf den Bereich emergenter
+Ph"anomene, wie die Hodge-Podge-Maschine \cite{Gerhardt89} belegt. Diskrete Gitter
+sind somit als Repr"asentation des kontinuierlichen Raums in den hier entwickelten
+Modellen gut geeignet.
+
+F"ur die ad"aquate Modellierung der Morphogenese ist die Repr"asentation der
+zeitlichen Gestaltung des morphogenetischen Prozesses, seiner Dynamik, ebenso wichtig
+wie die Modellierung der R"aumlichkeit. Weiterhin ist die Evolution, auch unabh"angig
+von der Ontogenese der evolvierenden Individuen, ein dynamischer Proze"s, dessen
+Modellierung ohne die Repr"asentation der Zeitkomponente nicht m"oglich ist.
+
+In den hier entwickelten Modellen wird
+der Zeitverlauf durch aufeinanderfolgende, diskrete Zeitschritte repr"asentiert.
+In einem Zeitschritt wird jede Zelle einmal prozessiert. Dazu wird ermittelt,
+welche Gene in der Zelle aktiviert sind, und die entsprechenden Aktionen werden
+ausgef"uhrt. Wie auch bei der Repr"asentation des Raums erm"oglicht auch bei der
+Zeit eine diskrete Modellierung eine sehr viel effektivere Implementation des Modells
+als eine kontinuierliche Modellierung. Entwicklungsmodelle mit kontinuierlicher
+Zeit (z.B.\ \cite{Prusinkiewicz94}) sind bereits f"ur ein einzelnes Individuum
+ausgesprochen aufwendig. Die Modellierung von Interaktionen zwischen Pflanzen,
+auf die bei der Modellentwicklung im Rahmen dieser Arbeit besonderer Wert gelegt
+wurde, f"uhrt zu einer zus"atzlichen Explosion des Rechenzeitbedarfs bei
+kontinuierlicher Repr"asentation der Zeit. Diese "Uberlegungen f"uhrten zur
+Entscheidung f"ur ein diskretes Zeitmodell. Hinzu kommt die Tatsache, da"s
+auf Grundlage dieses Ansatzes unterschiedlichste dynamische Prozesse erfolgreich
+simuliert werden konnten. Ein Beispiel hierf"ur sind {\slshape molecular dynamics}
+Simulationen.
+
+F"ur den Ablauf der Entwicklung einer Pflanze ist ihre Versorgung mit
+Energie notwendig. Die prim"are Energiequelle einer Pflanze ist Licht,
+welches von der Pflanze zur Photosynthese organischer Verbindungen
+genutzt wird. Die so gewonnen organischen Verbindungen
+liefern sowohl den gr"o"sten Teil des Materials als auch die Energie zum Aufbau
+der im Laufe der Entwicklung der Pflanze ausgebildeten Morphologie. Die Gestalt
+der Pflanze, sowie auch die Formen der Pflanzen in ihrer Umwelt, bestimmen wiederum
+die Effektivit"at, mit der eine Pflanze Photosynthese betreiben kann.
+
+In den hier entwickelten Modellen wird Energie durch grob diskretisierte
+Quanten repr"asentiert. Energiequanten werden als Photonen in das
+System eingebracht. Diese k"onnen von Pflanzenzellen absorbiert werden.
+Die Absorption eines Photons bewirkt den "Ubergang der betreffenden
+Pflanzenzelle in einen energiereichen Zustand. In diesem Zustand kann die
+Zelle eine Zellteilung ausf"uhren und damit zur Morphogenese der Pflanze
+beitragen. Nach dieser Aktion ist die Zelle bis zur erneuten Absorption
+eines Photons energielos.
+
+Ein Photon durchl"auft das die Welt repr"asentierende Gitter von oben nach unten.
+Daher beeinflussen pflanzliche Strukturen oberhalb einer Zelle ihre
+Chancen zur Absorption eines Photons. Auf diese Weise werden die komplexen
+Beziehungen zwischen der Morphologie einer Pflanze und den Pflanzen in
+ihrer Umwelt und der Energiezufuhr einer Pflanze im Modell repr"asentiert.
+Auf die Repr"asentation der zum Wachstum einer Pflanze ebenfalls erforderlichen
+Versorgung mit "uber das Wurzelsystem aufgenommenen N"ahrsalzen wird dagegen
+in den hier vorgestellten Modellen verzichtet.
+
+
+
+
+
+% Modellierung nicht auf explizit molekularer Ebene, DNA / Genome in
+%   Funktion von Sequenzen, nicht raeumliche Molekularstruktur.
+% Morphologie erfordert raeumliche Struktur, diskret. Ansatz bewaehrt
+%   in Physik (lattice gases, CA, Ising...)
+% Zeit in diskreten Schritten, Alternativen dazu sind nicht bekannt.
+% Mutationen als ungerichtete Variationen mit Motiven aus Molekulargenetik
+%   Beeinflussbarkeit der Mutationsraten
+% Funktionale Struktur von Genen: Konditionalteil und Aktions / Anweisunsteil.
+
+
+\section{Umsetzung in Simulationsmodelle}
+\label{modeldef}
+
+Die im vorangehenden Abschnitt aufgef"uhrten biologischen Mechanismen wurden
+in eine Reihe von Computermodellen umgesetzt, die insgesamt die LindEvol-Modellfamilie
+bilden. In diesem Abschnitt wird nun die technische Realisierung der
+in (\ref{modellansatz}) angesprochenen Modellkomponenten beschrieben.
+Zu den einzelnen Komponenten geh"oren in der Regel Kontrollparameter, also
+Gr"o"sen, die die Arbeitsweise der Komponenten steuern. Neben ihrer nat"urlichsprachlichen
+Bezeichnung haben alle Kontrollparameter einen Variablennamen, der z.B.\ in
+Parameterdateien (s.\ Anhang \ref{technicalstuff} und auch im Quelltext verwendet wird. Weiterhin werden
+Kontrollparameter in mathematischen Ausdr"ucken durch Formelbuchstaben
+symbolisiert. Sowohl Variablennamen als auch Formelbuchstaben werden in diesem
+Abschnitt f"ur alle Kontrollparameter angegeben und am Ende der Beschreibungen
+der einzelnen Komponenten, gemeinsam mit den Bezeichnungen weiterer charakteristischer
+Gr"o"sen, tabellarisch zusammengefa"st.
+
+
+\subsection{Zufallsgenerator}
+\label{rndgeneratordef}
+
+Zur Realisierung verschiedener Elemente der Modelle, z.B.\ der
+Mutation (\ref{mutationdef}) und der Lichtabsorption
+(\ref{energydef}), sind Zufallszahlen erforderlich. 
+Alle in einem Simulationsverlauf ben"otigten Zufallszahlen werden mithilfe der
+Funktion \verb|random()| von Earl T.\ Cohen erzeugt. Diese Funktion ist in den
+C-Funktionsbibliotheken enthalten, die mit den Systemen IRIX 4.0.5f und DEC OSF1 3.0
+ausgeliefert werden. Mit der Funktion \verb|initstate()| wird f"ur die Funktion
+\verb|random()| ein 256 Bytes langes internes Zustandsfeld ({\slshape state array}\/)
+installiert, was laut Dokumentation h"ochstwertige Zufallszahlen gew"ahrleistet.
+
+Zu Beginn einer Simulation wird der Zufallsgenerator mittels der Funktion
+\verb|srandom()| initialisiert. Dabei wird der Kontrollparameter \verb|random_seed|
+als Argument verwendet. Auf diese Weise ist es m"oglich, jeden Simulationslauf
+exakt zu wiederholen.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+\multicolumn{3}{|c|}{\bfseries Kontrollparameter des Zufallsgenerators} \\ \hline
+Formel- & Variablenname & Beschreibung \\
+buchstabe &              & \\ \hline
+- & \verb|random_seed| & ganzzahliger Wert zur Initialisierung des Zu\-falls\-ge\-ne\-ra\-tors \\ \hline
+\end{tabularx}
+\medskip
+
+
+\subsection{R"aumliche Struktur}
+\label{topodef}
+
+\subsubsection{Zweidimensionale Struktur}
+\label{topo2d}
+
+Eine zweidimensionale \introdef{Welt} ist ein zweidimensionales, orthogonales Gitter. Die Breite und
+H"ohe des Gitters sind Kontrollparameter, ihre Formelbuchstaben sind
+$w$ und $h$.
+
+Um lokale Interaktionen zu modellieren, mu"s eine \introdef{Nachbarschaft} definiert
+werden. Bei den zweidimensionalen LindEvol Modellen wird die Moore-Nachbarschaft
+(engl.:\ {\slshape Moore neighborhood}) verwendet. Wie in Abb.\ \ref{neighbor2d}
+dargestellt, werden den Moore-Nachbarn eines
+Gitterelements Indizes von 0 bis 7 zugerodnet, anhand derer sie eindeutig
+bezeichnet werden k"onnen.
+
+Absolute Gitterpositionen werden durch Koordinatenpaare angegeben, die
+X-Ko\-or\-di\-na\-te l"auft in Richtung der Breite von $0$ bis $w-1$, die
+Y-Ko\-or\-di\-na\-te l"auft, beginnnend am Boden, von $0$ bis $h-1$.
+
+Die Topologie der Welt entspricht derjenigen
+einer Zylinderoberfl"ache: Der rechte Nachbar der Position $(w-1, y)$ ist
+$(0, y)$, hingegen haben die Gitterpositionen in der untersten Zeile,
+dem \introdef{Boden} der Welt,
+keine unteren Nachbarn und diejeingen in der obersten Zeile, der \introdef{Decke},
+keine oberen Nachbarn.
+
+\begin{figure}[tb]
+
+\unitlength1cm
+\begin{picture}(15,5)
+\put(1,0){\makebox(15,5)[b]{\epsfxsize=5cm \epsffile{neigh2d.eps}}}
+\end{picture}
+
+\caption[Struktur der zweidimensionalen Nachbarschaft]
+{\label{neighbor2d}
+Die Moore-Nachbarschaft eines Gitterelements X in einem zweidimensionalen Gitter. Die
+Nachbarpositionen eines Gitterelements werden entsprechend dem hier dargestellten
+Schema indiziert. Position 2 bez"uglich des Elements X bezeichnet also beispielsweise
+das Gitterelement rechts unterhalb des Elements X.}
+\end{figure}
+
+
+\subsubsection{Dreidimensionale Struktur}
+\label{topo3d}
+
+Eine dreidimensionale Welt ist ein dreidimensionales, orthogonales Gitter
+mit quadratischer Grundfl"ache. Kontrollparameter sind die Breite der Grundfl"ache
+und die H"ohe des Gitters mit den Formelbuchstaben $w$ und $h$.
+Die zweidimensionale Moore-Nachbarschaft
+wurde zu einer achtzehnzelligen, dreidimensionalen Nachbarschaft erweitert,
+deren Struktur und Indizierung in Abb.\ \ref{neighbor3d} dargestellt ist.
+
+Die gesamte Welt hat die Abmessungen $w * w * h$. Gitterpositionen werden durch
+Koordinatentripel bezeichnet, wie bei der zweidimensionalen
+Struktur beginnen die Koordinaten mit 0 und am Boden. Der Boden und alle zu ihm
+parallelen Ebenen haben Torustopologie, also ist $(0, y, z)$ der rechte Nachbar von
+$(w-1, y, z)$, und $(x, w-1, z)$ ist der vordere Nachbar von $(x, 0, z)$.
+
+\begin{figure}[tb]
+
+\unitlength1cm
+\begin{picture}(15,10)
+\put(1,0){\makebox(5,5)[bl]{\epsfxsize=5cm \epsffile{neigh3dc.eps}}}
+\put(9,0){\makebox(5,10)[bl]{\epsfxsize=5cm \epsffile{neigh3ds.eps}}}
+\end{picture}
+
+\caption[Struktur der dreidimensionalen Nachbarschaft]
+{\label{neighbor3d}
+Die achtzehnzellige Nachbarschaft eines Gitterelements X im dreidimensionalen Gitter und das Indizierungsschema
+f"ur die Nachbarpositionen. Links ist
+die Struktur der Nachbarschaft dargestellt, auf der rechten Seite wurden die Ebenen der
+Nachbarschaft separiert, damit alle Gitterpositionen mit ihren Indices gezeigt werden
+k"onnen.}
+\end{figure}
+
+\medskip
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+\multicolumn{3}{|c|}{\bfseries Kontrollparameter der Welt} \\ \hline
+Formel-   & Variablenname & Beschreibung \\ 
+buchstabe &               & \\ \hline
+$w$ & \verb|world_width| & Breite der Welt bzw.\ Kantenl"ange ihrer Grundfl"ache \\
+$h$ & \verb|world_height| & H"ohe der Welt \\ \hline
+\end{tabularx}
+\medskip
+\medskip
+
+
+\subsection{Pflanzenzellen}
+\label{celldef}
+
+Eine \introdef{Pflanzenzelle} besetzt in der Welt genau eine Gitterposition. An einer
+Gitterposition kann sich maximal eine Zelle befinden. Innerhalb einer Pflanze werden
+die Zellen der Reihenfolge ihrer Entstehung entsprechend indiziert, $C_i$ ist also
+die $i$-te Zelle einer Pflanze. Die \introdef{Keimzelle} einer Pflanze tr"agt den Index 0.
+Die Koordinaten einer Zelle $C$ werden mit $x(C)$, $y(C)$
+und $z(C)$ bezeichnet.
+
+Weiterhin ist eine
+Zelle durch ihre Parameter und durch die lokale Struktur der Pflanze in
+ihrer Umgebung charakterisiert, die gemeinsam den Zustand der Zelle bestimmen.
+Ferner k"onnen Pflanzenzellen verschiedene Aktionen ausf"uhren. Welche Aktion eine
+Pflanzenzelle ausf"uhrt, wird durch ein im genom der Pflanze codiertes Regelwerk in
+Abh"angigkeit vom Zustand der Zelle gesteuert. In diesem Abschnitt werden nun zun"achst
+der Zellzustand und die Aktionen eingef"uhrt. Die Definition des Genoms einer Pflanze
+und seine Interpretation als Regelwerk folgen in den Abschnitten (\ref{genomedef})
+und (\ref{interpreterdef}).
+
+
+\subsubsection{Zellparameter}
+
+Jede Pflanzenzelle $C$ hat einen bin"aren Energieparameter $E(C)$, sie ist entweder
+energiereich oder energielos. Bei einigen Modellen haben die 
+Zellen als weiteren Parameter einen internen Zustand, der je nach Modell 16 oder
+32 Bits umfa"st. Der interne Zustand einer Zelle $C$ wird mit $Z_i(C)$ bezeichnet.
+Der interne Zustand einer Zelle wird stets mit 0 initialisiert. Er kann durch Aktionen
+der Zelle (s.\ \ref{cellactiondef}) ver"andert werden.
+
+\subsubsection{Lokale Struktur}
+
+In der Nachbarschaft (s.\ \ref{topodef}) einer Zelle k"onnen sich weitere
+Zellen der Pflanze, zu der sie geh"ort, befinden. Die Anordnung dieser
+Nachbarzellen wird als die \introdef{lokale Struktur} einer Zelle bezeichnet. Sie wird
+mittels des Indizierungsschemas f"ur die Nachbarschaft auf
+nat"urliche Zahlen abgebildet. Dazu wird zun"achst die Nachbarzellfunktion
+definiert:
+
+Bezeichne $C$ eine Zelle und $I$ die Menge der Indizes ihrer Nachbarpositionen
+(s.\ \ref{topodef}). Dann ist die Nachbarzellfunktion $N_C: I \mapsto \{0, 1\}$
+definiert durch:
+
+\begin{equation}
+N_C(i) = \left\{
+    \begin{array}{ll}
+        1, & \mbox{falls an Position } i \mbox{ eine Zelle derselben Pflanze ist} \\
+        0, & \mbox{anderenfalls}
+    \end{array}
+    \right.
+\end{equation}
+
+Die Abbildung der lokalen Struktur der Zelle $C$ auf eine ganze Zahl erfolgt
+nun durch die Funktion
+
+\begin{equation}
+S(C) = \sum_{i=0}^{|I|-1} 2^i N_C(i)
+\end{equation}
+
+
+Zweidimensionale lokale Strukturen werden so auf Achtbit-Zahlen abgebildet, 
+dreidimensionale lokale Strukturen werden auf Achtzehnbit-Zahlen abgebildet.
+Abb.\ \ref{statespecfig} veranschaulicht die Abbildung im zweidimensionalen
+Gitter.
+
+
+\begin{figure}
+\unitlength1.2cm
+\begin{picture}(14,3)
+\put(0,2){\makebox(3,0.5)[l]{lokale Struktur:}}
+\put(4,2){\makebox(3,0.5)[l]{Achtbitzahl:}}
+{
+\ttfamily
+\put(0,1){\framebox(0.5,0.5){5}}
+\put(0.5,1){\makebox(0.5,0.5){6}}
+\put(1,1){\framebox(0.5,0.5){7}}
+\put(0,0.5){\makebox(0.5,0.5){3}}
+\put(0.5,0.5){\framebox(0.5,0.5){X}}
+\put(1,0.5){\makebox(0.5,0.5){4}}
+\put(0,0){\framebox(0.5,0.5){0}}
+\put(0.5,0){\makebox(0.5,0.5){1}}
+\put(1,0){\makebox(0.5,0.5){2}}
+\put(4,0.5){\framebox(0.25,0.5){1}}
+\put(4.25,0.5){\framebox(0.25,0.5){0}}
+\put(4.5,0.5){\framebox(0.25,0.5){1}}
+\put(4.75,0.5){\framebox(0.25,0.5){0}}
+\put(5,0.5){\framebox(0.25,0.5){0}}
+\put(5.25,0.5){\framebox(0.25,0.5){0}}
+\put(5.5,0.5){\framebox(0.25,0.5){0}}
+\put(5.75,0.5){\framebox(0.25,0.5){1}}
+
+{
+\footnotesize
+\put(3,0.2){\makebox(1,0.3)[l]{Bit Nr.}}
+\put(4,0.2){\makebox(0.25,0.3){7}}
+\put(4.25,0.2){\makebox(0.25,0.3){6}}
+\put(4.5,0.2){\makebox(0.25,0.3){5}}
+\put(4.75,0.2){\makebox(0.25,0.3){4}}
+\put(5,0.2){\makebox(0.25,0.3){3}}
+\put(5.25,0.2){\makebox(0.25,0.3){2}}
+\put(5.5,0.2){\makebox(0.25,0.3){1}}
+\put(5.75,0.2){\makebox(0.25,0.3){0}}
+}
+}
+\put(2,0.5){\makebox(1,0.5)[l]{$\rightarrow$}}
+\end{picture}
+\caption[Abbildung von zweidimensionalen lokalen Strukturen auf Achtbit-Zahlen]
+{\label{statespecfig}
+Abbildung von zweidimensionalen lokalen Strukturen auf Achtbit-Zahlen.
+Die Numerierung der Bits beginnt bei 0 mit dem niedrigstwertigen Bit.
+}
+\end{figure}
+
+
+\subsubsection{Zellzustand}
+
+In Modellen, bei denen die Pflanzenzellen keinen internen Zustand besitzen,
+definiert die lokale Struktur einer Zelle $C$ allein ihren Zustand $Z(C)$:
+
+\begin{equation}
+\label{stateq-nointernal}
+Z(C) = S(C)
+\end{equation}
+
+Bei Modellen mit internem Zellzustand sollen sowohl der interne Zustand einer Zelle als auch 
+ihre lokale Struktur bei der Bestimmung des Verhaltens der Zelle ber"ucksichtigt werden.
+Daher ist der Zustand einer Zelle in diesen Modellen definiert als $S(C)$ bitweise oderiert mit ihrem
+internen Zustand. Au"serdem ist das h"ochstwertige Bit des Zellzustands
+gesetzt, wenn die Zelle energiereich ist:
+
+\begin{equation}
+\label{stateq-internal}
+Z(C) = S(C) \vee Z_i(C) \vee E(C) * 2^{\mathit{num\_statebits} - 1}
+\end{equation}
+
+{\slshape num\_statebits} bezeichnet hier die Anzahl Bits des internen
+Zellzustands. Das h"ochstwertige Bit des Zellzustands wird wegen seiner
+speziellen Funktion auch als \introdef{Energiebit} bezeichnet.
+
+
+\subsubsection{Zellaktionen}
+\label{cellactiondef}
+
+Die Pflanzenzellen k"onnen verschiedene \introdef{Aktionen} ausf"uhren. Die meisten
+Aktionen verbrauchen Energie. Dies bedeutet, da"s sie nur von einer
+energiereichen Zelle ausgef"uhrt werden k"onnen, und da"s die Zelle
+nach der Ausf"uhrung der Aktion energielos ist. Die Energie wird
+unabh"angig vom Erfolg der Aktion verbraucht.
+
+Die einzelnen Aktionen werden mit englischen Codeworten bezeichnet.
+Zu einigen Aktionen geh"ort ein Parameter. Die folgende Tabelle gibt
+die Spezifikationen der Aktionen im Einzelnen an.
+
+\label{cellactionlist}
+\medskip
+\noindent\begin{tabularx}{\linewidth}{l|c|X}
+Aktion & Energie- & Beschreibung \\
+       & verbrauch & \\ \hline \hline
+\verb|divide| {\slshape pos} & ja &  Die Zelle produziert eine energielose
+    Tochterzelle. {\slshape pos} gibt dabei den Index der Nachbarposition an,
+    an der die Tochterzelle plaziert werden soll. Eine Teilung kann scheitern,
+    wenn die spezifizierte Nachbarposition bereits besetzt ist; die exakte Behandlung
+    von Konflikten ist bei den verschiedenen Modellen unterschiedlich. Wenn
+    an der spezifizierten Position kein Gitterelement existiert (also wenn
+    die Position unterhalb des Bodens oder oberhalb der Decke liegt), scheitert
+    die Teilung unweigerlich. \\ \hline
+\verb|flyingseed| & ja & Eine neue, aus einer energielosen Zelle bestehende
+    Pflanze wird an einer zuf"allig ausgew"ahlten freien Gitterposition am
+    Boden der Welt generiert. Diese Aktion scheitert,
+    wenn alle Gitterelemente am Boden der Welt durch Zellen besetzt sind. \\ \hline
+\verb|localseed| & ja & Eine neue einzellige Pflanze wird am Boden der
+    Welt senkrecht unterhalb der samenproduzierenden Zelle generiert. Falls
+    dieses Gitterelement bereits besetzt ist, wird bei Modellen mit zweidimensionaler
+    Topologie das n"achste freie Gitterelement neben dieser Zielposition gesucht
+    und die Pflanze dort generiert. Die Aktion scheitert, wenn alle Gitterelemente
+    am Boden der Welt besetzt sind. Bei dreidimensionaler Topologie wird nicht
+    nach benachbarten, freien Elementen gesucht, wenn die Position senkrecht unterhalb
+    der samenproduzierenden Zelle besetzt ist, scheitert die Samenerzeugung. \\ \hline
+\verb|mut-| & ja &  Der Mutationsexponent (s.\ \ref{mutationdef}) wird
+    um 1 erniedrigt. \\ \hline
+\verb|mut+| & ja & Der Mutationsexponent (s.\ \ref{mutationdef}) wird
+    um 1 erh"oht. \\ \hline
+\verb|statebit| {\slshape num} & nein & Das Bit {\slshape num} im internen
+    Zustand der Zelle wird gesetzt, d.h.\ der interne Zustand der Zelle wird
+    mit $2^{\mathit{num}}$ bitweise oderiert. Durch \verb|statebit|-Aktionen
+    in einem Zeitschritt wird jeweils der interne Zellzustand f"ur den n"achsten
+    Zeitschritt festgelegt. Der interne Zustand der Zelle im laufenden
+    Zeitschritt bleibt unbeeinflu"st. Eine Zelle, die in einem Zeitschritt keine
+    \verb|statebit|-Aktionen ausf"uhrt, hat im n"achsten Zeitschritt den internen
+    Zustand $Z_i=0$ \\
+\end{tabularx}
+\medskip
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+\multicolumn{3}{|c|}{\bfseries Parameter einer Zelle} \\ \hline
+Formel- & Variablenname   & Beschreibung \\
+buchstabe &               & \\ \hline
+$x(C)$    & & X-Koordinate der Zelle $C$ \\
+$y(C)$    & & Y-Koordinate der Zelle $C$ \\
+$z(C)$    & & Z-Koordinate der Zelle $C$ \\
+$N_C$     & & Nachbarzellfunktion der Zelle $C$ \\
+$E(C)$    & & Energiezustand der Zelle $C$ \\
+$S(C)$    & & lokale Struktur um die Zelle $C$ \\
+$Z_i(C)$  & & interner Zustand der Zelle $C$ \\
+$Z(C)$    & & Zustand einer Zelle $C$ \\ \hline
+\end{tabularx}
+\medskip
+
+
+\subsection{Energie}
+\label{energydef}
+
+Pflanzenzellen werden durch die Absorption eines \introdef{Photons} energiereich.
+Die Lichtbestrahlung der Welt wird simuliert, indem
+in jeder Gitterpositionen der obersten Ebene ein Photon eingesetzt wird.
+Von dort wandern die Photonen senkrecht abw"arts. Trifft ein Photon auf
+eine Pflanzenzelle, so wird es mit einer Wahrscheinlichkeit von 50\%
+absorbiert. Eine energielose Zelle wird dadurch energiereich, der Zustand
+einer energiereichen Zelle wird durch die Absorption eines Photons nicht
+ver"andert. Wird ein Photon von einer Zelle nicht absorbiert, wandert
+es weiter abw"arts. Passiert es den Boden der Welt, ohne absorbiert zu
+werden, verschwindet es. Der Algorithmus der Simulation des Lichts
+in einer zweidimensionalen Welt in Pseudocode lautet:
+
+\begin{verbatimcmd}
+FOR x = 0 TO world_width - 1
+  photon_exists = TRUE
+  y = world_height - 1
+  WHILE photon_exists AND (y >= 0)
+    IF \pcodemeta{eine Zelle bei} (x, y) \pcodemeta{existiert}
+      IF (random() MOD 2) == 1
+        photon_exists = FALSE
+        \pcodemeta{Setze Energieparameter der getroffenen Zelle auf energiereich}
+      ENDIF
+    ENDIF
+    y = y - 1
+  WEND
+NEXT x
+\end{verbatimcmd}
+
+Durch die Ausf"uhrung einer der auf Seite \pageref{cellactionlist} genannten
+energieverbrauchenden Aktionen gehen Pflanzenzellen vom energiereichen
+in den energielosen Zustand "uber. Die Lichteinstrahlung ist somit die
+Energiequelle, die alle Lebensvorg"ange in den Simulationen antreibt.
+
+
+\subsection{Pflanzen}
+\label{plantdef}
+
+Eine Pflanze $P$ ist ein Objekt, das aus einer oder mehreren Pflanzenzellen besteht.
+Neben ihren Zellen besitzt eine Pflanze als weitere charakteristische Parameter:
+
+\begin{itemize}
+\item Ihr Genom (s.\ \ref{genomedef}). Die Aktivit"aten aller Zellen einer Pflanzen
+    werden durch ein Genom gesteuert (s.\ \ref{interpreterdef}), damit k"onnen
+    somatische Mutationen, Mosaikbildung usw.\ nicht simuliert werden.
+\item Einen Mutationsexponenten $\mu$. Der Mutationsexponent einer Pflanze wird durch
+    die Ausf"uhrung der Aktionen \verb|mut+| und \verb|mut-| inkrementiert
+    bzw.\ dekrementiert. Bei der Mutation des Genoms beeinflu"st er
+    die Mutationsraten, dies wird in (\ref{mutationdef}) n"aher erl"autert.
+\item Die Gesamtzahl ihrer Zellen, sie wird mit dem Formelbuchstaben $n_c$
+    bezeichnet.
+\item Die Gesamtzahl ihrer energiereichen Zellen. Sie wird auch ihre (Gesamt-) Energie
+    genannt und durch den Formelbuchstaben $n_e$ bezeichnet.
+\end{itemize}
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+\multicolumn{3}{|c|}{\bfseries Parameter einer Pflanze} \\ \hline
+Formel- & Variablenname & Beschreibung \\
+buchstabe &               & \\ \hline
+$\mu$ & \verb|mut_counter| & Mutationsexponent \\
+$n_c$ & \verb|num_cells| & Anzahl Zellen \\
+$n_e$ & \verb|total_energy| & Anzahl Energiereicher Zellen \\ \hline
+\end{tabularx}
+\medskip
+
+
+\subsection{Zeit}
+\label{timedef}
+
+Alle Simulationen verlaufen in diskreten Zeitschritten. Ein solcher Zeitschritt,
+auch als \introdef{Tag} bezeichnet, beginnt stets mit der Simulation von Licht. Dazu wird,
+ausgehend von jeder Gitterposition in der obersten Ebene, ein Photonenlauf
+wie oben beschrieben durchgef"uhrt. Danach werden die Pflanzen abgearbeitet,
+wobei die Reihenfolge in jedem Zeitschritt erneut zufallsgesteuert bestimmt
+wird. Die Abarbeitung der Zellen einer Pflanze erfolgt in der Reihenfolge
+ihrer Entstehung. In Pseudocode ausgedr"uckt lautet der Algorithmus zur
+Simulation eines Zeitschritts:
+
+\begin{verbatimcmd}
+\pcodemeta{Simuliere Lichteinstrahlung}
+\pcodemeta{Randomisiere die Reihenfolge der Pflanzen}
+FOR i = 0 TO psize - 1
+  \pcodemeta{Simuliere Wachstum der i-ten Pflanze}
+NEXT i
+\end{verbatimcmd}
+
+
+\subsection{Genom}
+\label{genomedef}
+
+Genome sind als Zeichenketten von Bytes
+modelliert. Die L"ange eines Genoms ist variabel und wird mit
+dem Formelbuchstaben $l$ und durch den Variablennamen \verb|genome_length|
+bezeichnet. Sie kann durch Mutationen
+(s.\ \ref{mutationdef}) ver"andert werden. Die einzelnen
+Zeichenpositionen eines Genoms werden mit 0 beginnend indiziert,
+das letzte Zeichen hat damit den Index $l - 1$.
+
+Bei allen Modellen wird am Anfang eines Simulationslaufs eine Startpopulation
+von Genomen zufallsgesteuert erzeugt. Die L"ange dieser Genome wird durch den
+Kontrollparameter $l_s$ (\verb|glen_init|) bestimmt.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+\multicolumn{3}{|c|}{\bfseries Parameter einer Zelle} \\ \hline
+Formel- & Variablenname   & Beschreibung \\
+buchstabe &               & \\ \hline
+$l$       & \verb|genome_length| & L"ange des Genoms \\
+$l_s$     & \verb|glen_init| & L"ange der zufallsgesteuert generierten Genome der Startpopulation \\ \hline
+\end{tabularx}
+\medskip
+
+
+\subsection{Interpretation der genetischen Information}
+\label{interpreterdef}
+
+F"ur jede Zelle einer Pflanze wird durch die \introdef{Interpretation} des
+Genoms der Pflanze bestimmt, welche Aktionen die Zelle ausf"uhren
+soll. Der Vorgang der Interpretation eines Genoms erfolgt durch den
+Genominterpreter. Im Rahmen der vorliegenden Arbeit wurden zwei
+Interpretersysteme entwickelt, die im Folgenden beschrieben werden.
+
+Zur Abarbeitung einer Pflanzenzelle wird das Genom der Pflanze in ein \introdef{Regelwerk}
+"ubersetzt. Durch dieses Regelwerk wird f"ur jede Zelle in Abh"angigkeit
+von ihrem Zellzustand festgelegt, welche Aktionen die Zelle ausf"uhren
+soll. Eine Regel bestimmt eine Aktion f"ur einen Zellzustand oder f"ur eine Klasse
+von Zellzust"anden. Der Zustandsteil in einer Regel wird als ihre linke Seite, der
+Aktionsteil als ihre rechte Seite bezeichnet.
+Wenn der Zustand einer Zelle in die durch die linke Seite einer Regel
+spezifizierte Zustandsklasse f"allt, wird diese Regel \introdef{aktiviert}.
+
+Klassen von Zellzust"anden werden durch Bitmasken definiert. In einer
+solchen Bitmaske kann der Zustand eines Bits entweder spezifiziert oder
+unspezifiziert sein. Die Anzahl der in der linken Seite einer Regel
+spezifizierten Bits wird als die Spezifit"at dieser Regel bezeichnet.
+
+Eine Regel wird durch einen Abschnitt von Bytes auf dem Genom codiert.
+Ein solcher Abschnitt repr"asentiert ein \introdef{Gen}. Bei einem Byte kann maximal
+ein Gen anfangen. Damit ist durch das Genom eine Reihenfolge der Gene
+definiert. Die Anzahl der Gene in einem Genom wird durch den
+Variablennamen \verb|num_genes| bezeichnet. Ein Gen wird \introdef{exprimiert},
+wenn die Regel, die es codiert, aktiviert wird.
+
+Zur textuellen Darstellung einer Zellzustandsklasse werden die spezifizierten
+Bits durch ihren jeweiligen Zustand \verb|0| oder \verb|1| dargestellt,
+unspezifizierte Bits werden durch \verb|*| repr"asentiert.
+Ein Zellustand $Z$ geh"ort zu einer Klasse, wenn der Zustand
+s"amtlicher in der Klasse spezifizierten Bits dem Zustand der entsprechenden
+Bits in $Z$ entspricht. Zum Beispiel geh"oren zur Klasse
+\verb|1*******| s"amtliche Zust"ande, bei denen das Bit 7 gesetzt
+ist. Zur Klasse \verb|0000000*| geh"oren nur die beiden Zust"ande
+\verb|00000000| und \verb|00000001|.
+
+Zur textuellen Beschreibung einer Regel wird ihre linke Seite in der
+beschriebenen Weise dargestellt, darauf folgt das Symbol \verb|->|
+und schlie"slich das Codewort f"ur die spezifizierte Aktion
+(vgl.\ \ref{cellactiondef}). Diesen Angaben k"onnen zu"atzliche
+Informationen "uber das Gen folgen. Die Regeln werden entsprechend ihrer
+Reihenfolge auf dem Genom numeriert. Diese Darstellung eines Genoms
+wird als sein {\slshape listing} bezeichnet. Ein Beispiel f"ur das
+{\slshape listing} eines Genoms ist:
+
+\begin{verbatim}
+  1: 00000001 -> flyingseed
+  2: 00000000 -> divide 7
+  3: 000**001 -> divide 6
+  4: ***1*00* -> mut+
+  5: 0***00*1 -> statebit 7
+\end{verbatim}
+
+Der Zustand einer Keimzelle ist stets 0. Einem Gen, welches eine Regel codiert,
+die f"ur diesen Zustand eine Aktion angibt, ist somit erforderlich, um den Wachstumsproze"s
+einer Pflanze anzusto"sen und andere Gene zu aktivieren. Ein solches Gen wird als
+\introdef{Keimzellgen} bezeichnet.
+
+Wenn durch den Zustand einer Zelle mehrere Gene aktiviert werden, deren
+rechte Seite energieverbrauchende Aktionen festlegen, kann nur eine dieser
+Aktionen ausgef"uhrt werden. In diesem Fall wird nur das erste Gen auf dem Genom,
+welches eine energieverbrauchende Aktion spezifiziert, exprimiert; die
+Expression aller weiteren Gene, die energieverbrauchende Aktionen ausl"osen,
+wird unterdr"uckt. Im obigen Beispiel
+w"urde der Zellzustand \verb|00000001| zur Aktivierung der Regel Nr.\ 1
+f"uhren. Regel Nr.\ 3 w"urde nicht aktiviert, obwohl seine Zustandsklasse
+den Zellzustand \verb|00000001| ebenfalls einschlie"st. Regel Nr.\ 5 w"urde hingegen
+aktiviert, weil \verb|statebit| keine Energie ben"otigt.
+Der folgende Pseudocode beschreibt die Ermittlung der von einer Zelle $C$
+auszuf"uhrenden Aktionen anhand des im Genom codierten Regelwerks.
+
+\begin{verbatimcmd}
+FOR i = 0 TO num_genes - 1
+  IF \pcodemeta{\begin{math}Z(C)\end{math} geh{\"o}rt zur Zustandsklasse der i-ten Regel}
+    IF \pcodemeta{i-te Regel spezifiziert energieverbrauchende Aktion}
+      IF \pcodemeta{C ist energiereich}
+        \pcodemeta{F{\"u}hre durch i-te Regel spezifizierte Aktion aus}
+        \pcodemeta{Setze \begin{math}E(C)\end{math} auf energielos}
+      ENDIF
+    ELSE
+      \pcodemeta{F{\"u}hre durch i-te Regel spezifizierte Aktion aus}
+    ENDIF
+  ENDIF
+NEXT i
+\end{verbatimcmd}
+
+
+\subsubsection{Blockorientierte Genominterpretation}
+\label{blockinterdef}
+
+Bei dem blockorientiert arbeitenden Interpretersystem
+besteht jedes Gen aus zwei aufeinanderfolgenden Bytes im Genom. An jeder
+geradzahligen Position des Genoms (also bei den Zeichen 0, 2, 4 usw.) beginnt
+jeweils ein Gen. Die Gene liegen damit dicht im Genom, es gibt weder
+"Uberlappungen noch Bytes, die keinem Gen zugeordnet sind. Abb.\ \ref{blockinterfig}
+verdeutlicht die Anordnung der Gene bei der blockorientierten Genominterpretation.
+
+Bei der blockorientierten Genominterpretation kommen keine unspezifizierten Bits auf
+der linken Seite einer Regel vor. Das erste Byte eines Gens 
+spezifiziert s"amtliche Bits eines Zellzustands,
+in ihm ist somit die gesamte linke Seite der Regel codiert. Im zweiten
+Byte des Gens ist die rechte Seite der Regel in einem Achtbit-Aktionscode codiert,
+seine Codierung wird in (\ref{actioncodedef}) beschrieben.
+
+Die blockorientierte Genominterpretation kann nur in Verbindung mit
+Achtbit-Zell\-zu\-st"an\-den sinnvoll verwendet werden, da weitere Bits nicht
+in der linken Regelseite spezifiziert werden k"onnen. Eine Erweiterung
+des Prinzips der blockorientierten Genominterpretation auf gr"o"sere Bitbreiten ist
+zwar leicht konstruierbar, sie hat sich jedoch als unpraktikabel erwiesen.
+Auf diesen Punkt wird sp"ater (\ref{lnd2-summary}) n"aher eingegangen.
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,5)
+{\footnotesize
+\put(0,2.6){\makebox(2,0.3)[l]{Index:}}
+\put(2,2.6){\makebox(1,0.3){0}}
+\put(3,2.6){\makebox(1,0.3){1}}
+\put(4,2.6){\makebox(1,0.3){2}}
+\put(5,2.6){\makebox(1,0.3){3}}
+\put(6,2.6){\makebox(1,0.3){4}}
+\put(7,2.6){\makebox(1,0.3){5}}
+}
+\put(0,2){\makebox(2,0.5)[l]{Genom:}}
+{\ttfamily
+% \put(1,2){\line(1,0){5.5}}
+% \put(1,2.5){\line(1,0){5.5}}
+\put(2,2){\framebox(1,0.5){\$01}}
+\put(3,2){\framebox(1,0.5){\$2B}}
+\put(4,2){\framebox(1,0.5){\$88}}
+\put(5,2){\framebox(1,0.5){\$47}}
+\put(6,2){\framebox(1,0.5){\$A0}}
+\put(7,2){\framebox(1,0.5){\$03}}
+}
+\thicklines
+% \put(2,1.5){\line(0,1){0.2}}
+\put(2,1.35){\framebox(2,0.35){Gen 0}}
+% \put(4,1.5){\line(0,1){0.2}}
+\put(4,1.35){\framebox(2,0.35){Gen 1}}
+% \put(6,1.5){\line(0,1){0.2}}
+\put(6,1.35){\framebox(2,0.35){Gen 2}}
+% \put(8,1.5){\line(0,1){0.2}}
+\thinlines
+\end{picture}
+
+\begin{picture}(16,4.5)
+\put(0,4.0){\makebox(2,0.5)[l]{Gen 0:}}
+{\ttfamily
+\put(2,4.0){\framebox(1,0.5){\$01}}
+\put(3,4.0){\framebox(1,0.5){\$2B}}
+\put(6,4.0){\makebox(8,0.5)[l]{00000001 -> action code \$2B}}
+
+\put(2.5,4.0){\line(0,-1){0.4}}
+\put(2.5,3.6){\line(1,0){4.2}}
+\put(6.7,3.6){\vector(0,1){0.4}}
+
+\put(3.5,4.0){\line(0,-1){0.6}}
+\put(3.5,3.4){\line(1,0){7.2}}
+\put(10.7,3.4){\vector(0,1){0.6}}
+}
+
+\put(0,2.5){\makebox(2,0.5)[l]{Gen 1:}}
+{\ttfamily
+\put(2,2.5){\framebox(1,0.5){\$88}}
+\put(3,2.5){\framebox(1,0.5){\$47}}
+\put(6,2.5){\makebox(8,0.5)[l]{10001000 -> action code \$47}}
+
+\put(2.5,2.5){\line(0,-1){0.4}}
+\put(2.5,2.1){\line(1,0){4.2}}
+\put(6.7,2.1){\vector(0,1){0.4}}
+
+\put(3.5,2.5){\line(0,-1){0.6}}
+\put(3.5,1.9){\line(1,0){7.2}}
+\put(10.7,1.9){\vector(0,1){0.6}}
+}
+
+\put(0,1.0){\makebox(2,0.5)[l]{Gen 2:}}
+{\ttfamily
+\put(2,1){\framebox(1,0.5){\$A0}}
+\put(3,1){\framebox(1,0.5){\$03}}
+\put(6,1.0){\makebox(8,0.5)[l]{10100000 -> action code \$03}}
+
+\put(2.5,1.0){\line(0,-1){0.4}}
+\put(2.5,0.6){\line(1,0){4.2}}
+\put(6.7,0.6){\vector(0,1){0.4}}
+
+\put(3.5,1.0){\line(0,-1){0.6}}
+\put(3.5,0.4){\line(1,0){7.2}}
+\put(10.7,0.4){\vector(0,1){0.6}}
+}
+\end{picture}
+
+\caption{\label{blockinterfig}
+Schema der blockorientierten Genominterpretation.
+}
+\end{figure}
+
+
+\subsubsection{Graphische Darstellung von Genomen bei blockorientierter Interpretation}
+
+\begin{figure}[tb]
+
+% {\bfseries Aufbau einer Zeile im {\slshape listing}}
+% 
+% \begin{tabular}{r@{\ttfamily [}r@{\ttfamily ]:}lcc}
+% \verb|2| & \verb|3| & \verb|00000000 -> divide 7   | & \verb|00 07| \\
+% Index des Gens & Anzahl Aktivierungen & Regel & codierende Bytesequenz \\
+% \end{tabular}
+% 
+
+{\bfseries {\slshape Listing} des Genoms:}
+\begin{verbatim}
+    0 [    1]: 00000000 -> divide 7                 00 07
+    1 [    0]: 00000101 -> divide 5                 05 05
+    2 [    0]: 10100011 -> divide 0                 a3 b8
+    3 [    0]: 11000100 -> flying seed              c4 c0
+    4 [    0]: 01001000 -> local seed               48 d7
+    5 [    0]: 10100101 -> mut-                     a5 eb
+    6 [    0]: 00000011 -> mut+                     03 f4
+\end{verbatim}
+
+{\bfseries Graphische Darstellung des Genoms:}
+
+\unitlength1cm
+\begin{picture}(16,3)
+\put(0,0){\makebox(16,3){\epsfxsize=16cm \epsffile{lstexample.eps}}}
+\end{picture}
+
+\caption[Graphische Darstellung von Regeln]{\label{lnd1-graphrule}
+Darstellung eines Genoms als {\slshape listing} und in graphischer Form. Im {\slshape listing} gibt die
+einer Regel vorangestellte Zahl den Index des Gens innerhalb des Genoms an. Nach dem Index kann, in eckigen
+Klammern, angegeben werden, wie oft das Gen w"ahrend der Entwicklung der Pflanze aktiviert wurde.
+Hinter einer Regel wird die Bytesequenz, in der die Regel codiert ist, in hexadezimaler Schreibweise
+angegeben. \newline
+Bei der graphischen Darstellung wird die linke Seite, die bei der blockorientierten Genominterpretation
+stets genau einen Zellzustand spezifiziert,
+durch eine Abbildung dieser lokalen Struktur visualisiert. Die Darstellung der
+rechten Seite h"angt von der in dieser angegebenen Aktion ab. Steht dort die Aktion {\ttfamily divide},
+wird die aus der Division resultierende Struktur dargestellt, wobei die Tochterzelle von den
+restlichen Zellen durch dunklere Schattierung abgesetzt wird. Andere Aktionen werden durch entsprechende
+Symbole repr"asentiert (s.\ Text).
+Unterhalb der graphischen Darstellung eines Gens werden in einer weiteren Box sein Index innerhalb
+des Genoms und die Anzahl seiner Aktivierungen ({\slshape usage counter}) angegeben.
+}
+\end{figure}
+
+Zur Verbesserung der Anschaulichkeit
+werden bei der blockorientierten Genominterpretation Regelwerke graphisch dargestellt.
+Zur Darstellung einer Regel wird dabei die in ihrer linken Seite spezifizierte
+lokale Struktur wiedergegeben. Gibt der Aktionsteil der Regel eine Zellteilung an, wird
+die nach der Teilung resultierende lokale Struktur gezeichnet, wobei die neu gebildete
+Tochterzelle besonders gekennzeichnet wird. F"ur die anderen Aktionen werden folgende
+Symbole verwendet:
+
+\medskip
+\begin{tabular}{|c|l|} \hline
+Symbol & Aktion \\ \hline
++ & \verb|mut+| \\
+- & \verb|mut-| \\
+$\circ$ & \verb|flyingseed| \\
+$\bullet$ & \verb|localseed| \\ \hline
+\end{tabular}
+\medskip
+
+Als Zusatzinformationen zu den Regeln werden ihr Index sowie die Anzahl ihrer
+Aktivierungen angegeben.
+Abb.\ \ref{lnd1-graphrule} illustriert die graphische Darstellung von Regelwerken anhand
+eines Beispiels.
+
+
+\subsubsection{Regulatorische Netzwerke bei blockorientierter Genominterpretation}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,8)
+\put(0,7){\makebox(16,0.5){\bfseries Orthogonale Tochterzellposition}}
+\put(0,6.2){\makebox(16,0.5){Beeinflu"ste Zelle in Nachbarschaft von M:}}
+\put(0,3.5){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhoinf0.eps}}}
+\put(2.6,3.5){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhoinf1.eps}}}
+\put(5.2,3.5){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhoinf3.eps}}}
+\put(7.8,3.5){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhoinf4.eps}}}
+\put(10.4,3.5){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhoinf6.eps}}}
+\put(13.0,3.5){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhoinf7.eps}}}
+\put(0,2.8){\makebox(16,0.5){Beeinflu"ste Zelle au"serhalb der Nachbarschaft von M:}}
+\put(3.9,0){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhoinf2.eps}}}
+\put(6.5,0){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhoinf5.eps}}}
+\put(9.1,0){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhoinf8.eps}}}
+\end{picture}
+
+\begin{picture}(16,8)
+\put(0,7){\makebox(16,0.5){\bfseries Diagonale Tochterzellposition}}
+\put(0,6.2){\makebox(16,0.5){Beeinflu"ste Zelle in Nachbarschaft von M:}}
+\put(2.6,3.5){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhdinf3.eps}}}
+\put(5.2,3.5){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhdinf4.eps}}}
+\put(7.8,3.5){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhdinf6.eps}}}
+\put(10.4,3.5){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhdinf7.eps}}}
+\put(0,2.8){\makebox(16,0.5){Beeinflu"ste Zelle au"serhalb der Nachbarschaft von M:}}
+\put(1.3,0){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhdinf0.eps}}}
+\put(3.9,0){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhdinf1.eps}}}
+\put(6.5,0){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhdinf2.eps}}}
+\put(9.1,0){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhdinf5.eps}}}
+\put(11.7,0){\makebox(2.5,2.5){\epsfxsize=2cm \epsffile{nhdinf8.eps}}}
+\end{picture}
+
+\caption[Modifikation lokaler Strukturen durch Zellteilungen]{\label{neighbor-inf}
+Die durch die Produktion einer Tochterzelle T durch eine Mutterzelle M ver"anderten
+lokalen Strukturen. Der Bereich der lokalen Struktur der Mutterzelle ist durch
+ein Gitter dargestellt. Der grau unterlegte Bereich kennzeichnet die Nachbarschaften,
+die durch die Produktion von T ver"andert werden. Dabei ist die zentrale Position
+dunkler hervorgehoben. An der zentralen Position befindet
+sich ggfs.\ die Zelle, deren Zustand durch die Teilung beeinflu"st wird.
+Bei der Produktion einer Zelle in einer Position orthogonal zur Mutterzelle liegen
+mehr solcher Positionen innerhalb der Nachbarschaft der Mutterzelle. Der
+"Uberlappungsbereich zwischen der Nachbarschaft der Mutterzelle und der
+jeweils durch die Teilung modifizierten Nachbarschaft ist schraffiert.
+}
+\end{figure}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,12.0)
+\put(0,9.5){\makebox(7,5){\epsfxsize=6cm \epsffile{p010.eps}}}
+\put(0,9){\makebox(7,0.5){\bfseries (a)}}
+\put(8,9.5){\makebox(7,5){\epsfxsize=6cm \epsffile{p015.eps}}}
+\put(8,9){\makebox(7,0.5){\bfseries (b)}}
+\put(0,5){\makebox(7,5){\epsfxsize=6cm \epsffile{p005.eps}}}
+\put(0,4.5){\makebox(7,0.5){\bfseries (c)}}
+\put(8,5){\makebox(7,5){\epsfxsize=6cm \epsffile{p012.eps}}}
+\put(8,4.5){\makebox(7,0.5){\bfseries (d)}}
+\put(0,0.5){\makebox(7,5){\epsfxsize=6cm \epsffile{pxlong0105a.eps}}}
+\put(0,0){\makebox(7,0.5){\bfseries (e)}}
+\put(8,0.5){\makebox(7,5){\epsfxsize=6cm \epsffile{pxlong0105u.eps}}}
+\put(8,0){\makebox(7,0.5){\bfseries (f)}}
+\end{picture}
+\caption[Graphische Darstellung regulatorischer Netze]{\label{lnd1-graphgenom}
+Graphische Darstellung eines LindEvol Genoms. Es wird jeweils das vollst"andige
+Genom einer Pflanze mit dem entsprechenden regulatorischen Netzwerk gezeigt. Oberhalb
+jeden Genoms ist die resultierende Pflanze dargestellt. Die Genome in den Beispielen
+(a) bis (d) wurden manuell erstellt und sind nicht Ergebnis von LindEvol-GA--Simulationen.\newline
+(a) Gen 0 ist ein starker Aktivator von Gen 1: Nachdem durch Gen 0 die Produktion einer
+Zelle orthogonal oberhalb der Keimzelle ausgel"ost wurde, befindet sich die Mutterzelle
+in einer lokalen Struktur, durch die Gen 1 aktiviert wird. (b) In diesem Beispiel ist
+Gen 0 ein starker Aktivator f"ur Gen 1, weil die Tochterzelle sich nach der durch Gen
+0 gesteuerten Teilung in einer Struktur befindet, die zur Aktivierung von Gen 1
+f"uhren kann. Gen 1 ist ein schwacher Aktivator von sich selbst, weil sich an der Position links
+oberhalb der von Gen 1 produzierten Tochterzelle eine weitere Zelle befinden k"onnte. In dieser
+Zelle w"urde durch die von Gen 1 gesteuerte Zellteilung ein Beitrag zur Aktivierung von 
+Gen 1 geleistet. Diese Konstellation tritt jedoch beim Wachstum der Pflanze nicht auf;
+in diesem Fall ist dies auch deshalb unm"oglich, weil die angenommene weitere Zelle zu
+Beginn eine leere lokale Struktur haben m"u"ste. Dies ist jedoch ausschlie"slich bei der
+Keimzelle einer Pflanze der Fall.
+(c) Hier ist wiederum Gen 0 ein starker Aktivator von Gen 1. Gen 1
+wird zus"atzlich durch sich selbst stark aktiviert, weil die durch Gen 1 gesteuerte
+Teilung zu einer Tochterzelle f"uhrt, in der wiederum Gen 1 aktiviert werden kann.
+Auf diese Weise kann durch zwei Gene ein Wachstumsprogramm f"ur einen diagonalen
+Spro"s unbegrenzter L"ange codiert werden. (d) Gen 0 ist ein schwacher Aktivator
+f"ur alle Gene, bei denen in der linken Seite eine Zelle links unterhalb der aktuellen
+Mutterzelle spezifiziert ist. Keines dieser Gene wird jedoch tats"achlich aktiviert , weil 
+Gene zur Produktion weiterer zur Aktivierung erforderlicher Zellen nicht existieren.
+Auch das Gen 4, f"ur das Gen 0 sogar ein starker Aktivator ist, wird nicht aktiviert,
+weil kein Gen existiert, welches die zur Aktivierung von Gen 4 erforderliche Zelle
+oberhalb der aktuellen Mutterzelle erzeugen k"onnte.
+(e) In einem Genom existiert in der Regel eine Vielzahl
+starker und schwacher Aktivierungsbeziehungen zwischen Genen. Viele dieser Beziehungen sind f"ur
+das Wachstum der Pflanze jedoch irrelevant, weil weder das aktivierende noch das aktivierte Gen
+jemals tats"achlich aktiviert werden. Bei der Vielzahl regulatorischer Beziehungen ist es
+schwierig, zu erkennen, welche dieser Beziehungen bei der Entstehung des Ph"anotyps der Pflanze
+eine Rolle gespielt haben. (f) zeigt dasselbe Genom wie (e), der Unterschied ist, da"s hier die unbenutzten
+Gene ausgeblendet wurden. Auf diese Weise werden die relevanten regulatorischen Wechselwirkungen
+aus der Vielzahl der Aktivierungsbeziehungen herausgearbeitet, und der Zusammenhang zwischen dem Entwicklungsprogramm
+und dem Ph"anotyp wird klar erkennbar.
+}
+\end{figure}
+
+Die Aktivierung eines Gens erfolgt in den LindEvol-Modellen durch \verb|divide|-Aktionen.
+Die lokale Struktur, in der sich eine neu gebildete Zelle befindet, entspricht in der
+Regel nicht der lokalen Struktur der Mutterzelle. Somit findet eine Differenzierung in
+Abh"angigkeit von lokaler, positionaler Information statt.
+Weiterhin ver"andert sich bei einer Teilung der Zustand der Mutterzelle und weiterer
+Zellen, die sich in der Nachbarschaft der neu entstandenen Zelle befinden.
+Durch diese Ver"anderungen der lokalen Strukturen von Zellen erfolgt die Aktivierung
+von Genen. Somit wird die
+Aktivierung eines Gens durch die Aktivit"aten von Genen reguliert.
+Nur ein Gen, dessen linke Seite eine leere lokale Struktur spezifiziert, wird nicht
+durch Zellteilungen aktiviert, sondern es kann ausschlie"slich in der Keimzelle einer
+Pflanze aktiv werden, weshalb es als \introdef{Keimzellgen} bezeichnet wird.
+Insgesamt bilden die Gene, die im Laufe der Morphogenese einer LindEvol-Pflanze aktiviert
+werden, ein regulatorisches Netzwerk aus, wie es auch bei molekulargenetischen
+Systemen, z.B. f"ur die MADS-Box-Gene beschrieben wurde \cite{Theissen95}.
+
+Bei der blockorientierten Genominterpretation kommen keine unspezifizierten Bits
+in der linken Seite einer Regel vor. 
+Wird die blockorientierte Genominterpretation also in einem Modell eingesetzt,
+bei dem die Pflanzenzellen nicht "uber interne Zust"ande verf"ugen (s.\ \ref{celldef}),
+wird ein Gen durch genau eine lokale Struktur
+aktiviert. Wenn die Aktivierung des Gens zur Produktion einer neuen Zelle f"uhrt,
+werden dadurch die lokalen Strukturen an neun Zellpositionen, n"amlich an
+der Position der Tochterzelle und an ihren acht Nachbarpositionen, beeinflu"st.
+
+Die lokale Struktur der Mutterzelle nach einer erfolgreichen Teilung kann aus
+der Regel, die die Teilung gesteuert hat, vollst"andig abgeleitet werden, indem
+einfach das der Position der Tochterzelle zugeordnete Bit in der linken Seite
+der Regel zus"atzlich gesetzt wird. F"ur die restlichen Zellpositionen, deren
+lokale Struktur durch die Entstehung der Tochterzelle ver"andert wird, kann die
+resultierende Struktur hingegen nicht vollst"andig abgeleitet werden, weil
+Teile der Nachbarschaft der betroffenen Zelle nicht zu der Nachbarschaft der
+Mutterzelle geh"oren. Abb.\ \ref{neighbor-inf} zeigt die Positionen, 
+deren lokale Struktur durch die Produktion einer neuen Zelle modifiziert wird.
+Zwischen den modifizierten Nachbarschaften und der Nachbarschaft der Mutterzelle
+existiert jeweils ein "Uberlappungsbereich. Der Bereich einer lokalen Struktur, der in einem
+solchen "Uberlappungsbereich enthalten ist, wird \introdef{partielle lokale Struktur}
+genannt.
+
+Wenn die aus einer Teilung resultierende lokale Struktur derart mit der in der
+linken Seite einer Regel spezifizierten lokalen Struktur "uberlagert werden
+kann, da"s die partiellen Strukturen im "Uberlappungsbereich "ubereinstimmen,
+bedeutet dies, da"s die betreffende Regel durch die Teilung aktiviert werden
+kann. Diejenige Regel, die die Teilung ausgel"ost hat, wird in diesem Fall
+\introdef{Aktivator} genannt.
+
+Wenn eine Regel \regel{A} Aktivator einer Regel \regel{R} ist, bedeutet dies
+nicht, da"s die Ausl"osung einer Zellteilung durch \regel{A} zwangsl"aufig
+die Aktivierung von \regel{R} nach sich zieht. Neben der durch \regel{A}
+produzierten Zelle k"onnen weitere, au"serhalb des "Uberlappungsbereichs liegende
+Zellen erforderlich sein, um die in der
+linken Seite von \regel{R} spezifizierte lokale Struktur zu erzeugen.
+In diesem Fall sind weitere Zellteilungen erforderlich,
+um \regel{R} zu aktivieren. Zur Ausf"uhrung dieser weiteren Zellteilungen k"onnen
+weitere Aktivatoren au"ser \regel{A} erforderlich sein.
+
+Die durch eine Zellteilung beeinflu"sten Nachbarschaften zerfallen, wie Abb.\ \ref{neighbor-inf} zeigt,
+in zwei Klassen: Die zentrale Position der beeinflu"sten Nachbarschaft kann innerhalb
+oder au"serhalb des "Uberlappungsbereichs liegen. Liegt die zentrale Position innerhalb
+des "Uberlappungsbereichs, bedeutet dies, da"s aus der nach der Teilung resultierenden Struktur
+entnommen werden kann, ob sich an dieser Position eine Zelle befindet. Zu der lokalen Struktur
+dieser Zelle wird dann durch die vom Aktivator \regel{A} herbeigef"uhrte Zellteilung eine Zelle
+hinzugef"ugt, die zur Aktivierung von \regel{R} erforderlich ist. In diesem Fall wird \regel{A}
+als \introdef{starker Aktivator} von \regel{R} bezeichnet.
+
+Liegt die zentrale Zelle der durch die von dem Aktivator \regel{A} herbeigef"uhrten Zellteilung
+beeinflu"sten Nachbarschaft dagegen au"serhalb der Nachbarschaft der Mutterzelle, welche \regel{A}
+exprimiert hat, kann dagegen aus der resultierenden Nachbarschaft der Mutterzelle nicht abgeleitet
+werden, ob sich an der zentralen Position der modifizierten Nachbarschaft "uberhaupt eine Zelle befindet.
+Wenn dort eine Zelle existiert, wird durch die von \regel{A} gesteuerte Zellteilung ein Beitrag
+zur Aktivierung von \regel{R} in dieser Zelle geleistet. Es ist jedoch auch m"oglich, da"s an
+der fraglichen Position "uberhaupt keine Zelle exisitiert. Daher wird ein Aktivator dieser Art
+als \introdef{schwacher Aktivator} von \regel{R} bezeichnet.
+
+Das von den Genen eines Genoms gebildete regulatorische Netzwerk kann nun graphisch
+dargestellt werden, indem von jedem Gen eine gerichtete Kante zu den Genen, dessen
+Aktivator es ist, gezeichnet wird. Bei schwachen Aktivatoren werden graue, bei starken
+Aktivatoren schwarze Pfeile gezeichnet. Abb.\ \ref{lnd1-graphgenom} demonstriert diese
+Technik zur Visualisierung regulatorischer Netzwerke anhand einiger Beispiele.
+
+
+\subsubsection{Promotororientierte Genominterpretation}
+\label{prominterdef}
+
+Ein Gen ist ein definierter Sequenzabschnitt in einem Genom. Bei der blockorientierten
+Genominterpretation werden die Abschnitte des Genoms, die jeweils ein Gen bilden, aufgrund
+ihrer absoluten Position im Genom definiert. In der molekularen Natur werden Gene, oder
+genauer, transkriptionelle Einheiten (vgl.\ \cite{Watson}, s.\ 233), jedoch nicht aufgrund
+ihrer absoluten Position erkannt; vielmehr sind sie dadurch festgelegt, da"s der Transkriptionsmechanismus
+bestimmte Sequenzmotive in der DNA, Promotoren und Terminatoren, zu erkennen vermag, bei denen die
+Transkription initiiert bzw.\ terminiert wird. Dieses Prinzip der Markenorientierung wurde in
+der promotororientierten Genominterpretation umgesetzt.
+
+Gene sind bei der promotororientierten Genominterpretation als Abschnitte des Genoms definiert,
+die durch Bytes mit speziellen Werten begrenzt sind. Die L"ange von Genen kann daher bei der
+promotororientierten Genominterpretation unterschiedliche Werte annehmen. Die Bytes, die Anfang
+und Ende eines Gens festlegen, werden entsprechend ihrer molekularen Vorbilder als Promotoren
+und Terminatoren bezeichnet. Ein \introdef{Promotor} ist ein Byte, in dem das 7.\ Bit
+gesetzt ist, dessen Wert also zwischen 128 und 255 liegt. Ein \introdef{Terminator} ist
+ein Byte, in dem das 6.\ Bit gesetzt ist, dessen Wert dementsprechend entweder
+zwischen 64 und 127 oder zwischen 192 und 255 liegt.
+
+Ein \introdef{terminiertes Gen} ist ein Abschnitt von einem Promotor bis
+zu einem Terminator, in dem sich keine Promotoren oder Terminatoren befinden.
+Ein \introdef{nicht terminiertes Gen} ist ein Abschnitt zwischen zwei
+Promotoren, in dem keine Promotoren oder Terminatoren liegen, oder ein
+von Promotoren und Terminatoren freier Abschnitt zwischen einem Promotor
+und dem Ende des Genoms.
+
+Ein Byte, in dem sowohl
+das 6.\ als auch das 7.\ Bit gesetzt sind, ist gleichzeitig Terminator und Promotor
+des folgenden Gens. Ein Gen, das durch einen solchen Terminator-Promotor
+beendet wird, ist terminiert.
+
+Bytes zwischen einem Promotor und einem Terminator, in denen weder das
+6.\ noch das 7.\ Bit gesetzt sind, werden \introdef{Operatoren} genannt.
+Durch jeden Operator wird ein Bit der linken Regelseite spezifiziert. Die
+Bits 0--4 des Operators geben den Index des spezifizierten Bits an. Damit ist
+die Spezifikation von maximal 32 Bits m"oglich. Bei Modellen mit Zellzust"anden
+mit einer Breite von 16 Bit werden nur die Bits 0--3 der Operatoren verwendet,
+das 4.\ Bit wird ignoriert. Das 5.\ Bit eines Operators gibt den Zustand
+des spezifizierten Zustands an. Wenn in einem Gen mehrere Operatoren dasselbe
+Bit in der Zustandsklasse spezifizieren, wird nur der letzte dieser Operatoren
+wirksam. Ein Bit in der Zustandsklasse, das durch keinen Operator spezifiziert
+wird, bleibt unspezifiziert. Somit werden Gene, die keine Operatoren besitzen,
+also nur aus einem Promotor und einem Terminator bestehen, konstitutiv exprimiert.
+
+Bei terminierten Genen steht in den Bits 0--5 des Terminators der Sechsbit-Aktionscode
+der rechten Seite der Regel. Dessen Codierung wird in (\ref{actioncodedef}) beschrieben.
+Nicht terminierte Gene l"osen keine Aktion aus.
+
+\begin{figure}[t]
+
+\unitlength1cm
+\begin{picture}(16,5)
+{\scriptsize
+\put(0,2.6){\makebox(1.3,0.3)[l]{Index:}}
+\put(1.3,2.6){\makebox(0.7,0.3){0}}
+\put(2.0,2.6){\makebox(0.7,0.3){1}}
+\put(2.7,2.6){\makebox(0.7,0.3){2}}
+\put(3.4,2.6){\makebox(0.7,0.3){3}}
+\put(4.1,2.6){\makebox(0.7,0.3){4}}
+\put(4.8,2.6){\makebox(0.7,0.3){5}}
+\put(5.5,2.6){\makebox(0.7,0.3){6}}
+\put(6.2,2.6){\makebox(0.7,0.3){7}}
+\put(6.9,2.6){\makebox(0.7,0.3){8}}
+\put(7.6,2.6){\makebox(0.7,0.3){9}}
+\put(8.3,2.6){\makebox(0.7,0.3){10}}
+\put(9.0,2.6){\makebox(0.7,0.3){11}}
+\put(9.7,2.6){\makebox(0.7,0.3){12}}
+\put(10.4,2.6){\makebox(0.7,0.3){13}}
+\put(11.1,2.6){\makebox(0.7,0.3){14}}
+\put(11.8,2.6){\makebox(0.7,0.3){15}}
+\put(12.5,2.6){\makebox(0.7,0.3){16}}
+\put(13.2,2.6){\makebox(0.7,0.3){17}}
+\put(13.9,2.6){\makebox(0.7,0.3){18}}
+\put(14.6,2.6){\makebox(0.7,0.3){19}}
+\put(15.3,2.6){\makebox(0.7,0.3){20}}
+}
+\put(0,2){\makebox(1.3,0.5)[l]{Genom:}}
+{\ttfamily
+% \put(1,2){\line(1,0){5.5}}
+% \put(1,2.5){\line(1,0){5.5}}
+\put(1.3,2){\framebox(0.7,0.5){\$01}}
+\put(2.0,2){\framebox(0.7,0.5){\$80}} % gen 0
+\put(2.7,2){\framebox(0.7,0.5){\$00}}
+\put(3.4,2){\framebox(0.7,0.5){\$22}}
+\put(4.1,2){\framebox(0.7,0.5){\$01}}
+\put(4.8,2){\framebox(0.7,0.5){\$40}} %
+\put(5.5,2){\framebox(0.7,0.5){\$1B}}
+\put(6.2,2){\framebox(0.7,0.5){\$2F}}
+\put(6.9,2){\framebox(0.7,0.5){\$97}} % gen 1, unterminiert
+\put(7.6,2){\framebox(0.7,0.5){\$10}}
+\put(8.3,2){\framebox(0.7,0.5){\$24}}
+\put(9.0,2){\framebox(0.7,0.5){\$BC}} % gen 2
+\put(9.7,2){\framebox(0.7,0.5){\$31}}
+\put(10.4,2){\framebox(0.7,0.5){\$01}}
+\put(11.1,2){\framebox(0.7,0.5){\$47}} %
+\put(11.8,2){\framebox(0.7,0.5){\$10}}
+\put(12.5,2){\framebox(0.7,0.5){\$A7}} % gen 3
+\put(13.2,2){\framebox(0.7,0.5){\$1C}}
+\put(13.9,2){\framebox(0.7,0.5){\$F9}} %% gen 4
+\put(14.6,2){\framebox(0.7,0.5){\$7B}} %
+\put(15.3,2){\framebox(0.7,0.5){\$6D}}
+}
+\thicklines
+% \put(2.0,1.5){\line(0,1){0.2}}
+\put(2.0,1.35){\framebox(3.5,0.35){Gen 0}}
+% \put(5.5,1.5){\line(0,1){0.2}}
+% \put(6.9,1.5){\line(0,1){0.2}}
+\put(6.9,1.35){\framebox(2.1,0.35){Gen 1}}
+% \put(9.0,1.5){\line(0,1){0.2}}
+% \put(9.0,1.5){\line(0,1){0.2}}
+\put(9.0,1.35){\framebox(2.8,0.35){Gen 2}}
+% \put(11.8,1.5){\line(0,1){0.2}}
+% \put(12.5,1.5){\line(0,1){0.2}}
+\put(12.5,1.35){\framebox(2.1,0.35){Gen 3}}
+% \put(14.6,1.5){\line(0,1){0.2}}
+% \put(13.9,1.0){\line(0,1){0.2}}
+\put(13.9,0.85){\framebox(1.4,0.35){Gen 4}}
+% \put(15.3,1.0){\line(0,1){0.2}}
+\thinlines
+\end{picture}
+
+\begin{picture}(16,7.5)
+
+\put(0,7.0){\makebox(2,0.5)[l]{Gen 0:}}
+{\ttfamily
+\put(2.0,7.0){\framebox(0.7,0.5){\$80}} % gen 0
+\put(2.7,7.0){\framebox(0.7,0.5){\$00}}
+\put(3.4,7.0){\framebox(0.7,0.5){\$22}}
+\put(4.1,7.0){\framebox(0.7,0.5){\$01}}
+\put(4.8,7.0){\framebox(0.7,0.5){\$40}} %
+
+\put(6.00,7.0){\makebox(0.25,0.5){*}}
+\put(6.25,7.0){\makebox(0.25,0.5){*}}
+\put(6.50,7.0){\makebox(0.25,0.5){*}}
+\put(6.75,7.0){\makebox(0.25,0.5){*}}
+
+\put(7.00,7.0){\makebox(0.25,0.5){*}}
+\put(7.25,7.0){\makebox(0.25,0.5){*}}
+\put(7.50,7.0){\makebox(0.25,0.5){*}}
+\put(7.75,7.0){\makebox(0.25,0.5){*}}
+
+\put(8.00,7.0){\makebox(0.25,0.5){*}}
+\put(8.25,7.0){\makebox(0.25,0.5){*}}
+\put(8.50,7.0){\makebox(0.25,0.5){*}}
+\put(8.75,7.0){\makebox(0.25,0.5){*}}
+
+\put(9.00,7.0){\makebox(0.25,0.5){*}}
+\put(9.25,7.0){\makebox(0.25,0.5){1}}
+\put(9.50,7.0){\makebox(0.25,0.5){0}}
+\put(9.75,7.0){\makebox(0.25,0.5){0}}
+
+\put(10.00,7.0){\makebox(5,0.5)[l]{-> action code \$00}}
+
+\put(3.05,7.0){\line(0,-1){0.2}}
+\put(3.05,6.8){\line(1,0){6.775}}
+\put(9.875,6.8){\vector(0,1){0.2}}
+
+\put(3.75,7.0){\line(0,-1){0.4}}
+\put(3.75,6.6){\line(1,0){5.625}}
+\put(9.375,6.6){\vector(0,1){0.4}}
+
+\put(4.45,7.0){\line(0,-1){0.6}}
+\put(4.45,6.4){\line(1,0){5.175}}
+\put(9.625,6.4){\vector(0,1){0.6}}
+
+\put(5.15,7.5){\line(0,1){0.2}}
+\put(5.15,7.7){\line(1,0){7.85}}
+\put(13.0,7.7){\vector(0,-1){0.2}}
+}
+
+\put(0,5.5){\makebox(2,0.5)[l]{Gen 1:}}
+{\ttfamily
+\put(2.0,5.5){\framebox(0.7,0.5){\$97}} % gen 1, unterminiert
+\put(2.7,5.5){\framebox(0.7,0.5){\$10}}
+\put(3.4,5.5){\framebox(0.7,0.5){\$24}}
+
+\put(6.00,5.5){\makebox(0.25,0.5){*}}
+\put(6.25,5.5){\makebox(0.25,0.5){*}}
+\put(6.50,5.5){\makebox(0.25,0.5){*}}
+\put(6.75,5.5){\makebox(0.25,0.5){*}}
+
+\put(7.00,5.5){\makebox(0.25,0.5){*}}
+\put(7.25,5.5){\makebox(0.25,0.5){*}}
+\put(7.50,5.5){\makebox(0.25,0.5){*}}
+\put(7.75,5.5){\makebox(0.25,0.5){*}}
+
+\put(8.00,5.5){\makebox(0.25,0.5){*}}
+\put(8.25,5.5){\makebox(0.25,0.5){*}}
+\put(8.50,5.5){\makebox(0.25,0.5){*}}
+\put(8.75,5.5){\makebox(0.25,0.5){1}}
+
+\put(9.00,5.5){\makebox(0.25,0.5){*}}
+\put(9.25,5.5){\makebox(0.25,0.5){*}}
+\put(9.50,5.5){\makebox(0.25,0.5){*}}
+\put(9.75,5.5){\makebox(0.25,0.5){0}}
+
+\put(10.00,5.5){\makebox(5,0.5)[l]{-> no action}}
+
+\put(3.05,5.5){\line(0,-1){0.2}}
+\put(3.05,5.3){\line(1,0){6.775}}
+\put(9.875,5.3){\vector(0,1){0.2}}
+
+\put(3.75,5.5){\line(0,-1){0.4}}
+\put(3.75,5.1){\line(1,0){5.125}}
+\put(8.875,5.1){\vector(0,1){0.4}}
+}
+
+\put(0,4.0){\makebox(2,0.5)[l]{Gen 2:}}
+{\ttfamily
+
+\put(2.0,4.0){\framebox(0.7,0.5){\$BC}} % gen 2
+\put(2.7,4.0){\framebox(0.7,0.5){\$31}}
+\put(3.4,4.0){\framebox(0.7,0.5){\$01}}
+\put(4.1,4.0){\framebox(0.7,0.5){\$47}} %
+
+\put(6.00,4.0){\makebox(0.25,0.5){*}}
+\put(6.25,4.0){\makebox(0.25,0.5){*}}
+\put(6.50,4.0){\makebox(0.25,0.5){*}}
+\put(6.75,4.0){\makebox(0.25,0.5){*}}
+
+\put(7.00,4.0){\makebox(0.25,0.5){*}}
+\put(7.25,4.0){\makebox(0.25,0.5){*}}
+\put(7.50,4.0){\makebox(0.25,0.5){*}}
+\put(7.75,4.0){\makebox(0.25,0.5){*}}
+
+\put(8.00,4.0){\makebox(0.25,0.5){*}}
+\put(8.25,4.0){\makebox(0.25,0.5){*}}
+\put(8.50,4.0){\makebox(0.25,0.5){*}}
+\put(8.75,4.0){\makebox(0.25,0.5){*}}
+
+\put(9.00,4.0){\makebox(0.25,0.5){*}}
+\put(9.25,4.0){\makebox(0.25,0.5){*}}
+\put(9.50,4.0){\makebox(0.25,0.5){0}}
+\put(9.75,4.0){\makebox(0.25,0.5){*}}
+
+\put(10.00,4.0){\makebox(5,0.5)[l]{-> action code \$07}}
+
+\put(3.05,4.0){\line(0,-1){0.2}}
+\put(3.05,3.8){\line(1,0){6.575}}
+\put(9.625,3.8){\vector(0,1){0.2}}
+
+\put(3.75,4.0){\line(0,-1){0.4}}
+\put(3.75,3.6){\line(1,0){5.875}}
+\put(9.625,3.6){\vector(0,1){0.4}}
+
+\put(4.45,4.5){\line(0,1){0.2}}
+\put(4.45,4.7){\line(1,0){8.55}}
+\put(13.0,4.7){\vector(0,-1){0.2}}
+}
+
+\put(0,2.5){\makebox(2,0.5)[l]{Gen 3:}}
+{\ttfamily
+
+\put(2.0,2.5){\framebox(0.7,0.5){\$A7}} % gen 3
+\put(2.7,2.5){\framebox(0.7,0.5){\$1C}}
+\put(3.4,2.5){\framebox(0.7,0.5){\$F9}} %% gen 4
+
+\put(6.00,2.5){\makebox(0.25,0.5){*}}
+\put(6.25,2.5){\makebox(0.25,0.5){*}}
+\put(6.50,2.5){\makebox(0.25,0.5){*}}
+\put(6.75,2.5){\makebox(0.25,0.5){0}}
+
+\put(7.00,2.5){\makebox(0.25,0.5){*}}
+\put(7.25,2.5){\makebox(0.25,0.5){*}}
+\put(7.50,2.5){\makebox(0.25,0.5){*}}
+\put(7.75,2.5){\makebox(0.25,0.5){*}}
+
+\put(8.00,2.5){\makebox(0.25,0.5){*}}
+\put(8.25,2.5){\makebox(0.25,0.5){*}}
+\put(8.50,2.5){\makebox(0.25,0.5){*}}
+\put(8.75,2.5){\makebox(0.25,0.5){*}}
+
+\put(9.00,2.5){\makebox(0.25,0.5){*}}
+\put(9.25,2.5){\makebox(0.25,0.5){*}}
+\put(9.50,2.5){\makebox(0.25,0.5){*}}
+\put(9.75,2.5){\makebox(0.25,0.5){*}}
+
+\put(10.00,2.5){\makebox(5,0.5)[l]{-> action code \$39}}
+
+\put(3.05,2.5){\line(0,-1){0.2}}
+\put(3.05,2.3){\line(1,0){3.825}}
+\put(6.875,2.3){\vector(0,1){0.2}}
+
+\put(3.75,3.0){\line(0,1){0.2}}
+\put(3.75,3.2){\line(1,0){9.25}}
+\put(13.0,3.2){\vector(0,-1){0.2}}
+}
+
+\put(0,1.0){\makebox(2,0.5)[l]{Gen 4:}}
+{\ttfamily
+
+\put(2.0,1.0){\framebox(0.7,0.5){\$F9}} %% gen 4
+\put(2.7,1.0){\framebox(0.7,0.5){\$7B}} %
+
+\put(6.00,1.0){\makebox(0.25,0.5){*}}
+\put(6.25,1.0){\makebox(0.25,0.5){*}}
+\put(6.50,1.0){\makebox(0.25,0.5){*}}
+\put(6.75,1.0){\makebox(0.25,0.5){*}}
+
+\put(7.00,1.0){\makebox(0.25,0.5){*}}
+\put(7.25,1.0){\makebox(0.25,0.5){*}}
+\put(7.50,1.0){\makebox(0.25,0.5){*}}
+\put(7.75,1.0){\makebox(0.25,0.5){*}}
+
+\put(8.00,1.0){\makebox(0.25,0.5){*}}
+\put(8.25,1.0){\makebox(0.25,0.5){*}}
+\put(8.50,1.0){\makebox(0.25,0.5){*}}
+\put(8.75,1.0){\makebox(0.25,0.5){*}}
+
+\put(9.00,1.0){\makebox(0.25,0.5){*}}
+\put(9.25,1.0){\makebox(0.25,0.5){*}}
+\put(9.50,1.0){\makebox(0.25,0.5){*}}
+\put(9.75,1.0){\makebox(0.25,0.5){*}}
+
+\put(10.00,1.0){\makebox(5,0.5)[l]{-> action code \$3B}}
+
+\put(3.05,1.5){\line(0,1){0.2}}
+\put(3.05,1.7){\line(1,0){9.95}}
+\put(13.0,1.7){\vector(0,-1){0.2}}
+}
+
+
+\end{picture}
+
+\caption{\label{prominterfig}
+Schema der promotororientierten Genominterpretation.
+}
+\end{figure}
+
+Abb.~\ref{prominterfig} zeigt die Arbeitsweise der promotororientierten
+Genominterpretation an einem Beispiel, in dem die oben beschriebenen
+Mechanismen erl"autert werden. Der Pseudocode f"ur die Decodierung bei der
+promotororientierten Genominterpretation ist:
+
+\begin{verbatimcmd}
+r = 0
+i = 0
+WHILE i < genome_length
+  WHILE (i < genome_length) AND (\pcodemeta{Bit 7 im i-ten Byte des Genoms gel{\"o}scht})
+    i = i + 1
+  WEND
+  IF i < genome_length
+    i = i + 1
+    \pcodemeta{Initialisiere Zustandsteil der r-ten Regel mit unspezifizierten Bits}
+    WHILE (i < genome_length) AND (\pcodemeta{Bits 6 und 7 im i-ten Byte des Genoms gel{\"o}scht})
+      j = \pcodemeta{Bits 0 bis 4 des i-tes Bytes des Genoms}
+      IF \pcodemeta{Bit 5 im i-ten Byte des Genoms gesetzt}
+        \pcodemeta{Spezifiziere j-tes Bit im Zustandsteil der r-ten Regel als} 1
+      ELSE
+        \pcodemeta{Spezifiziere j-tes Bit im Zustandsteil der r-ten Regel als} 0
+      ENDIF
+      i = i + 1
+    WEND
+    IF ((i < genome_length) AND (\pcodemeta{Bit 6 im i-ten Byte des Genoms gesetzt})
+      \pcodemeta{Aktionscode der r-ten Regel} = \pcodemeta{i-tes Byte des Genoms}
+      \pcodemeta{L{\"o}sche Bits 6 und 7 im Aktionscode der r-ten Regel}
+    ELSE
+      \pcodemeta{r-te Regel ist nicht terminiert und hat keinen Aktionscode}
+    ENDIF
+    r = r + 1
+  ENDIF
+WEND
+\end{verbatimcmd}
+
+
+\subsubsection{Codierung der rechten Seite}
+\label{actioncodedef}
+
+Wie in den beiden vorangehenden Abschnitten dargestellt wurde, wird
+bei allen Interpretersystemen die rechte Seite der Regeln durch
+acht oder durch sechs Bit breite \introdef{Aktionscodes} codiert. Die Decodierung
+dieser Aktionscodes wird durch die 
+die Kontrollparameter des genetischen Systems \verb|num_divide|,
+\verb|num_flyingseed|, \verb|num_localseed|, \verb|num_mutminus|, \verb|num_mutplus|
+und \verb|num_statebit| gesteuert. Diese Kontrollparameter geben jeweils an, wievielen
+verschiedenen Aktionscodes die entsprechende Aktion zugeordnet wird.
+F"ur die Decodierung werden zun"achst folgende Hilfswerte berechnet:
+
+\medskip
+\begin{tabular}{l@{ = }l}
+\verb|lnd_divide|,     & \verb|num_divide|, \\
+\verb|lnd_flyingseed|, & \verb|lnd_divide| + \verb|num_flyingseed| \\
+\verb|lnd_localseed|,  & \verb|lnd_flyingseed| + \verb|num_localseed| \\
+\verb|lnd_mutminus|,   & \verb|lnd_localseed| + \verb|num_mutminus| \\
+\verb|lnd_mutplus|,    & \verb|lnd_mutminus| + \verb|num_mutplus| \\
+\verb|lnd_statebit|,   & \verb|lnd_mutplus| + \verb|num_statebit| \\
+\end{tabular}
+\medskip
+
+Den Sechs- oder Achtbitcodes $x$ werden nun entsprechend der folgenden
+Tabelle Aktionen zugeordnet:
+
+\medskip
+\begin{tabular}{l@{ $\rightarrow$ }l}
+$0 \leq x <$ \verb|lnd_divide|                        & \verb|divide|, $pos = x \wedge \mathit{divmask}$ \\
+$\verb|lnd_divide| \leq x <$ \verb|lnd_flyingseed|    & \verb|flyingseed| \\
+$\verb|lnd_flyingseed| \leq x <$ \verb|lnd_localseed| & \verb|localseed| \\
+$\verb|lnd_localseed| \leq x <$ \verb|lnd_mutminus|   & \verb|mutminus| \\
+$\verb|lnd_mutminus| \leq x <$ \verb|lnd_mutplus|     & \verb|mutplus| \\
+$\verb|lnd_mutplus| \leq x <$ \verb|lnd_statebit|     & \verb|statebit|, $num = x \wedge \mathit{sbmask}$ \\
+\end{tabular}
+\medskip
+
+Der Wert f"ur $\mathit{divmask}$ ist bei allen Modellen fest vorgegeben. Bei
+den Modellen mit zweidimensionaler Welt ist $\mathit{divmask} = 7$, in dreidimensionalen Modellen
+ist $\mathit{divmask} = 31$. Diese Werte gew"ahrleisten, da"s der Wertebereich des Ausdrucks $x \wedge \mathit{divmask}$
+die jeweilige Indexmenge der Nachbarpositionen vollst"andig umfa"st, wenn f"ur \verb|num_divide| ein
+Wert gr"o"ser als $\mathit{divmask}$ gew"ahlt wird. Im dreidimensionalen Fall kann der Ausdruck
+$x \wedge \mathit{divmask}$ die Werte 18 bis 31 liefern, die keinen g"ultigen Index einer Nachbarposition
+f"ur die Tochterzelle darstellen. Eine Zelle, die einen solchen Aktionscode ausf"uhrt, verbraucht ihre
+Energie, ohne da"s eine Zellteilung stattfindet.
+
+Ebenfalls fest vorgegeben ist der Wert von $\mathit{sbmask}$. Bei Modellen mit 16 Bit breitem internen Zellzustand
+ist $\mathit{sbmask} = 15$, bei 32 Bit breitem internem Zellzustand ist $\mathit{sbmask} = 31$. Durch diese Auswahl
+wird sichergestellt, da"s durch den Ausdruck $x \wedge \mathit{sbmask}$ s"amtliche Bits des internen Zustands
+angesprochen werden k"onnen, sofern \verb|num_statebit| gr"o"ser als $\mathit{sbmask}$ ist.
+
+Die Decodierung ist nur dann wohldefiniert, wenn die Summe der Kontrollparameter des genetischen Systems
+(sie entspricht \verb|lnd_statebit|) 256 bei Modellen mit Achtbitcodes und 64 bei
+Modellen mit Sechsbitcodes betr"agt.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+\multicolumn{3}{|c|}{\bfseries Kontrollparameter der Genominterpretation} \\ \hline
+Formel- & Variablenname & Beschreibung \\
+buchstabe &              & \\ \hline
+- & \verb|num_divide|     & Anzahl Aktionscodes f"ur \verb|divide| \\
+- & \verb|num_flyingseed| & Anzahl Aktionscodes f"ur \verb|flyingseed| \\
+- & \verb|num_localseed|  & Anzahl Aktionscodes f"ur \verb|localseed| \\
+- & \verb|num_mutminus|   & Anzahl Aktionscodes f"ur \verb|mutminus| \\
+- & \verb|num_mutplus|    & Anzahl Aktionscodes f"ur \verb|mutplus| \\
+- & \verb|num_statebit|   & Anzahl Aktionscodes f"ur \verb|statebit| \\ \hline
+\end{tabularx}
+\medskip
+
+
+\subsection{Mutation}
+\label{mutationdef}
+
+Mutation ist als zufallsgesteuerte, ungerichtete Anwendung von Mutationsoperatoren
+auf ein Genom implementiert. Es gibt vier Typen von Mutationsereignissen,
+die Austauschmutation, die Insertion, die Deletion und die Genduplikation.
+
+Von der \introdef{Austauschmutation} existieren zwei Varianten. Bei der byteweisen
+Austauschmutation wird der Wert eines Bytes im Genom durch einen Zufallswert
+ausgetauscht. Bei einer bitweisen Austauschmutation wird dagegen ein durch Zufall
+bestimmtes Bit im betroffenen Byte invertiert.
+
+Eine \introdef{Insertion} wird durch das Einf"ugen von Blocks aus Bytes
+mit Zufallswerten in das Genom realisiert. Eine \introdef{Deletion} ist
+die Entfernung eines derartigen Blocks. Die Blockgr"o"se ist zwei
+Bytes bei Modellen mit blockorientierter Genominterpretation (s.\ \ref{blockinterdef}) , bei
+Modellen mit promotororientierter (s.\ \ref{prominterdef}) Genominterpretation werden einzelne Bytes
+eingef"ugt bzw.\ entfernt.
+
+Die \introdef{Genduplikation} wurde nur bei den Modellen mit promotororientierter
+Genominterpretation implementiert. Bei ihr
+wird eine exakte Kopie eines Gens an das Genom angeh"angt.
+
+Zu den Kontrollparametern einer Simulation geh"oren die Basiswerte f"ur die
+Austauschrate $M_r$, die Insertionsrate $M_i$ und die Deletionsrate
+$M_d$. Bei einigen Modellen kommt die Duplikationsrate $M_{\mathit{dup}}$ hinzu.
+Diese Raten werden durch die Variablennamen \verb|m_replacement|, \verb|m_insertion|,
+\verb|m_deletion| bzw.\ \verb|m_duplication| bezeichnet.
+
+Der \introdef{Mutationsfaktor} $m_f$ (\verb|m_factor|) steuert das Ausma"s, in dem die Basisraten
+durch die Zellaktionen \verb|mut-| und \verb|mut+| "uber den
+Mutationsexponenten $\mu$ (\verb|m_counter|) beeinflu"st werden k"onnen. Die effektiven Raten,
+die die Wahrscheinlichkeit f"ur das Eintreten eines Mutationsereignisses
+pro Position und Zeitschritt angeben, sind:
+
+\begin{equation}
+m_r = M_r \cdot {m_f}^{\mu}
+\end{equation}
+\begin{equation}
+m_i = M_i \cdot {m_f}^{\mu}
+\end{equation}
+\begin{equation}
+m_d = M_d \cdot {m_f}^{\mu}
+\end{equation}
+\begin{equation}
+m_{\mathit{dup}} = M_{\mathit{dup}} \cdot {m_f}^{\mu}
+\end{equation}
+
+Nach der Mutation eines Genoms wird der Mutationsexponent $\mu$ des
+mutierten Genoms stets wieder auf 0 zur"uckgesetzt.
+
+Die algorithmischen Details der verschiedenen Mutationstypen werden
+im Folgenden durch Pseudocode verdeutlicht. \pcodemeta{Zufallszahl}
+bedeutet dabei eine Flie"skommazahl zwischen 0 und 1. Das Genom
+wird durch den Variablennamen \verb|genome| bezeichnet. Der
+Pseudocode f"ur die byteweise Austauschmutation ist:
+
+\begin{verbatimcmd}
+FOR i = 0 TO genome_length
+  IF \pcodemeta{Zufallszahl} < \pcodemeta{\begin{math}m\sb{r}\end{math}}
+    genome[i] = \pcodemeta{Zufallswert zwischen 0 und 255}
+  ENDIF
+NEXT i
+\end{verbatimcmd}
+
+Bei der bitweisen Austauschmutation unterscheidet sich nur die Art der
+Ver"anderung der durch ein Mutationsereignis betroffenen Bytes:
+
+\begin{verbatimcmd}
+FOR i = 0 TO genome_length
+  IF \pcodemeta{Zufallszahl} < \pcodemeta{\begin{math}m\sb{r}\end{math}}
+    r = \pcodemeta{Zufallswert zwischen 0 und 7}
+    flipmask = \pcodemeta{r-tes Bit gesetzt, alle anderen Bits gel{\"o}scht}
+    genome[i] = genome[i] XOR flipmask
+  ENDIF
+NEXT i
+\end{verbatimcmd}
+
+Die Arbeitsweise der Insertionsmutation wird folgenderma"sen in Pseudocode beschrieben,
+wobei \verb|blocksize| die Gr"o"se eines durch ein Insertionsereignis eingef"ugten
+Blocks angibt:
+
+\begin{verbatimcmd}
+i = 0
+WHILE i <= genome_length
+  IF \pcodemeta{Zufallszahl} < \pcodemeta{\begin{math}m\sb{i}\end{math}}
+    FOR j = genome_length - 1 DOWNTO i
+      genome[j + blocksize] = genome[j]
+    NEXT j
+    FOR j = i TO blocksize - 1
+      genome[j] = \pcodemeta{Zufallswert zwischen 0 und 255}
+    NEXT j
+    genome_length = genome_length + blocksize
+    i = i + blocksize
+  ENDIF
+  i = i + 1
+WEND
+\end{verbatimcmd}
+
+Die Deletion wirkt in "ahnlicher Weise:
+
+\begin{verbatimcmd}
+i = 0
+WHILE i + blocksize < genome_length
+  IF \pcodemeta{Zufallszahl} < \pcodemeta{\begin{math}m\sb{d}\end{math}}
+    FOR j = i TO genome_length - blocksize
+      genome[j] = genome[j + blocksize]
+    NEXT j
+    genome_length = genome_length - blocksize
+    i = i - 1
+  ENDIF
+  i = i + 1
+WEND
+\end{verbatimcmd}
+
+Bei der Genduplikation werden nicht Zeichen oder Bl"ocke des Genoms,
+sondern individuelle Gene dupliziert:
+
+\begin{verbatimcmd}
+FOR i = 0 TO num_genes - 1
+  IF \pcodemeta{Zufallszahl} < \pcodemeta{\begin{math}m\sb{\mathit{dup}}\end{math}}
+    l = \pcodemeta{L{\"a}nge des i-ten Gens}
+    FOR j = 0 TO l - 1
+      genome[i + genome_length] = genome[i + j]
+    NEXT j
+    genome_length = genome_length + l
+  ENDIF
+NEXT i
+\end{verbatimcmd}
+
+Bei der Simulation des gesamten Mutationsvorgangs werden die einzelnen
+Mutationstypen nacheinander durchgef"uhrt, nachdem die effektiven Mutationsraten
+berechnet wurden.
+Soweit ein Mutationstyp in einem konkreten Modell nicht enthalten ist,
+entf"allt nat"urlich der entsprechende Schritt. Insgesamt ergibt sich folgender
+Ablauf:
+
+\begin{verbatimcmd}
+\pcodemeta{Berechne \begin{math}m\sb{r}, m\sb{i}, m\sb{d}\end{math} und \begin{math}m\sb{\mathit{dup}}\end{math}}
+\pcodemeta{F{\"u}hre Austauschmutationen durch}
+\pcodemeta{F{\"u}hre Insertionen durch}
+\pcodemeta{F{\"u}hre Deletionen durch}
+\pcodemeta{F{\"u}hre Genduplikationen durch}
+\end{verbatimcmd}
+
+Dies bedeutet, da"s die sp"ateren Mutationsoperationen jeweils an
+Genomen erfolgen, die bereits den vorangegangenen Mutationsoperatoren
+unterworfen wurden. Unter anderem hat dies zur Folge, da"s bei gleicher
+Insertions- und Deletionsrate der Erwartungswert f"ur die L"ange eines
+Genoms nach Insertion und Deletion nicht seiner urspr"unglichen L"ange
+entspricht.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+\multicolumn{3}{|c|}{\bfseries Kontrollparameter der Mutation} \\ \hline
+Formel- & Variablenname & Beschreibung \\
+buchstabe &              & \\ \hline
+$M_r$     & \verb|m_replacement| & Basisrate f"ur Austauschmutationen \\
+$M_i$     & \verb|m_insertion|   & Basisrate f"ur Insertionen \\
+$M_d$     & \verb|m_deletion|    & Basisrate f"ur Deletionen \\
+$M_{\mathit{dup}}$ & \verb|m_duplication| & Basisrate f"ur Genuplikationen \\
+$m_f$     & \verb|m_factor|      & Faktor zur Modifikation der Basisraten pro \verb|mut+|- bzw.\ \verb|mut+|-Aktion \\ \hline
+\end{tabularx}
+\medskip
+
+
+% \subsection{Zusammenfassung der Kontrollparameter}
+% 
+% \medskip
+% \noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+% Formel- & Bezeichner & Beschreibung \\
+% buchstabe & & \\ \hline
+% $p$ & \verb|psize| & Populationsgr"o"se \\
+% $p_s$ & \verb|psize_init| & Populationsgr"o"se beim Simulationsstart \\
+% $l_s$ & \verb|glen_init| & L"ange der am Simulationsstart zuf"allig generierten Genome \\
+% $s$ & \verb|srate| & Selektionsrate \\
+% $w$ & \verb|world_width| & Breite der Welt \\
+% $h$ & \verb|world_height| & H"ohe der Welt \\
+% $D$ & \verb|p_random_death| & Basiswahrscheinlichkeit f"ur Absterben \\
+% $d_n$ & \verb|rdeath_f_numcells| & Modifikator f"ur Absterbewahrscheinlichkeit in Abh"angigkeit von Anzahl Zellen \\
+% $d_e$ & \verb|rdeath_f_energy| & Modifikator f"ur Absterbewahrscheinlichkeit in Abh"angigkeit von Gesamtenergie \\
+% $d_l$ & \verb|leanover_penalty| & Modifikator f"ur Absterbewahrscheinlichkeit in Abh"angigkeit vom "Uberhang \\
+% $M_r$ & \verb|m_replacement| & Basiswert der Austauschrate \\
+% $M_i$ & \verb|m_insertion| & Basiswert der Insertionsrate \\
+% $M_d$ & \verb|m_deletion| & Basiswert der Deletionsrate \\
+% $M_{\mathit{dup}}$ & \verb|m_duplication| & Basiswert der Duplikationsrate \\
+% $m_f$ & \verb|m_factor| & Modifikationsfaktor f"ur Mutationsraten \\
+%  & \verb|num_divide| & Anzahl Codewerte f"ur \verb|divide| \\
+%  & \verb|num_flyingseed| & Anzahl Codewerte f"ur \verb|flyingseed| \\
+%  & \verb|num_localseed| & Anzahl Codewerte f"ur \verb|localseed| \\
+%  & \verb|num_mutminus| & Anzahl Codewerte f"ur \verb|mut-| \\
+%  & \verb|num_mutplus| & Anzahl Codewerte f"ur \verb|mut+| \\
+%  & \verb|num_statebit| & Anzahl Codewerte f"ur \verb|statebit| \\
+%  & \verb|random_seed| & {\slshape seed} zur Initialisierung des Zufallsgenerators \\ \hline
+% \end{tabularx}
+% \medskip
+
+
+\subsection{Technische Ausf"uhrung}
+\label{technicaldef}
+
+\subsubsection{Organisation der Simulationsl"aufe}
+
+Alle Simulationsexperimente, die in dieser Arbeit besprochen werden, haben einen eindeutigen
+Namen, der sich aus Buchstaben und Ziffern zusammensetzt. Zu jedem Experiment geh"ort
+eine Parameterdatei, deren Name dem Experimentnamen entspricht. In dieser Parameterdatei
+sind s"amtliche Kontrollparameter f"ur das Simulationsexperiment spezifiziert.
+% Im Anhang \ref{paramfile-appendix}
+% sind die Parameterdateien zu allen in dieser Arbeit angesprochenen Experimenten abgedruckt.
+Da ein Simulationsexperiment durch den Satz der verwendeten Kontrollparameter eindeutig identifiziert
+werden kann, ist somit die exakte Reproduktion der hier diskutierten Ergebnisse m"oglich.
+
+Die Namen der Simulationsl"aufe entstanden im Verlauf der Entwicklung der Simulationsprogramme
+und -experimente und haben keinen durchg"angigen systematischen Aufbau. Sie werden im Text dort
+verwendet, wo die eindeutige Bezeichnung eines Laufs erforderlich ist.
+
+
+\subsubsection{Graphische Darstellung der Pflanzen}
+
+Pflanzenzellen werden als quadratische Boxen dargestellt. Ihr Energiezustand wird dabei durch die
+Farbgebung angezeigt, dunkle Farben zeigen energiereiche Zellen an. Wird nur eine Pflanze dargestellt,
+werden f"ur energiereiche Zellen schwarz gef"ullte, f"ur energielose Zellen wei"se oder hellgraue
+Boxen verwendet. Diese Darstellung wurde bereits in Abb.\ \ref{lnd1-graphgenom} verwendet.
+Bei der Darstellung mehrerer Pflanzen werden die Zellen verschiedener Pflanzen in
+unterschiedlichen Farben dargestellt, damit die individuellen Pflanzen voneinander unterschieden
+werden k"onnen. Die dunkleren Farbt"one zeigen dabei jeweils energiereiche Zellen an.
+Die farbigen Abbildungen sind aus drucktechnischen Gr"unden im Anhang \ref{colorplates}
+zusammengefa"st.
+

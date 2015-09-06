@@ -1,0 +1,220 @@
+\chapter{Einleitung}
+
+Die gro"se Vielfalt der Lebensformen ist f"ur jeden Betrachter auch ohne wissenschaftlichen
+Hintergrund offensichtlich. Die systematische Bestandsaufnahme und wissenschaftliche Betrachtung
+dieser Vielfalt f"uhrte zur Entwicklung der Taxonomie, welche die Lebensformen aufgrund von
+"Ahnlichkeiten und gemeinsamen Merkmalen in Taxons unterschiedlicher Kategorien klassifiziert.
+Die Beobachtung der taxonomischen Struktur der Vielfalt des Lebens gab den Anla"s zur Entwicklung
+der Evolutionstheorie durch \textsc{Darwin} \cite{Darwin}. Die Untersuchung der vielf"altigen Formen und Funktionen lebender
+Systeme sowie ihre Entstehung durch die  Evolution bilden bis heute zentrale Schwerpunkte biologischer Forschung.
+
+Die Komplexit"at der heutigen Lebewesen ist ein beeindruckendes Ergebnis der Evolution. Ebenso
+faszinierend ist die Vielfalt der Lebensformen, die wir heute auf der Erde beobachten. Es liegt nahe, 
+anzunehmen, da"s zwischen der Vielfalt und der Komplexit"at des Lebens Zusammenh"ange bestehen, da"s sie
+sich gegenseitig bedingen (vgl.\ \cite{Stanley73}). Auf genetischer Ebene spielen Ver"anderungen und
+Neuentwicklungen von Genen, welche die Morphogenese eines Organismus steuern, eine Schl"usselrolle bei
+der Entstehung neuer Lebensformen (s.\ \cite{Carroll95,Theissen95}).
+Die Untersuchung und Charakterisierung des Zusammenspiels dieser Faktoren
+ist der Gegenstand der vorliegenden Arbeit. 
+
+Es ist nicht m"oglich, diese Aspekte des Evolutionsgeschehens in formaler, quantitativer Weise zu beschreiben und somit
+ein mathematisches Modell der Evolution zu erhalten, anhand dessen die Beziehungen zwischen Komplexit"at und Vielfalt
+der Lebensformen untersucht werden k"onnen. Wie viele andere Systeme und Vorg"ange in der Biologie ist die Evolution
+"`zu verwickelt, um der Mathematik zug"anglich zu sein"' (\textsc{Schr"odinger}, \cite{Schroedinger44}). Zur Untersuchung von komplexen
+Systemen, die sich der mathematischen Modellierung entziehen, haben sich in den letzten Jahrzehnten Computermodelle
+in vielen F"allen bew"ahrt. Daher wurde auch in der vorliegenden Arbeit die Computermodellierung als Untersuchungsmethode
+gew"ahlt.
+
+
+\section{Computermodelle komplexer biologischer \\ Systeme}
+
+Praktisch jedes Objekt biologischer Forschung kann als Komponente eines komplexen Systems beschrieben
+werden. Auf der molekularen Ebene sind biologische Makromolek"ule wie Proteine und Ribonucleins"auren komplexe
+Objekte, die aus ihren jeweiligen monomeren Komponenten aufgebaut sind. Diese Makromolek"ule sind wiederum Komponenten
+subzellul"arer Strukturen wie Membranen, Ribosomen, Filamenten und Chromosomen, die ihrerseits die Komponenten einer
+Zelle bilden. Aus Zellen leitet sich eine Vielzahl organismischer Strukturen ab, neben der physikalischen Gestalt
+eines Lebewesens sind auch verschiedene Subsysteme wie das neuronale System und das Immunsystem aus zellul"aren
+Komponenten aufgebaut. Ensembles von Lebewesen k"onnen komplexe soziale Strukturen bilden. Viele verschiedene
+Lebensformen bilden schlie"slich gemeinsam ein "Okosystem; die Gesamtheit aller "Okosysteme wird als Biosph"are
+bezeichnet.
+
+Von vielen dieser komplexen biologischen Systeme existieren bereits unterschiedliche Computermodelle. Viele dieser
+Modelle wurden mit dem Ziel entwickelt, bestimmte Leistungen biologischer Systeme in technischen Systemen zu
+realisieren, indem man die Arbeitsweise der biologischen Vorlage imitiert. Die folgenden Abschnitte geben einen
+"Uberblick "uber die Computermodelle, die f"ur die vorliegende Arbeit von Bedeutung sind.
+
+
+\subsection{Evolution"are Algorithmen}
+
+Die heutigen Lebensformen sind durch eine Vielzahl teils hochkomplexer biologischer Systeme (z.B.\ Rezeptorsysteme
+wie Augen, Ohren, das Nervensystem, motorische Systeme) sehr gut an das Leben
+in ihrer nat"urlichen Umwelt angepa"st. Betrachtet man die Anpassung an die Umweltbedingungen als eine Aufgabe,
+so kann man sagen, da"s viele Aufgaben dieser Art durch die Evolution in beeindruckender Weise gel"ost wurden. 
+Die Grundidee evolution"arer Algorithmen ist es, einen Evolutionsproze"s zu simulieren und dabei als Adaptationskriterium
+die Qualit"at der L"osung eines technischen Problems einzusetzen, um so
+die F"ahigkeiten der Evolution zur L"osung komplexer Optimierungsprobleme zu nutzen.
+
+Die ersten evolution"aren Algorithmen waren die Evolutionsstrategie von \textsc{Rechenberg} \cite{Rechenberg} und der
+genetische Algorithmus von \textsc{Holland} \cite{Goldberg89}. Seither wurde eine gro"se Zahl evolution"arer Algorithmen
+entwickelt.
+Ein evolution"arer Algorithmus umfa"st typischerweise die folgenden Komponenten:
+
+\begin{itemize}
+
+\item Eine Repr"asentation f"ur L"osungen zu dem zu behandelnden Problem in endlichen Objekten.
+    Bei der Evolutionsstrategie \cite{Rechenberg} wurden Vektoren reeller Zahlen verwendet, in
+    genetischen Algorithmen \cite{Goldberg89} werden Bitstrings eingesetzt.
+
+\item Eine Funktion, die die Qualit"at einer L"osung angibt. Diese Funktion wird als Fitnessfunktion
+    bezeichnet.
+
+\item Ein Selektionsverfahren, mit dem aus einer Menge von L"osungen eine Teilmenge ausgew"ahlt wird.
+    Die Wahrscheinlichkeit der Auswahl einer L"osung h"angt dabei von ihrem Fitnesswert ab.
+
+\item Genetische Operatoren, die neue L"osungen auf der Grundlage bestehender L"osungen generieren. Hierbei werden
+    mehrere Typen von Operatoren unterschieden. Mutationsoperatoren erstellen neue L"osungen auf der
+    Grundlage einer bestehenden L"osung, indem sie einzelne Komponenten zufallsgesteuert ver"andern.
+    Rekombinationsoperatoren erzeugen neue L"osungen durch die Kombination von Teilen mehrerer bestehender L"osungen.
+    Rekombinationsoperatoren, die zwei bestehende L"osungen verarbeiten, werden als \textsl{crossover}-Operatoren
+    bezeichnet.
+
+\end{itemize}
+
+Die Arbeitsweise eines evolution"aren Algorithmus ist die iterative Generierung von Populationen von L"osungen
+durch einen zyklischen Proze"s. Ein Zyklus besteht aus einer Fitnessbewertung der L"osungen in der Population und
+einem Selektions- und Reproduktionsvorgang, bei dem mit dem Selektionsverfahren L"osungen ausgew"ahlt werden,
+aus denen mithilfe der genetischen Operatoren eine neue Population zusammengestellt wird. Bei erfolgreichem
+Ablauf dieses simulierten Evolutionsprozesses steigt die Qualit"at der L"osungen in der Population von Generation
+zu Generation.
+
+
+\subsection{Lindenmayer-Systeme}
+
+Die von \textsc{Lindenmayer} entwickelten
+Lindenmayer-Systeme \cite{Prusinkiewicz90,Prusinkiewicz94,RozenbergSalomaa86}, auch kurz L-Systeme genannt, sind formale Modelle
+des Pflanzenwachstums. Die r"aumliche Struktur einer Pflanze wird bei L-Systemen in einer Zeichenkette codiert.
+Das Entwicklungsprogramm, welches das Wachstum der Pflanze steuert, wird durch einen Satz von Ersetzungsregeln
+repr"asentiert.
+Das Wachstum einer Pflanze wird durch die Anwendung dieser Ersetzungsregeln auf diese Zeichenkette simuliert.
+Eine solche Regel bewirkt die Ersetzung einer bestimmten Abfolge von Zeichen durch eine andere Zeichenfolge.
+Ein Satz von Ersetzungsregeln wird als Regelwerk bezeichnet. Zur Simulation des Wachstums in unterschiedlichen
+Entwicklungsphasen k"onnen mehrere Regelwerke bereitgestellt werden. Bestehen die zu ersetzenden Zeichenfolgen
+stets nur aus einem Zeichen, spricht man von einem kontextfreien L-System.
+
+Die Darstellung der r"aumlichen Gestalt der Pflanze erfolgt durch eine graphische Interpretation der entsprechenden
+Zeichenkette nach dem \textsl{turtlegraphics}-Prinzip. Die eine Pflanze repr"asentierende Zeichenkette wird dabei
+als eine Folge von Anweisungen f"ur einen Zeichenautomaten interpretiert.
+Der Zeichenautomat besitzt einen \textsl{stack}, der es erm"oglicht, seine Position im Raum abzuspeichern und sp"ater
+wieder aufzusuchen. Das Ablegen von Positionen auf dem \textsl{stack} und das Zur"uckholen dieser Positionen
+erfolgt dabei durch spezielle Zeichen in der Zeichenkette, die als Metasymbole bezeichnet werden. Bei der Gestaltung
+der Regelwerke ist darauf zu achten, da"s diese Metasymbole nur in der zul"assigen, paarweisen Art auftreten.
+Dies ist gew"ahrleistet, wenn Metasymbole bei der Ersetzung stets nur paarweise erzeugt werden, und wenn sie nicht
+durch weitere Ersetzungen wieder entfernt werden.
+
+Die Anwendung von Ersetzungsregeln simuliert den Proze"s der Differenzierung. Werde beispielsweise ein apikales
+Meristem durch das Symbol $M$ und ein Blattprimordium durch das Symbol $P$ in der Zeichenkette repr"asentiert,
+dann kann die Entstehung eines solchen Primordiums durch die Ersetzungsregel $M \rightarrow PM$
+simuliert werden. Durch die iterative Anwendung der Ersetzungsregeln entstehen
+fraktale Strukturen. Selbst mit einfachen L-Systemen lassen sich "uberraschend komplexe Pflanzenformen
+generieren (vgl.\ \cite{Tragut89}). Aufwendige L-Systeme erlauben die Erstellung von Computergraphiken simulierter
+Pflanzen, die von Photographien realer Pflanzen kaum zu unterscheiden sind \cite{Prusinkiewicz90}.
+
+
+\subsection{Zellularautomaten}
+
+Zellularautomaten sind in der Physik inzwischen eine etablierte Technik zur Simulation von Syst\-emen in ausgedehnten
+R"aumen. Auch zur Simulation biologischer Szenarien k"onnen Zellularautomaten eingesetzt werden. Ein einfaches, recht
+gut bekanntes Beispiel ist das \textsl{Game of Life} von \textsc{Conway} \cite{Gardner70}.
+
+Ein Zellularautomat besteht aus Elementarautomaten, die in einem Gitter angeordnet sind. Dieses Gitter kann ein- oder
+mehrdimensional sein. Jeder Elementarautomat hat einen individuellen Zustand. Die Eingabe eines Elementarautomaten
+besteht aus den Zust"anden der Automaten in seiner Nachbarschaft, zu der auch der Elementarautomat selbst geh"ort.
+Typische Nachbarschaften bei zweidimensionalen, orthogonalen Gittern sind die von-Neumann- oder F"unfzell-Nachbarschaft, die
+aus dem Elementarautomaten selbst und seinen unmittelbar in vertikale und horizontale Richtung angrenzenden Nachbarn
+besteht, und die Moore- oder Neunzell-Nachbarschaft, die zus"atzlich die vier diagonal angrenzenden Nachbarn
+einschlie"st \cite{Langton90}. In Abh"angigkeit von seiner Eingabe ermittelt der Elementarautomat als Ausgabe seinen
+neuen Zustand mithilfe der Zustands"ubergangsfunktion, die f"ur alle Elementarautomaten gleich ist. Die Berechnung
+des Zustands eines Elementarautomaten wird als \textsl{update} bezeichnet.
+
+Die Zeit verl"auft bei Zellularautomaten in diskreten Zeitschritten. In einem Zeitschritt wird jeder Elementarautomat
+einem \textsl{update} unterworfen. Dabei ist zwischen parallelem und asynchronem \textsl{update}
+zu unterscheiden. Beim parallelen \textsl{update} wird der neue Zustand der Automaten in Abh"angigkeit von der
+Konfiguration ihrer Nachbarschaft zu Beginn des Zeitschritts ermittelt. Die Zustands"anderung eines Elementarautomaten
+wirkt sich erst im n"achsten Zeitschritt auf seine Nachbarn aus. Beim asynchronen \textsl{update} steuert dagegen stets die
+jeweils aktuelle Umgebung den Zustands"ubergang, Automaten, die sp"ater bearbeitet werden, "`sehen"' also schon die
+"Anderungen, die bei ihren Nachbarn zuvor stattgefunden haben.
+
+Zellularautomaten werden zur Untersuchung von Ph"anomenen eingesetzt, die durch lokale Interaktionen zwischen
+gleichartigen Agenten auf globalem Ma"sstab auftreten und einer mathematischen Modellierung nicht zug"anglich sind.
+Ph"anomene dieser Art treten auch im bereits erw"ahnten \textsl{Game of Life} auf, beispielsweise kann der Verlauf
+der Populationsgr"o"se im \textsl{Game of Life} einen chaotischen Verlauf haben, der mit Differentialgleichungsmodellen
+der Populationsdynamik nicht erkl"art werden kann.
+
+
+\section{\textsl{Artificial Life}}
+
+In den vorangehenden Abschnitten wurden nur einige Ans"atze zur Umsetzung komplexer biologischer Systeme in Computermodelle
+und Algorithmen angesprochen. Auch in anderen Disziplinen dienten in der j"ungeren Vergangenheit biologische Systeme
+als Vorbild bei der Entwicklung unterschiedlichster Techniken. Ein geradezu klassisches Beispiel hierf"ur sind die
+nach dem Vorbild des Gehirns entwickelten neuronalen Netze, die in der k"unstlichen Intelligenz intensiv eingesetzt
+werden. In der Robotertechnik versucht man, autonom agierende Einheiten zu entwickeln, indem man sich bei der Gestaltung
+verschiedener Subsysteme an biologischen Vorlagen orientiert. Schlie"slich erm"oglichten neue Entwicklungen im Bereich
+der Biotechnologie und die Entdeckung der Ribozyme die Realisierung molekularer Evolutionsprozesse \textsl{in vitro}.
+Alle diese Str"omungen flossen in den letzten Jahren des vergangenen Jahrzehnts zu einem neuen, interdisziplin"aren
+Forschungsfeld zusammen, f"ur das sich die Bezeichnung \textsl{Artificial Life} etabliert hat. Im Vorwort von \cite{ALifeII}
+definiert \textsc{Langton} \textsl{Artificial Life} wie folgt:
+
+\begin{quotation}
+"`Artificial Life is a field of study devoted to understanding life by attempting to abstract
+the fundamental dynamical principles underlying biological phenomena, and recreating these dynamics in
+other physical media -- such as computers -- making them accessible to new kinds of experimental manipulation and testing."'
+\end{quotation}
+
+Ein Kernbereich der \textsl{Artificial Life} Forschung ist demnach die Umsetzung biologischer Systeme in Computermodelle.
+Ein Schwerpunkt in diesem Bereich ist die Modellierung der Evolution. F"ur die Informatik sind solche Modelle interessant,
+weil evolution"are Algorithmen als universelle Optimierungsverfahren eingesetzt werden k"onnen. F"ur die Biologie
+sind Evolutionsmodelle als Grundlage f"ur vergleichende Untersuchungen der Evolution von Bedeutung
+(vgl. \cite{Keller94,Maley94,Ray92}).
+
+Alle Ph"anomene des Lebens k"onnen als komplexe Ph"anomene klassifiziert werden. Eine zentrale Arbeitshypothese des
+\textsl{Artificial Life} ist, da"s biologische Komplexit"at ein emergentes \cite{Assad92,Baas94,Cariani92}
+Ph"anomen ist, das durch ein von einfachen
+Regeln bestimmtes Zusammenspiel vieler elementarer Komponenten, die einen einfachen Aufbau haben, zustandekommt.
+Da keine ausreichend allgemeine Definition von Komplexit"at existiert, bereitet die Charakterisierung der emergenten
+Komplexit"at jedoch Schwierigkeiten. Dieses Problem wird dadurch versch"arft, da"s komplexe Ph"anomene typischerweise
+in einem Bereich zwischen monotoner Ordnung und beliebigem Chaos zu beobachten sind \cite{CampbellLNCS88},
+der h"aufig als \textsl{edge of chaos}
+bezeichnet wird \cite{Gutowitz95,Kauffman92,Langton92}.
+
+\textsl{Artificial Life} hat bereits eine Vielzahl bedeutender Ergebnisse hervorgebracht. So wurde das Dilemma der Hyperzyklentheorie
+\cite{Eigen71}, da"s ein Hyperzyklus durch einen Parasiten unweigerlich ausgel"oscht wird, durch die Umsetzung des Hyperzyklenmodells
+in ein Zellularautomatenmodell gel"ost \cite{Boerlijst92}. \textsc{Ray} gelang mit \textsl{Tierra} die Entwicklung einer
+Programmiersprache, mit der
+die evolution"are Entwicklung von Programmen m"oglich ist \cite{Ray92}. Die Theorie der RNA-basierten Evolution wurde sowohl mit
+biochemischen Methoden \cite{Joyce92} als auch mittels mathematischer und computergest"utzter Modellbildung \cite{Forst95,Schuster94}
+erheblich weiter entwickelt. Lindenmayer-Systeme und verwandte Verfahren wurden erfolgreich als Modelle der Morphogenese
+eingesetzt \cite{deBoer92,Hamilton93,Prusinkiewicz94}. Die Vielfalt der M"oglichkeiten zur Anwendung von
+\textsl{Artificial Life} Methoden
+zur Untersuchung biologischer Fragestellungen \cite{Taylor94} motivierte zur Anfertigung der vorliegenden Arbeit.
+
+    
+\section{Zielsetzung und Vorgehensweise}
+
+Gegenstand der vorliegenden Arbeit ist die Untersuchung der Evolution von Pflanzen mit komplexer Morphologie.
+Zu diesem Zweck wurde eine Familie von Computermodellen der Evolution pflanzlicher Wuchsformen entwickelt.
+Die Repr"asentation der Pflanzen erfolgt dabei in einem zwei- oder dreidimensionalen, diskreten, orthogonalen Gitter. Das
+Pflanzenwachstum findet durch Teilungen einzelner Pflanzenzellen statt. Zur Steuerung einer Zellteilung werden dabei, wie
+bei Zellularautomaten, nur Informationen aus der lokalen Umgebung der Zelle herangezogen. Anders als bei Zellularautomaten
+gibt es keine global einheitliche Zustands"ubergangsfunktion. Jede Pflanze besitzt vielmehr ein individuelles Genom, das
+als Lindenmayer-Regelwerk zur Steuerung der Aktivit"aten ihrer Zelle interpretiert wird. Bei der Gestaltung der
+Interpretationsmechanismen wurden die derzeit bekannten Schl"usselmechanismen der genetischen Steuerung der Morphogenese so
+weit wie m"oglich umgesetzt. Die Modelle werden kurz als LindEvol-Modelle bezeichnet.
+
+In den Modellen traten verschiedene emergente Ph"anomene auf, die auch in der nat"urlichen Evolution beobachtet
+werden. Dazu z"ahlen die Evolution kooperativen Verhaltens und die Evolution der aktiven Senkung der Mutationsraten.
+F"ur beide Ph"anomene wurden auch auf der Grundlage einer einfachen mathematischen Analyse Erkl"arungen gefunden.
+
+Als Vorschlag f"ur ein allgemeines Ma"s f"ur die Komplexit"at evolvierender Systeme wird in der vorliegenden Arbeit
+die Distanzverteilungskomplexit"at eingef"uhrt. Anhand der LindEvol-Modelle wurde die Eignung der Distanzverteilungskomplexit"at
+durch Vergleiche mit anderen Indikatoren und Ma"sen f"ur Komplexit"at demonstriert.
+

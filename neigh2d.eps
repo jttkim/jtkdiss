@@ -1,0 +1,36 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: Jan T. Kim
+%%Title: 2D-neighborhood:
+%%BoundingBox: 0.0 0.0 150.0 150.0
+%%EndComments
+%%BeginProlog
+/plotrect {
+newpath
+0 0 moveto 0 50 lineto 50 50 lineto 50 0 lineto closepath
+gsave 1 setgray fill grestore
+stroke
+dup stringwidth .5 mul 25 exch sub 5 sub exch .5 mul 25 exch sub exch moveto show
+} bind def
+
+%%EndProlog
+
+save
+
+2 setlinewidth
+/Courier-Bold findfont 18 scalefont setfont
+1 setlinecap 1 setlinejoin
+% 150 30 translate
+
+(0) plotrect
+50 0 translate (1) plotrect
+50 0 translate (2) plotrect
+-100 50 translate (3) plotrect
+50 0 translate (X) plotrect
+50 0 translate (4) plotrect
+-100 50 translate (5) plotrect
+50 0 translate (6) plotrect
+50 0 translate (7) plotrect
+
+restore
+
+%%EOF

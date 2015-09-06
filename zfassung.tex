@@ -1,0 +1,174 @@
+\chapter{Zusammenfassung und Ausblick}
+
+Mit der LindEvol-Simulationsfamilie wurde ein System etabliert, mit dem der Proze"s der
+Evolution genetisch codierter Morphogeneseprogramme mit Computern simuliert werden kann.
+Die diskrete Repr"asentation des Raums und das Prinzip der Bestimmung von Zellaktivit"aten
+auf der Grundlage lokaler Information wurde dabei von den Zellularautomaten "ubernommen.
+Das Vorbild der Lindenmayer-Systeme \cite{Prusinkiewicz94,RozenbergSalomaa86} inspirierte die
+Beschreibung elementarer pflanzlicher Wachstumsprozesse durch Regeln. Anders als bei
+herk"ommlichen Lindenmayer-Systemen wird jedoch auf die Repr"asentation von Pflanzen
+in Zeichenketten verzichtet, die Regeln beziehen sich unmittelbar auf lokale r"aumliche
+Pflanzenstrukturen.
+
+Die Pflanzen einer Population wachsen in einer gemeinsamen Gitterwelt. Dabei konkurrieren
+sie um Raum und um Energie, die sie f"ur ihr Wachstum ben"otigen. Die Wachstums- und
+Reproduktionschancen einer Pflanze werden durch andere Pflanzen in der Population nachhaltig
+beeinflu"st, es findet eine intrinsische Adaptation \cite{Packard89} statt.
+
+Die aus der Genetik bekannten Mechanismen der Kontrolle der Expression \cite{Watson} von Genen wurden
+in zwei Verfahren zur Interpretation von Bytesequenzen als Regelwerke zur Steuerung des Wachstums
+umgesetzt. Durch das einfachere, blockorientierte Verfahren wird die Aktivierung von Genen
+in Abh"angigkeit von der Position einer Zelle innerhalb des Organismus repr"asentiert.
+Bei der m"achtigeren, promotororientierten Genominterpretation wurde zus"atzlich das
+Prinzip der Expressionskontrolle durch Operatoren (im genetischen Sinne) realisiert.
+Die Entscheidung "uber die Aktivierung eines Gens erfolgt bei der blockorientierten Genominterpretation
+durch einen Minterm und bei der promotororientierten Genominterpretation durch ein Monom.
+
+Der Vergleich der f"ur LindEvol entwickelten Interpretationsverfahren mit der Programmiersprache
+\textsl{Tierran} \cite{Ray92} zeigt, da"s die Interpretationsverfahren aufgrund ihrer Gestaltung
+als Simulationen genetischer Prozesse einige der Eigenschaften aufweisen, die von \textsc{Ray}
+als Voraussetzung f"ur die Evolvierbarkeit einer Sprache identifiziert wurden.
+
+Das in LindEvol verwendete Mutationsverfahren umfa"st einen Mechanismus f"ur die genetisch
+gesteuerte Modifikation der effektiven Mutationsraten. Dieser Mechanismus zeichnet sich dadurch
+aus, da"s seine Aktivierung, dem molekularen Vorbild entsprechend, Energie erfordert.
+
+Mit den Komponenten des LindEvol-Systems wurde zun"achst das Modell LindEvol-GA mit blockorientierter
+Genominterpretation erstellt, bei dem ein genetischer Algorithmus als Evolutionsmchanismus verwendet wurde. 
+Das Modell LindEvol-B arbeitet ebenfalls mit blockorientierter Genominterpretation, anstelle des relativ
+starren Evolutionsverfahren des genetischen Algorithmus tritt jedoch eine
+explizitere, nicht globale Modellierung der Reproduktion und des Absterbens. Die bei LindEvol-GA
+als Kontrollparameter extern vorgegebene Selektionsrate wird damit bei LindEvol-B zu einer intrinsisch modellierten
+Gr"o"se. Der Einsatz der promotororientierten Genominterpretation in LindEvol-P f"uhrte zu einer
+deutlichen Zunahme der Komplexit"at bei der evolution"aren Dynamik und bei den beobachteten
+Pflanzenformen. Mit der promotororientierten Genominterpretation war auch die Entwicklung eines
+Modells der Evolution dreidimensionaler Pflanzen m"oglich. Dies wurde mit LindEvol-P/3D realisiert.
+
+Als Ma"s zur Charakterisierung der Komplexit"at einer evolvierenden Population wurde die
+Distanzverteilungskomplexit"at (DVK) eingef"uhrt. Sie quantifiziert mithilfe der Shannon-Entropie
+die Verteilung der Verwandtschaftsgrade in einer Population. Mit der DVK kann der Unterschied
+zwischen Populationen mit komplexer taxonomischer Struktur, in denen viele unterschiedliche
+Verwandtschaftsgrade vorkommen, unterschieden werden von randomisierten Populationen aus
+nicht verwandten Individuen, und von konvergierten Populationen mit eng verwandten Individuen.
+
+In Simulationsl"aufen mit den Modellen konnte eine Vielzahl emergenter Ph"anomene beobachtet
+werden, die auch in der Natur auftreten. Zu diesen Ph"anomenen z"ahlen:
+
+\begin{itemize}
+
+\item Die emergente Evolution kooperativen Wachstumsverhaltens, die starke "Ahnlichkeiten mit emergenter Kooperation bei
+Simulationen auf der Basis des \textsl{prisoner's dilemma} aufweist.
+
+\item Eine emergente Evolution der aktiven Senkung der effektiven Mutationsraten. Dieses Ph"anomen
+wurde dar"uberhinaus als \textsl{evolution towards the edge of chaos} charakterisiert.
+
+\item Die evolutive Entstehung komplexer regulatorischer Netzwerke.
+
+\item Evolution"are Adaptation durch pleiotrope Mutationen. 
+
+\end{itemize}
+
+Mithilfe einer einfachen mathematischen Mutationsfolgenabsch"atzung wurden zwei unterschiedliche evolution"are
+Vorteile der aktiven Senkung der Mutationsraten identifiziert. Zum einen erbt bei niedrigeren Mutationsraten ein
+gr"o"serer Anteil der Nachkommen eines Individuums dessen genetische Information in unver"andert funktioneller
+Form. Niedrigere Mutationsraten stellen in dieser Weise keinen Selektionsvorteil, sondern einen
+Reproduktionsvorteil dar. Zum anderen er"offnet die Evolution niedrigerer Mutationsraten die M"oglichkeit
+der Evolution komplexerer Wachstumsprogramme, deren Evolution bei h"oheren Mutationsraten wegen der "Uberschreitung
+ihrer kritischen Fehlergrenze \cite{Maynard89} nicht m"oglich war. Die komplexeren Wuchsformen k"onnen einen
+Selektionsvorteil bedeuten.
+
+Das Modell LindEvol-GA wurde als Testsystem f"ur die Standardverfahren zur Stammbaumrekonstruktion
+\textsl{parsimony} und \textsl{neighbor joining} \cite{PHYLIP} eingesetzt. Es wurde demonstriert, da"s signifikante
+Abweichungen von der Annahme neutraler Evolution sowie die Evolution der aktive Absenkung der
+effektiven Mutationsraten zu Beeintr"achtigungen der Rekonstruktionsgenauigkeit bei den untersuchten
+Verfahren f"uhren.
+
+Es wurde gezeigt, da"s zwischen hohen DVK-Werten und vielen anderen Ma"sen und Indikatoren
+der Komplexit"at, eine ausgepr"agte Korrelation besteht. Als Komplexit"atskriterien wurden
+dabei die Gestalt der evolvierenden Pflanzen sowie die Anzahl ihrer aktiven Gene verwendet.
+Ferner wurde bei den einfacheren Modellen eine \textsl{edge of chaos} \cite{Kauffman92,Langton92} charakterisiert. Es
+zeigte sich, da"s bei dieser \textsl{edge of chaos} Maximalwerte der DVK gemessen werden.
+Auch die \textsl{evolution towards the edge of chaos} durch aktive Verringerung der effektiven
+Mutationsraten war stets von einem deutlichen Anstieg der DVK begleitet. Aufgrund dieser
+Ergebnisse kann die DVK als ein Ma"s zur Charakterisierung der Komplexit"at evolvierender
+Populationen bezeichnet werden. Die DVK kann f"ur alle evolvierenden Systeme, bei denen ein geeignetes Distanzma"s
+verf"ugbar ist, berechnet werden. Da bei einer gro"sen Zahl evolvierender Systeme ein solches
+Distanzma"s gefunden werden kann, ist die DVK ein Beitrag zur Entwicklung eines allgemeinen Ma"ses
+der Komplexit"at evolvierender Systeme.
+
+Das bei der Berechnung der DVK verwendete Distanzma"s sollte f"ur zwei Genome angeben,
+wie oft die in dem evolvierenden System aktiven genetischen Operatoren angewendet werden m"ussen,
+um das eine Genom in das andere zu transformieren. In den LindEvol-Modellen wurde ausschlie"slich
+mit vegetativer Vermehrung gearbeitet. Bei vegetativer Vermehrung gen"ugen sequenzbasierte Distanzma"se wie die Hamming-Distanz
+oder der Editierabstand zumindest n"aherungsweise den Anforderungen an das Distanzma"s zur
+Berechnung der DVK. Bei evolvierenden Systemen, in denen auch sexuelle Fortpflanzung oder
+Rekombination stattfindet, ist die Definition eines geeigneten Distanzma"ses ein ungel"ostes
+Problem. Die Schwierigkeit r"uhrt daher, da"s zur Generierung eines bestimmten Genoms aus einem
+anderen Genom erfoderliche Anzahl genetischer Operationen bei der Verwendung von Rekombinationsoperatoren
+von der Zusammensetzung der Population abh"angt. Das Distanzma"s wird also gleichsam intrinsisch
+gestaltet und ist mit sequenzanalytischen Methoden nicht ohne weiteres zu approximieren.
+
+Eine Formulierung der DVK f"ur evolvierende Systeme mit Rekombination und sexueller Vermehrung
+w"are ein weiterer Schritt zu einem allgemenen Komplexit"atsma"s f"ur evolvierende Systeme.
+F"ur die Untersuchung der nat"urlichen Evolution ist diese Frage jedoch nur f"ur die Bestimmung
+der intraspezifischen Komplexit"at von Bedeutung. Rekombination zwischen verschiedenen Arten
+ist ein so seltenes Ereignis, da"s sie f"ur die DVK vernachl"assigt werden kann.
+
+Zur Untersuchung der Auswirkungen von Rekombination und sexueller Vermehrung auf die mit der DVK in ihrer
+in dieser Arbeit vorgestellten Formulierung bietet sich die Entwicklung neuer
+LindEvol-Modelle an, die Rekombination und sexuelle Reproduktion einschlie"sen.
+Diese k"onnen auch als Testsystem f"ur alternative oder erweiterte
+Formulierungen der DVK dienen. Unabh"angig davon sollte die DVK anhand anderer evolvierender
+Systeme, bei denen Zust"ande unterschiedlicher Komplexit"at bekannt sind, weiter untersucht werden.
+
+Im Rahmen solcher Erweiterungen der LindEvol-Familie k"onnen auch weitere komplexe genetische
+Operatoren, die auf individuelle Genome wirken, eingef"uhrt werden. Dabei ist insbesondere an
+gro"se Duplikationen und an Translokationen zu denken. Diese Erweiterungen k"onnen Gelegenheiten
+zur Untersuchung der Evolution von Familien paraloger Gene bieten.
+
+Ein weiterer Anwendungsbereich von LindEvol ist die Erstellung detaillierterer Simulationen f"ur einzelne
+Pflanzen. Bei einer solchen Entwicklung w"are auch die explizite Repr"asentation individueller Genome
+der Zellen auch mit den heute verf"ugbaren Rechnerkapazit"aten m"oglich, so da"s die Auswirkungen lokaler,
+somatischer genetischer Ver"anderungen simuliert werden k"onnten.
+
+
+% -> Ray / Tierra: Robustheit gegen Mutationen, wenige Befehle, kleiner, diskreter
+%     Wertebereich fuer Argumente von Befehlen.
+
+% LindEvol-GA: Staerkere Selektion -> hoehere Robustheit gegen Mutationen (groesseres t(s,l))
+%     Adaptationsmoeglichkeiten?
+
+% LindEvol-GA -> LindEvol-B: Umwandlung Selektionsrate von extern vorgegebenem
+%     Kontrollparameter zu intrinsisch gestalteter Groesse.
+%     Hierdurch prinzipiell Moeglichkeit zur Variation anderer Kontrollparameter
+%     (Populationsgroesse?)
+
+% LindEvol-P: Bedeutung von gain of function.
+
+% Offenheit: System soll Erweiterungen zulassen.
+%   * Sexuelle Fortpflanzung: "pollen"-Befehl: Diffundierender Pollen hin zu "flower"
+%   * Erweiterung der Promotororientierten Interpretation:
+%     Prom. - Operatoren - Transkr.-Start - Struktur - Terminator.
+%     Noetig wg. Depletion des 6bit Aktionscoderaums.
+%   * Erweiterung um Zell-Zell-Kommunikation.
+% -> LindEvol hat viele Entwicklungsmoeglichkeiten, sowohl was Modellbildung betrifft,
+%     als auch im Hinblick auf Untersuchungen spezieller Prozesse (Stammbaumanalyse,
+%     Konvergenzproblematik, Orhologie-Paralogie usw.
+
+% Distanzverteilungsanalyse: Kriterien fuer Distanzmass
+% DVK bei neutraler und nichtneutraler Evolution sehr aehnlich: Zeigt optimale Suche,
+%     unabhaengig davon, ob features auf landscape gefunden werden koennen.
+% Als universelles Mass fuer Komplexitaet evolvierender Systeme geeignet!
+
+% Weitere Entwicklung der Modelle: Mehr morphologische Diversitaet / komplexere Oekosysteme?
+
+% Weitere Untersuchungen zu Bandbreite des evolutionaeren Informationsuebertragungswegs?
+% Problem mit LindEvol-GA: zuwenig aktive Gene, die unter Selektionsdruck sind, daher
+%     koennen Effekte der Selektion nur bei sehr kurzen Genomen und entsprechend beschraenkten
+%     Rekonstruktionsmoeglichkeiten untersucht werden.
+% Rekonstruktionsuntersuchungen mit Modellen mit Duplikation: Bei Verwendung von Teilsequenzen
+%     mit hoher Homologie koennen Probleme mit Orthologie / Paralogie untersucht werden.
+
+% Intrinsische Adaptation: System stellt sich seine eigenen Aufgaben -- fundamentaler Unterschied
+%     zu Adaptation an externe, feste Fitnessfunktionen wie in klassischen evolutionaeren Algorithmen.
+

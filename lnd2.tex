@@ -1,0 +1,709 @@
+\chapter[LindEvol-B]{LindEvol-B: Modell mit asynchronen Generationen}
+\label{lindevol-2}
+
+
+\section{Definition von LindEvol-B}
+\label{lnd2-def}
+
+\subsection{Modellkomponenten}
+
+LindEvol-B ist ein Modell, in dem das Wachstum der Pflanzen nicht in einer durch Vegetationsperioden
+synchronisierten Weise abl"auft. Wie in LindEvol-GA findet eine blockorientierte Genominterpretation
+statt, was durch das nachgestellte "`B"' angedeutet wird. LindEvol-B wurde mit den folgenden Komponenten aufgebaut:
+
+\begin{itemize}
+\item Topologie: Zweidimensionales Gitter (\protect\ref{topo2d}).
+\item Zellparameter: Nur Energieparameter (\protect\ref{celldef}), kein interner Zustand.
+    Der Zustand einer Zelle ist also durch die sie umgebende lokale Struktur vollst"andig bestimmt
+    (Gl.\ \ref{stateq-nointernal}).
+\item Zellaktionen: \verb|divide|, \verb|flyingseed|, \verb|localseed|,
+    \verb|mut-| und \verb|mut+| (\protect\ref{cellactiondef}).
+\item Genominterpretation: LindEvol-B arbeitet mit blockorientierter
+    Genominterpretation (\protect\ref{blockinterdef}).
+\item Mutation: In LindEvol-B kommen bitweise Austauschmutationen sowie
+    Insertionen und Deletionen von Bl"ocken aus zwei Bytes vor (\protect\ref{mutationdef}).
+\end{itemize}
+
+
+\subsection{Absterbewahrscheinlichkeit und Angriffe}
+
+Die evolution"are Selektion wird in LindEvol-B durch mehrere Komponenten
+bestimmt, die wesentliche biologische und physikalische Faktoren, welche
+in der Natur die "Uberlebens- und Fortpflanzungschancen mitbestimmen,
+repr"asentieren.
+
+Die Vermehrung der Pflanzen erfolgt durch die Aktionen \verb|flyingseed|
+und \verb|localseed|, nicht, wie in LindEvol-GA, durch einen starren
+Selektionsmechanismus. Damit ist der Fortpflanzungserfolg einer Pflanze
+nicht in unmittelbarer Weise von ihrer Gr"o"se abh"angig.
+
+Pflanzen sterben in LindEvol-B entweder durch einen zufallsabh"angigen
+Tod oder durch einen Angriff. Durch den zufallsabh"angigen Tod werden
+verschiedene physikalische und biologische Einfl"usse, die zum Absterben
+einer Pflanze f"uhren k"onnen, in stark generalisierter Weise repr"asentiert.
+Die Berechnung der Wahrscheinlichkeit f"ur den zufallsabh"angigen Tod $P_d$
+einer Pflanze wird in LindEvol-B durch die Kontrollparameter $d$, $d_n$, $d_e$
+und $d_l$ bestimmt. Zur Berechnung von $P_d$ wird zun"achst der "Uberhangkoeffizient
+$L$ berechnet:
+
+\begin{equation}
+\label{leanover-eq}
+L = \frac{2}{n_c(n_c - 1)} \left| \sum_{i=0}^{n_c-1} \frac{w}{2} - ((\frac{3w}{2} + x(C_i) - x(C_0)) \mbox{ mod } w) \right|
+\end{equation}
+
+Dieser Ausdruck liefert Zahlen zwischen 0 und 1, wobei gr"o"sere Werte eine st"arkere
+Abweichung von einer um die Keimzelle ausbalancierten Anordnung der Zellen der Pflanze
+anzeigen. Die Form des Summanden dient zur Gew"ahrleistung der Unabh"angigkeit
+des "Uberhangskoeffizienten von der absoluten Position der Pflanze in der Welt:
+Der Term $x(C_i) - x(C_0)$ gibt im Prinzip die horizontale Abweichung der Zelle $C_i$
+von der Keimzelle $C_0$ an; wenn allerdings die Pflanze von der X-Koordinate 0
+zur X-Koordinate $w - 1$ (oder in umgekehrter Richtung) gewachsen ist, liefert
+dieser Term einen Wert des Betrags $w - 1$, obwohl die Pflanze nur eine Gitterposition
+weitergewachsen ist. Durch die Addition von $3w / 2$ und die Modulo-Division durch
+$w$ erh"alt man einen Term, der f"ur Zellen oberhalb der Keimzelle $w/2$ liefert,
+f"ur links der Keimzelle gewachsene Zellen liefert er kleinere, f"ur rechts gewachsene
+Zellen hingegen gr"o"sere Werte. Durch die Subtraktion dieses Werts von $w / 2$
+bekommt man schlie"slich negative Werte f"ur Zellen rechts von der Keimzelle und
+positive Werte f"ur Zellen links von der Keimzelle.
+
+Weil Zellen immer nur in der Moore-Nachbarschaft bereits bestehender Zellen gebildet
+werden k"onnen, mu"s auf allen X-Koordinaten zwischen der Keimzelle und der
+links- bzw.\ rechts"au"sersten Zelle mindestens eine Zelle existieren. Daher ist
+$n_c(n_c - 1) / 2$ der Maximalwert der Summe in Gl.\ \ref{leanover-eq}, und die
+Division durch diesen Maximalwert gew"ahrleistet eine Normierung auf das Intervall
+$[0, 1]$. Dieser Kehrwert ist nicht definiert falls $n_c = 1$, in diesem Fall
+wird $L = 0$ gesetzt -- eine Pflanze, die nur aus einer Zelle besteht, weist
+auch keinen "Uberhang auf.
+
+Die Absterbewahrscheinlichkeit wird nun in Abh"angigkeit von ihrer Gr"o"se,
+ihrer Gesamtenergie und ihrem "Uberhangskoeffizienten folgenderma"sen berechnet:
+
+\begin{equation}
+\label{deathprob-eq}
+P_d = d \cdot n_c^{d_n} \cdot (n_e + 1)^{d_e} + d_l \cdot L
+\end{equation}
+
+Durch $d_n$ werden die generalisierten Auswirkungen der Gr"o"se einer Pflanze
+auf ihre "Uberlebenswahrscheinlichkeit festgelegt. Bei einem negativen Wert
+ist die "Uberlebenswahrscheinlichkeit umso besser, je gr"o"ser die Pflanze
+ist, ein positiver Wert f"ur $d_n$ hat den gegenteiligen Effekt. Somit kann
+zum Beispiel der nat"urliche Effekt eines besseren Schutzes vor Fra"s durch
+die Wahl eines negativen Wertes f"ur $d_n$, die gr"o"sere Anf"alligkeit gegen
+Wind und andere mechanische Belastungen durch einen positiven Wert simuliert
+werden.
+
+$d_e$ implementiert den gleichen Mechanismus f"ur die Gesamtenergie der Pflanze.
+Hier liegt die Annahme, da"s Vitalit"at und
+Widerstandskraft bei einer energiereichen Pflanze h"oher sind als bei einer
+Pflanze mit geringer Gesamtenergie, nahe. 
+Daher ist die Auswahl negativer Werte
+f"ur $d_e$ sinnvoll.
+
+Durch $d_l$ schlie"slich wird das Ausma"s der Destabilisierung einer Pflanze
+durch mechanisches Ungleichgewicht bestimmt. Da die "uberhangsabh"angige
+Komponente ein Summand von $P_d$ ist, kann ein starker "Uberhang nicht
+durch Gr"o"se oder Energiegehalt kompensiert werden.
+
+\introdef{Angriffe} finden in LindEvol-B statt, wenn bei \verb|divide|
+die Zielposition der Tochterzelle bereits besetzt ist. In diesem Fall wird
+die Pflanze zu der die bereits vorhandene Zelle geh"ort, angegriffen.
+Die Wahrscheinlichkeit $P_{\mathit{kill}}$
+f"ur den Erfolg eines Angriffs ist umgekehrt proportional zu der Gesamtenergie
+der angegriffenen Pflanze $A$:
+
+\begin{equation}
+P_{\mathit{kill}} = \frac{1}{n_e(A)}
+\end{equation}
+
+Ist ein Angriff erfolgreich, wird die angegriffene Pflanze aus der Welt
+entfernt. Sofern die Pflanze nicht sich selbst erfolgreich angegriffen
+hat, verl"auft anschlie"send die Teilung erfolgreich. Bei einem erfolglosen
+Angriff scheitert die Teilung.
+
+
+\subsection{Simulationsablauf}
+
+Wie auch in LindEvol-GA wird in LindEvol-B zu Beginn eines Simulationslaufs
+eine Startpopulation von Genomen vorgegebener L"ange zufallsgesteuert
+erzeugt. Mit dieser Startpopulation wird in eine Schleife eingetreten,
+bei der jeweils ein Tag pro Durchlauf simuliert wird. 
+Dieser Simulationsablauf ist in Abb.\ \ref{lnd2-flowchart} graphisch
+dargestellt.
+
+Innerhalb der Schleife "uber die Tage wird zun"achst die Bestrahlung der
+Welt mit Licht simuliert (vgl.\ \ref{energydef}). Danach werden die Pflanze in einer
+Reihenfolge abgearbeitet, die f"ur jeden Durchlauf erneut zufallsgesteuert
+festgelegt wird. Bei der Abarbeitung einer Pflanze wird diese zun"achst
+zufallsgesteuert mit der durch Gleichung \ref{deathprob-eq}
+bestimmten Wahrscheinlichkeit entfernt. "Uberlebt die Pflanze diesen
+Schritt, wird durch die Interpretation des Genoms der Pflanze f"ur jede Zelle der Pflanze
+die auszuf"uhrenden Aktionen ermittelt und ausgef"uhrt. Im Anschlu"s daran
+wird das Genom der Pflanze mutiert, wobei der w"ahrend der Abarbeitung
+der Pflanzenzellen durch \verb|mut-| und \verb|mut+| ver"anderte Stand
+des Mutationsexponenten ber"ucksichtigt wird.
+
+\begin{figure}
+\unitlength0.5cm
+\begin{picture}(15,18)
+\thicklines
+
+\put(8,17){\framebox(14,1){Initialisierung der Population}}
+\put(15,17){\vector(0,-1){2}}
+
+\put(9,13.5){\makebox(12,1){F"ur jede Pflanze:}}
+
+\put(9,10){\framebox(12,3){
+\parbox{12cm}{
+\centerline{Absterben mit Wahrscheinlichkeit}
+\centerline{$P_d = d \cdot n_c^{d_n} \cdot (n_e + 1)^{d_e} + d_l \cdot L$}
+}}}
+\put(15,10){\vector(0,-1){1}}
+
+\put(8,3){\framebox(14,12){}}
+\put(15,3){\vector(0,-1){1}}
+
+\put(9,6){\framebox(12,3){
+\parbox{12cm}{
+\centerline{Abarbeitung der Pflanze: Zellen}
+\centerline{k"onnen sich teilen, Samen}
+\centerline{produzieren etc.}}}}
+\put(15,6){\vector(0,-1){1}}
+
+\put(9,4){\framebox(12,1){Mutation des Genoms}}
+
+\put(8,1){\framebox(14,1){Inkrementieren des Zeitschritts}}
+\put(15,1){\line(0,-1){0.5}}
+\put(19,0.5){\oval(8,1)[b]}
+\put(23,0.5){\line(0,1){15}}
+\put(19,15.5){\oval(8,1)[t]}
+% \put(15,13.5){\vector(0,-1){0.5}}
+
+\end{picture}
+
+\caption{\label{lnd2-flowchart}
+Flu"sdiagramm f"ur LindEvol-B
+}
+\end{figure}
+
+Eine Auflistung der Kontrollparameter von LindEvol-B befindet sich in Tabelle \ref{lnd2-controlparams}.
+
+% \subsection{Kontrollparameter von LindEvol-B}
+
+\begin{table}[tb]
+
+\noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+Formel- & Bezeichner              & Beschreibung \\
+buchstabe &                       & \\ \hline
+$p_s$ & \verb|psize_init|         & Populationsgr"o"se am Anfang der Simulation \\
+$l_s$ & \verb|glen_init|          & L"ange der am Simulationsstart zuf"allig generierten Genome \\
+$M_r$ & \verb|m_replacement|      & Basiswert der Austauschrate \\
+$M_i$ & \verb|m_insertion|        & Basiswert der Insertionsrate \\
+$M_d$ & \verb|m_deletion|         & Basiswert der Deletionsrate \\
+$m_f$ & \verb|m_factor|           & Modifikationsfaktor f"ur Mutationsraten \\
+$d$   & \verb|p_random_death|     & Basiswahrscheinlichkeit f"ur Absterben pro Zeitschritt \\
+$d_n$ & \verb|rdeath_f_numcells|  & Modifikationskoeffizient f"ur die Absterbewahrscheinlichkeit
+                                    in Abh"angigkeit von der Gr"o"se der Pflanze \\
+$d_e$ & \verb|rdeath_f_energy|    & Modifikationskoeffizient f"ur die Absterbewahrscheinlichkeit
+                                    in Abh"angigkeit von der Gesamtenergie der Pflanze \\
+$d_l$ & \verb|leanover_penalty|   & Maximalwert der Erh"ohung der Absterbewahrscheinlichkeit
+                                    bei "uberh"angender Wuchsform \\
+$w$   & \verb|world_width|        & Breite der Welt \\
+$h$   & \verb|world_height|       & H"ohe der Welt \\
+      & \verb|num_divide|         & Anzahl Codewerte f"ur \verb|divide| \\
+      & \verb|num_flyingseed|     & Anzahl Codewerte f"ur \verb|flyingseed| \\
+      & \verb|num_localseed|      & Anzahl Codewerte f"ur \verb|localseed| \\
+      & \verb|num_mutminus|       & Anzahl Codewerte f"ur \verb|mut-| \\
+      & \verb|num_mutplus|        & Anzahl Codewerte f"ur \verb|mut+| \\
+      & \verb|random_seed|        & {\slshape seed} zur Initialisierung des Zufallsgenerators \\ \hline
+\end{tabularx}
+
+\caption{\label{lnd2-controlparams}
+Kontrollparameter von LindEvol-B.
+}
+\end{table}
+
+\section{Ergebnisse}
+\label{lnd2-results}
+
+Der Ergebnisteil zu LindEvol-B ist in drei Teile untergliedert. Im ersten Teil wird zun"achst die
+Auswahl der Werte der Kontrollparameter erl"autert. Im anschlie"senden Teil wird ein Beispiellauf
+detailliert besprochen. Darauf folgt eine kurze Diskussion der Auswirkungen von Variationen des
+Kontrollparameters $d_l$, der die Modifikation der Absterbewahrscheinlichkeit in Abh"angigkeit von
+der Ausbalanciertheit einer Pflanze bestimmt. Im letzten Teil wird die Auswertung einer Serie von
+L"aufen mit ansteigenden Mutationsraten diskutiert. Dabei wird gezeigt, da"s auch bei LindEvol-B
+die Evolution komplexer Pflanzenformen mit dem Auftreten hoher DVK-Werte korreliert ist, und da"s
+der Bereich von Mutationsraten, in dem die Evolution komplexer Wuchsformen und hoher DVK-Werte beobachtet
+wird, als Bereich einer \textsl{edge of chaos} charakterisiert werden kann.
+
+
+\subsection{Auswahl der Kontrollparameter}
+\label{lnd2-controlvalues}
+
+Bei den L"aufen, die in den folgenden Teilen besprochen werden, wurden au"ser den Mutationsraten keine
+anderen Kontrollparameter variiert. F"ur die Auswahl der konstanten Werte dieser Kontrollparameter
+gaben folgende "Uberlegungen, von denen einige durch Testl"aufe best"atigt wurden, den Ausschlag:
+
+\begin{itemize}
+
+\item Abmessungen der Welt: Die Populationsgr"o"se in LindEvol-B ist ver"anderlich. Dies bedeutet,
+da"s sie auch auf Null absinken kann; dann sind alle Pflanzen ausgestorben und es ist keine weitere
+Evolution mehr m"oglich. Die Populationsgr"o"se ist in LindEvol-B durch die Breite der Welt
+beschr"ankt. Bei geringer Breite der Welt und entsprechend kleiner Population k"onnen Fluktuationen
+der Populationsgr"o"se leicht zum Aussterben der Gesamtpopulation f"uhren. Derartige Fluktuationen
+k"onnen durch Pflanzen, die einen gro"sen Bereich der Welt "uberwuchern oder beschatten, ausgel"ost werden. Solche
+"Uberwucherungsvorg"ange kommen bei kleineren Welten h"aufiger vor. Die Breitenausdehnung, die eine
+buschf"ormige Pflanze erreicht, h"angt von ihrer H"ohe ab; daher kommen Pflanzen mit einer gr"o"seren
+Breitenausdehnung umso h"aufiger vor, je gr"o"ser die H"ohe der Welt im Verh"altnis zur Breite ist.
+Aus diesen Gr"unden wurden stets Welten von 500 * 50 Gitterpositionen verwendet.
+
+\item Gr"o"se der Startpopulation: In den Testl"aufen wurde stets beobachtet, da"s ein gro"ser Teil
+der am Simulationsstart generierten Pflanzen nicht vermehrungsf"ahig ist. Um die Wahrscheinlichkeit,
+der Erzeugung mindestens einer vermehrungsf"ahigen Pflanze zu maximieren, wurde stets $p_{\mathit{init}}=w$,
+also $p_{\mathit{init}}=500$ gesetzt.
+
+\item Absterbebasiswahrscheinlichkeit $d$: Bei kleinen Werten der Absterbewahrscheinlichkeit sind primitive,
+einzellige Formen evolution"ar ausgesprochen stabil, eine m"ogliche Evolution komplexerer Formen tritt daher erst nach
+langer Anfangsphase ein. Allzu hohe Werte f"uhren dagegen zu einem Aussterben der gesamten Population in der
+Anfangsphase. Testl"aufe ergaben, da"s die Populationen bei $d=0.4$ schnell aussterben. Bei $d=0.35$ k"onnen sich
+hingegen primitive Formen aus der Startpopulation stabil etablieren. Je kliner der Wert von $d$ gew"ahlt wird,
+desto stabiler sind die einzelligen Pflanzen und desto geringer ist folglich die Tendenz zur Evolution komplexerer
+Formen. Um eine allzu starke Stabilisierung dieser
+einfachen Formen zu vermeiden, wurde in den Simulationsl"aufen stets $d=0.35$ gew"ahlt.
+
+\item Modifikatoren der Absterbewahrscheinlichkeit: In LindEvol-GA bestimmt der Energiegehalt einer Pflanze die
+Vermehrungschance ihres Genoms. In Anlehnung daran soll in LindEvol-B ein hoher Energiegehalt zumindest die
+"Uberlebenschancen einer Pflanze vergr"o"sern. Dies wird durch die Auswahl von $d_e=-2.5$ erreicht. Auf eine gr"o"senabh"angige
+Beeinflussung der "Uberlebenschancen wurde verzichtet, also $d_n = 0.0$. F"ur die Erh"ohung der Absterbewahrscheinlichkeit
+durch einseitig "uberh"angendes Wachstum wurde $d_l = 0.15$ gew"ahlt; mit diesem Wert sind einfache, diagonale
+Pflanzen gegen"uber anderen Formen extrem benachteiligt, w"ahrend komplexe, buschartige Pflanzen recht stabil sein
+k"onnen. Auf die Bedeutung des Wertes von $d_l$ wird in (\ref{leanover-discussion}) n"aher eingegangen.
+
+\item Mutationsraten: Die Mutationsraten wurden, wie in LindEvol-GA, stets in einem festen Verh"altnis zueinander
+gew"ahlt. Da die bitweise Austauschmutation eine erheblich geringere Ver"anderung als Insertionen und
+Deletionen darstellt, sollte die Austauschrate gr"o"ser als die Insertions- und die Deletionsrate sein
+Daher wurden Austausch-, Insertions- und Deletionsrate stets im Verh"altnis 5:1:1 eingesetzt.
+
+\item Mutationsfaktor: Bei der hier gew"ahlten Gr"o"se der Welt k"onnen die Pflanzen in LindEvol-B erheblich
+gr"o"ser werden als die Pflanzen in den in \ref{lndga-results} besprochenen L"aufen. Dementsprechend vergr"o"sert
+sich das Maximum der Anzahl der \verb|mut-| bzw.\ \verb|mut+|-Aktionen, die eine Pflanze pro Zeitschritt ausf"uhren
+kann. Daher wurde der Mutationsfaktor mit $m_f=1.5$ kleiner als in LindEvol-GA gew"ahlt.
+
+\item Konfiguration des Genominterpreters: Hier wurden folgende Werte verwendet:
+
+\begin{tabular}{ll}
+\verb|num_divide|: 192 \\
+\verb|num_flyingseed|: 16 \\
+\verb|num_localseed|: 16 \\
+\verb|num_mutminus|: 16 \\
+\verb|num_mutplus|: 16 \\
+\end{tabular}
+
+Diese Werte wurden durch Erweiterung der bei LindEvol-GA verwendeten Konfiguration erhalten; es fanden keine
+Tests mit unterschiedlichen Konfigurationen des Genominterpreters statt.
+
+\item Stichproben bei Distanzverteilungsanalyse: Die Erstellung der Distanzverteilungen sowie die Berechnungen der
+DVK erfolgten mit Stichproben aus 50 zufallsgesteuert ausgew"ahlten Pflanzen einer Population (vgl.\ \ref{ddistr-method}).
+
+\end{itemize}
+
+
+\subsection{Einzelsimulation}
+\label{lnd2-individualrun}
+
+\begin{figure}
+\unitlength1cm
+\begin{picture}(16,20.5)
+\put(0,0){\makebox(16,20.5)[b]{\epsfxsize=16cm \epsffile{m00007n000e25l15.eps}}}
+\end{picture}
+
+\caption[Verlaufsdaten eines LindEvol-B--Laufs]
+{\label{lnd2-result}
+Verlaufsdiagramm des LindEvol-B--Laufs \runname{m00007n000e25l15}. Einige Boxen enthalten
+zwei Kurven. In der Beschriftung dieser Boxen sind jeweils die Bezeichnungen f"ur beide
+Me"sgr"o"sen, getrennt durch zwei Schr"agstriche, angegeben. Bei allen Boxen dieser Art
+ist einer der beiden Werte stets kleiner oder gleich dem anderen Wert: Die Anzahl verschiedener
+Genotypen kann maximal der Populationsgr"o"se entsprechen; der Energiegehalt einer Pflanze
+ist durch ihre Gr"o"se nach oben beschr"ankt; und die Anzahl der fliegenden Samen kann die
+Gesamtzahl der Samen nicht "ubersteigen.
+}
+\end{figure}
+
+% \begin{figure}[p]
+% 
+% \unitlength1cm
+% \begin{picture}(16,13)
+% \put(0,10.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{lnd2-w01000.eps}}}
+% \put(0,10){\makebox(16,0.5){Generation 1000}}
+% \put(0,8.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{lnd2-w10000.eps}}}
+% \put(0,7.5){\makebox(16,0.5){Generation 10000}}
+% \put(0,5.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{lnd2-w20000.eps}}}
+% \put(0,5){\makebox(16,0.5){Generation 20000}}
+% \put(0,3.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{lnd2-w30000.eps}}}
+% \put(0,2.5){\makebox(16,0.5){Generation 30000}}
+% \put(0,0.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{lnd2-w45000.eps}}}
+% \put(0,0){\makebox(16,0.5){Generation 45000}}
+% \end{picture}
+% 
+% \caption[Weltdarstellungen aus einer LindEvol-B--Simulation]
+% {\label{lnd2-worlds}
+% Weltdarstellungen aus dem LindEvol-B--Lauf \runname{m00007n000e25l15}
+% }
+% \end{figure}
+
+% \begin{figure}[p]
+% 
+% \unitlength1cm
+% \begin{picture}(16,5)
+% \put(0,3.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l02w.eps}}}
+% \put(0,2.5){\makebox(16,0.5){\textbf{a:} $d_l = 0.02$}}
+% \put(0,0.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l10w.eps}}}
+% \put(0,0){\makebox(16,0.5){\textbf{b:} $d_l = 0.1$}}
+% \end{picture}
+% 
+% \caption[Weltdarstellungen aus einer LindEvol-B--Simulation]
+% {\label{lnd2-otherworlds}
+% Weltdarstellungen aus LindEvol-B--L"aufen, jeweils nach dem Zeitschritt 49999. Bei $d_l = 0.02$
+% entsteht eine Pflanze, die die gesamte Welt "uberspannt. Bei $d_l = 0.1$ weisen diagonal
+% wachsende Pflanzen bereits eine ausreichende Stabilit"at auf, um das "Uberleben als Art
+% zu gew"ahrleisten. Buschf"ormig verzweigte Pflanzen sind jedoch erheblich stabiler und k"onnen
+% somit bis zur vollen H"ohe der Welt heranwachsen.
+% }
+% \end{figure}
+
+\begin{figure}[t]
+
+\unitlength1cm
+\begin{picture}(16,13)
+\put(0,9.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-p01000a.eps}}}
+\put(0,9.0){\makebox(7,0.5){\textbf{a:} Zeitschritt 1000}}
+\put(8,9.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-p20000a.eps}}}
+\put(8,9.0){\makebox(7,0.5){\textbf{b:} Zeitschritt 20000}}
+\put(0,5.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-p20000b.eps}}}
+\put(0,4.5){\makebox(7,0.5){\textbf{c:} Zeitschritt 20000}}
+\put(8,5.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-p30000a.eps}}}
+\put(8,4.5){\makebox(7,0.5){\textbf{d:} Zeitschritt 30000}}
+\put(0,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-p45000a.eps}}}
+\put(0,0.0){\makebox(7,0.5){\textbf{e:} Zeitschritt 45000}}
+\put(8,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-p45000c.eps}}}
+\put(8,0.0){\makebox(7,0.5){\textbf{f:} Zeitschritt 45000}}
+\end{picture}
+
+\caption[Genome in LindEvol-B]
+{\label{lnd2-genomes}
+Genome von typischen Pflanzen aus verschiedenen Generationen in Lauf \runname{m00007n000e25l15}. Oben ist jeweils
+der Ph"anotyp der Pflanze dargestellt, darunter ihr Genom in graphischer Form.
+}
+\end{figure}
+
+Der Lauf \runname{m00007n000e25l15} wurde mit den Mutationsraten $m_r=0.00035$, $m_i=0.00007$ und $m_d=0.00007$
+durchgef"uhrt; die restlichen Kontrollparameter waren entsprechend den Angaben in (\ref{lnd2-controlvalues})
+gesetzt. Abb.\ \ref{lnd2-result} zeigt das Verlaufsdiagramm von \runname{m00007n000e25l15}. F"ur einige Me"sgr"o"sen,
+die sich im Laufe des Lebens einer Pflanze ver"andern,
+wurden die Maximalwerte und die Durchschnittswerte in verschiedenen Boxen dargestellt. Dies war erforderlich,
+weil bei LindEvol-B keine Synchronisierung der Lebensphasen stattfindet, wie dies bei LindEvol-GA durch die
+Vegetationsperioden geschieht. Somit befinden sich in einer Population Pflanzen unterschiedlichen Alters; und in die
+Berechnung der Durchschnittswerte geht eine gr"o"sere Menge junger Pflanzen ein, bei denen die entsprechenden 
+Werte, wie z.B.\ die Gr"o"se, typischerweise klein sind. Der Durchschnittswert einer Gr"o"se kann daher durchaus
+eine Gr"o"senordnung unterhalb des Maximalwerts liegen. In diesem Fall ist er auf einer gemeinsamen Skala mit dem
+Maximalwert nicht ad"aquat visualisierbar.
+
+Bereits an den Kurven der Populationsgr"o"se und der Anzahl verschiedener Genome k"onnen verschiedene evolution"are
+Spr"unge abgelesen werden. Die Populationsgr"o"se bleibt w"ahrend der ersten 35000 Zeitschritte fast konstant bei
+ihrem Maximalwert von 500 (der Breite der Welt), um dann leicht abzusinken. Bei der Anzahl verschiedener Genotypen
+sind zwei weitere Spr"unge zu sehen, ein stark ausgepgr"agter Anstieg beim Zeitschritt 14000 und ein weniger abrupter
+weiterer Anstieg beim Zeitschritt 22500. Synchron mit dem R"uckgang der Populationsgr"o"se geht auch die Anzahl verschiedener
+Genotypen wieder zur"uck.
+
+Abb.\ \ref{lnd2-worlds} (Seite \pageref{lnd2-worlds}) zeigt Darstellungen der Welt in den verschiedenen Phasen
+der Evolution. In der Anfangsphase
+bildet sich zun"achst ein dichter Teppich aus einzelligen Pflanzen aus. Das Keimzellgen dieser Pflanze veranla"st
+die Keimzelle zur Produktion von Samen (Abb.\ \ref{lnd2-genomes}a). Da keine Zellen erzeugt werden, werden au"ser dem
+Keimzellgen keine weiteren Gene aktiviert.
+
+Bei Generation 1000 ist eine vertikal
+gewachsene Pflanze zu sehen. Diese produziert jedoch keine Samen, sie ist also steril. Da diese Pflanze eine gr"o"sere
+Zahl energiereicher Zellen aufweist, ist ihre Absterbewahrscheinlichkeit sehr gering, was ihr "Uberleben seit der
+Anfangsphase erkl"art. Aus der Kurve des maximalen Alters in Abb.\ \ref{lnd2-result} ist ersichtlich, da"s diese
+Pflanze erst nach dem Zeitschritt 2500 abstirbt.
+
+Beim Zeitschritt 10000 hat sich die Situation nicht wesentlich ge"andert. In Abb.\ \ref{lnd2-worlds} sind in diesem
+Zeitschritt einige mehrzellige Pflanzen zu sehen. Eine Untersuchung ergab jedoch, da"s alle mehrzelligen Pflanzen
+in dieser Population steril sind.
+
+Im Zeitschritt 20000 sind die den Boden der Welt bedeckenden Pflanzen zweizellig. Abb.\ \ref{lnd2-genomes}b zeigt
+das erwartungsgem"a"s einfache Entwicklungsprogramm einer solchen zweizelligen Pflanze. Der Vorteil dieser Pflanzen
+gegen"uber den einzelligen Pflanzen liegt in ihrer h"oheren Lebenserwartung. W"ahrend die obere Zelle Samen produziert,
+bleibt die untere Zelle, nachdem sie erneut ein Photon absorbiert hat, energiereich. Mit der Einstellung $d_e=-2.5$
+f"uhrt dies dazu, da"s die Absterbewahrscheinlichkeit auf weniger als die H"alfte des Ausgangswerts sinkt. Ein solcher
+R"uckgang der Absterbewahrscheinlichkeit ist in Abb.\ \ref{lnd2-result} beim Zeitschritt 14000 zu sehen, hier findet
+der evolution"are Schritt zur Zweizelligkeit statt.
+
+Die l"angere Lebenserwartung der zweistelligen Pflanzen f"uhrt dazu, da"s weniger Pflanzen pro Zeitschritt absterben
+und da"s dementsprechend auch weniger Pflanzen pro Zeitschritt neu entstehen k"onnen. Der Generationenablauf verlangsamt
+sich also. Auch Verdr"angungs- und Ausbreitungsprozesse laufen somit langsamer ab. Innerhalb einer Abstammungslinie
+sammeln sich daher mehr genetische Unterschiede an. Dies erkl"art die beobachtete Zunahme der Anzahl verschiedener
+Genotypen beim Auftreten der zweizelligen Formen. Mit diesem evolution"aren Schritt ist auch eine deutliche Ver"anderung
+bei den Distanzverteilungen verbunden, gr"o"sere Distanzwerte werden infolge der st"arkeren Divergenz taxonomischer
+Cluster h"aufiger.
+
+In Abb.\ \ref{lnd2-worlds} sind bei Generation 20000 bereits etliche unbeschr"ankt vertikal wachsende Pflanzen zu sehen.
+Jedoch auch hier sind s"amtliche Pflanzen dieser Art steril. Abb.\ \ref{lnd2-genomes}c zeigt das Entwicklungsprogramm
+einer solchen Pflanze. Ebenso wie die bei verschiedenen LindEvol-GA--L"aufen beobachteten Pflanzen dieser Gestalt
+speichern au"ser der apikalen Zelle alle Zellen Energie. In LindEvol-B f"uhrt dies zu einer hohen Lebenserwartung,
+nicht jedoch zur Reproduktion. Die H"aufigkeit der Pflanzen dieser Art erkl"art sich allein durch ihre lange Lebensdauer.
+Im Zeitschritt 20000 sind sie erheblich h"aufiger als im Zeitschritt 10000, weil das Entwicklungsprogramm der zweizelligen
+Pflanzen bereits das Keimzellgen, das f"ur das unbeschr"ankte vertikale Wachstum erforderlich ist, enth"alt. Die 
+Wahrscheinlichkeit f"ur die Entstehung eines Wachstumsprogramms f"ur eine unbeschr"ankt wachsende, vertikale Pflanze
+ist somit f"ur ein Genom einer zweizelligen Pflanze h"oher als bei einem Genom einer einzelligen Pflanze.
+
+Beim Zeitschritt 25000 ist ein starker Anstieg der durchschnittlichen Gr"o"se zu beobachten. Hier treten die ersten
+unbeschr"ankt wachsenden, nicht sterilen Pflanzen auf. Abb.\ \ref{lnd2-worlds} zeigt, da"s es sich um vertikale Formen
+handelt, die dicht in der Welt wachsen. Abb.\ \ref{lnd2-genomes}d zeigt das Entwicklungsprogramm dieser Pflanzen.
+Nur die unterste Zelle speichert bei diesen Pflanzen Energie, die Absterbewahrscheinlichkeit dieser Pflanzen entspricht
+damit derjenigen der zweizelligen Formen. Alle anderen Zellen au"ser der apikalen Zelle setzen die von ihnen absorbierte
+Energie zur Samenproduktion ein. Nachdem die Pflanze eine gewisse H"ohe erreicht hat, produziert sie damit in fast jedem
+Zeitschritt einen Samen (sofern sie nicht durch eine andere Pflanze "uberschattet wird). Eine zweizellige Pflanze produziert
+dagegen im Mittel nur in jedem zweiten Zeitschritt einen Samen. Der Vorteil der unbeschr"ankt vertikal wachsenden Pflanzen
+Pflanzen ist also nicht eine h"ohere Lebenserwartung, sondern eine effektivere Samenproduktion.
+
+Im Zeitschritt 30000 existieren einige Pflanzen, die seitlich angelagerte Zellen aufweisen. Diese sind jedoch alle
+steril; sie sind durch Mutationen des samenproduzierenden Gens (Gen 38 in Abb.\ \ref{lnd2-genomes}d) entstanden.
+Die ersten nicht sterilen Formen mit seitlichen Ausw"uchsen treten kurz nach dem Zeitschritt 35000 auf. Durch diese
+Entwicklung kommt es erstmalig zu Raumkonflikten und Angriffen in signifikantem Ausma"s. Dies schl"agt sich in einem
+Anstieg der Anzahl der Angriffe und in einem R"uckgang der Populationsgr"o"se nieder. Durch die Angriffe sinkt auch
+das durchschnittliche Alter deutlich ab.
+
+Das Auftreten der Pflanzen mit seitlichen Verzweigungen geht mit einem Wechsel der Samenverbreitungsform einher.
+W"ahrend der Phasen der Dominanz einzelliger und strikt vertikal wachsender Pflanzen findet die Reproduktion haupts"achlich
+durch \verb|localseed| statt. Die Nachkommen entstehen also so nah wie m"oglich an der Mutterpflanze. Da bei strikt
+vertikalem Wachstum keine r"aumliche Konkurrenz stattfindet, ist dies eher vorteilhaft f"ur die Pflanzen, weil die Strategie
+der Vermehrung mittels \verb|localseed| zur Erhaltung eines konkurrenzarmen Umfeldes beitr"agt. Pflanzen, die seitliche
+Verzweigungen ausbilden, greifen dabei zwangsl"aufig auch ihre Nachbarn an. F"ur solche Pflanzen ist es ung"unstig, die
+Nachkommen bevorzugt in der N"ahe der Mutterpflanze zu erzeugen.
+
+Im Zeitschritt 45000 sind die Pflanzenformen mit seitlichen Verzweigungen fest etabliert (s.\ Abb.\ \ref{lnd2-worlds}).
+Die Abbildungen \ref{lnd2-genomes}e und \ref{lnd2-genomes}f zeigen die Entwicklungsprogramme von zwei verschiedenen
+Formen dieses Typs. Die Entwicklungsprogramme verzweigter Formen sind erheblich komplexer als die der einfachen vertikalen
+Formen. Die Samenproduktion findet haupts"achlich in den seitlichen Pflanzenbereichen statt. Mit der Entstehung der
+komplexeren Entwicklungsprogramme geht eine Tendenz zur Verringerung der effektiven Mutationsraten einher,
+dieser ist jedoch nicht entfernt so ausgepr"agt wie in den L"aufen von LindEvol-GA,
+bei denen dieses Ph"anomen beobachtet wurde.
+
+
+\subsection{Variation des Kontrollparameters $d_l$}
+\label{leanover-discussion}
+
+\begin{sloppypar}
+Der Kontrollparameter $d_l$, der die Modifikation der Absterbewahrscheinlichkeit einer Pflanze in Abh"angigkeit von
+ihrem "Uberhangskoeffizienten (Gl.\ \ref{leanover-eq}) steuert, erwies sich als "au\discretionary{s-}{s}{"s}ert
+wichtig f"ur den qualitativen
+Verlauf der Simulationen. Bei kleinen Werten f"ur diesen Kontrollparameter kommt es regelm"a"sig zur Entstehung
+von Pflanzen, die die gesamte Welt "uberdecken. Abb.\ \ref{lnd2-otherworlds}a (Seite \pageref{lnd2-otherworlds}) 
+zeigt ein Beispiel einer solchen
+Pflanze. Hat eine Pflanze erst einmal dieses Ausma"s erreicht, hat sie einen sehr kleinen "Uberhangskoeffizienten.
+Pflanzen dieser Art sind oft steril und neigen zum Energiespeichern, was ihre Absterbewahrscheinlichkeit klein h"alt.
+Solche Pflanzen k"onnen als superstabil bezeichnet werden; sie sind sehr gut ausbalanciert und haben einen hohen
+Energiegehalt, was zu einer entsprechend sehr kleinen Absterbewahrscheinlichkeit f"uhrt. Ferner sind solche Pflanzen
+aufgrund ihrer Gr"o"se faktisch nicht erfolgreich angreifbar. Existiert eine superstabile Pflanze w"ahrend eines ausgedehnteren
+Zeitraums, sterben alle anderen Pflanzen ab. Wenn die superstabile Pflanze steril ist, werden keine neuen Pflanzen
+mehr gebildet. In diesem Fall sind nach dem Absterben der superstabilen Pflanze keine Individuen mehr in der Population,
+die Simulation ist damit vorzeitig beendet.
+\end{sloppypar}
+
+Bei allen untersuchten Kontrollparameterkonfigurationen, bei denen massive Buschformen entstanden, kam es fr"uher
+oder sp"ater zum Auftreten superstabiler Pflanzen mit nachfolgendem vorzeitigen Ende der Evolution. Bereits bei
+$d_l=0.1$ sind Ans"atze zur Entstehung buschf"ormiger Pflanzen zu beobachten, wie Abb.\ \ref{lnd2-otherworlds}b
+zeigt. Beide Darstellungen in Abb.\ \ref{lnd2-otherworlds} entstammen aus L"aufen, die mit den Mutationsraten $m_r=0.002$, $m_i=0.0004$
+und $m_d=0.0004$ durchgef"uhrt wurden. Bei niedrigeren Mutationsraten kommt es auch bei $d_l=0.1$ zur Entstehung
+superstabiler Pflanzen. Dieses Ph"anomen ist unerw"unscht, weil es in der nat"urlichen Evolution keine derart massiven, globalen
+Effekte einzelner Individuen gibt. Aus diesem Grund wurde f"ur den Kontrollparameter $d_l$ f"ur die im Folgenden
+besprochene Serie von L"aufen der Wert 0.15 eingesetzt, wie dies auch bei \runname{m00007n000e25l15} der Fall war.
+
+
+\subsection{Systematische Untersuchung der Eigenschaften von \\
+LindEvol-B in Abh"angigkeit von den Mutationsraten}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,20)
+\put(0,14.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-numcells.eps}}}
+\put(0,13.5){\makebox(7,0.5){\textbf{a:} Gr"o"se}}
+\put(8,14.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-energy.eps}}}
+\put(8,13.5){\makebox(7,0.5){\textbf{b:} Energiegehalt}}
+\put(0,9.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-glength.eps}}}
+\put(0,9.0){\makebox(7,0.5){\textbf{c:} Genoml"ange}}
+\put(8,9.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-nused.eps}}}
+\put(8,9.0){\makebox(7,0.5){\textbf{d:} Anzahl aktiver Gene}}
+\put(0,5.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-age.eps}}}
+\put(0,4.5){\makebox(7,0.5){\textbf{e:} Alter}}
+\put(8,5.0){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-mutcounter.eps}}}
+\put(8,4.5){\makebox(7,0.5){\textbf{f:} Mutationsexponent}}
+\put(0,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-ddc.eps}}}
+\put(0,0.0){\makebox(7,0.5){\textbf{g:} DVK}}
+\put(8,0.5){\makebox(7,4)[b]{\epsfysize=4cm \epsffile{lnd2-gdv.eps}}}
+\put(8,0.0){\makebox(7,0.5){\textbf{h:} genetische Diversit"at}}
+\end{picture}
+
+\caption[LindEvol-B bei verschiedenen Mutationsraten]
+{\label{lnd2-mutseries}
+Durchschnittswerte verschiedener Me"sgr"o"sen bei L"aufen mit verschiedenen Mutatiosnraten, jeweils ermittelt nach dem Zeitschritt 49900.
+Auf der Abszisse ist in logarithmischem Ma"sstab der Wert aufgetragen, der f"ur die Insertions- und die Deletionsrate
+gew"ahlt wurde, die Austauschrate war jeweils f"unfmal so hoch.
+}
+\end{figure}
+
+Der Selektionsvorgang, also das Absterben von Pflanzen und ihre Reproduktion, wird in LindEvol-B nicht durch einen
+expliziten Kontrollparameter, sondern durch das Wachstumsverhalten der Pflanzen, aus dem Absterbewahrscheinlichkeit
+und Samenproduktion resultieren, bestimmt. F"ur die Mutation sind hingegen, wie in LindEvol-GA, die entsprechenden
+Raten als explizite Kontrollparameter anzugeben. Anders als bei LindEvol-GA, wo das Evolutionsgeschehen in Abh"angigkeit
+von Selektions- und Mutationsrate charakterisiert werden konnte (\ref{lndga-parameterscan}), kann bei LindEvol-B
+nur der Einflu"s unterschiedlicher Mutationsraten auf die Evolution untersucht werden. Zu diesem Zweck wurde eine
+Serie von L"aufen durchgef"uhrt, bei der die Mutationsraten systematisch von $2 \cdot 10^{-6}$ bis $10^{-2}$
+gesteigert wurden. Die Austauschrate betrug dabei jeweils das f"unffache der Insertions- und Deletionsrate
+(vgl.\ \ref{lnd2-controlvalues}).
+
+Abb.\ \ref{lnd2-mutseries} zeigt die Ergebnisse dieses Experiments. Die Durchschnittswerte verschiedener Gr"o"sen
+(Gr"o"se der Pflanzen, Energiegehalt der Pflanzen, Genoml"ange, Anzahl aktivierter Gene, Alter und Mutationsexponent)
+sowie die DVK und die genetische Diversit"at wurden im Zeitschritt 49900 bestimmt.
+
+Sowohl bei sehr geringen Mutationsraten ($m_i < 10^{-5}$) als auch bei hohen Mutationsraten ($m_i > 0.003$) entwickeln sich
+nur einzellige Pflanzen. Bei hohen Mutationsraten liegt dies daran, da"s komplexere Entwicklungsprogramme durch Mutationen
+leichter zerst"ort werden, wie dies bereits in LindEvol-GA beobachtet wurde (vgl.\ \ref{xlong1005section}). Bei LindEvol-B
+kommt erschwerend hinzu, da"s komplexere Formen eine l"angere Generationsdauer haben, ihr Genom wird somit w"ahrend ihres
+Lebens h"aufiger mutiert. Da bei hohen Mutationsraten stets einige sterile, mehrzellige Pflanzen in der Population existieren,
+liegt der Durschnittswert der Gr"o"se etwas "uber eins.
+
+Bei sehr niedrigen Mutationsraten kommt dagegen w"ahrend der hier betrachteten Anzahl von Zeitschritten keine
+Evolution mehrzelliger Formen zustande. Anders als bei LindEvol-GA ist die Produktion mehrerer Zellen allein nicht
+mit einem Selektionsvorteil verbunden. Nur Pflanzen, die sowohl eine m"oglichst ausbalancierte Gestalt entwickeln
+und dabei auch Samen produzieren, haben gegen"uber den Einzellern Vorteile. Der evolution"are Schritt hin zu den
+einfachsten Formen dieser Art, etwa den in \runname{m00007n000e25l15} beobachteten, zweizelligen Pflanzen,
+wird bei den sehr geringen Mutationsraten innerhalb der ersten 50000 Zeitschritte nicht vollzogen. Damit kommt
+w"ahrend des Beobachtungszeitraums keine Evolution komplexerer Formen in Gang.
+
+\begin{sloppypar}
+Im Bereich zwischen den sehr niedrigen und den hohen Mutationsraten entwickeln sich innerhalb von 50000
+Zeitschritten Gemeinschaften aus mehrzelligen Pflanzen. Der zuvor besprochene Lauf \runname{m00007n000e25l15} geh"ort
+zu dieser Klasse. In einigen F"allen entstehen beschr"ankt wachsende Formen, was zu nur m"a"sig erh"ohten
+Durchschnittswerten der Gr"o"se und des Energiegehalts f"uhrt, w"ahrend sich in anderen F"allen, wie auch in
+\runname{m00007n000e25l15}, unbeschr"ankt wachsende Pflanzen entwickeln. Bei der Evolution solcher komplexer Wuchsformen
+kommt es auch zu einem Anstieg der Durchschnittswerte des Energiegehalts und des Alters.
+\end{sloppypar}
+
+Eine Korrelation zwischen der Evolution komplexer Wuchsformen und der durchschnittlichen Genoml"ange ist nicht feststellbar.
+Bei den durchschnittlichen Genoml"angen f"allt lediglich ein Spitzenwert bei Mutationsraten von 0.005 auf, dieser ist
+darauf zur"uckzuf"uhren, da"s das Maximum des Erwartungswerts f"ur die Verl"angerung eines Genoms nahe bei $m_i = m_d = 0.005$
+liegt (vgl.\ \ref{mutationdef}). Die durchschnittliche Anzahl aktiver Gene zeigt hingegen, wie auch in LindEvol-GA,
+eine deutliche Korrelation mit der Evolution komplexer Wuchsformen.
+
+Eine deutliche Evolution des Mutationsexponenten, wie in LindEvol-GA, wurde in keinem Lauf von LindEvol-B beobachtet. Ein Grund
+hierf"ur ist sicherlich die Tatsache, da"s sich die Generationen in LindEvol-B "uberlappen, so da"s stets auch ein Anteil an
+jungen Pflanzen, die noch nicht das Entwicklungsstadium, in dem sie aktiv die effektiven Mutationsraten verringern, erreicht
+haben, in die Durchschnittsberechnung eingeht. Der Hauptgrund f"ur die geringe Tendenz zur aktiven Verringerung der effektiven
+Mutationsraten d"urfte aber sein, da"s die Pflanzen in LindEvol-B steuern k"onnen, wieviele Samen sie erzeugen. Die Rate der
+Produktion von Nachkommen ist also nicht, wie in LindEvol-GA, durch eine Selektionsrate extern fest vorgegeben. Zur Erzielung
+einer maximalen Ausbreitungsrate k"onnen die Pflanzen also nicht nur ihre effektiven Mutationsraten regulieren, sondern alternativ
+dazu auch mehr Samen produzieren.
+
+Dennoch ist bei den Mutationsexponenten ein Zusammenhang mit den Mutationsraten zu erkennen. Bei sehr geringen Mutationsraten,
+bei denen keine Entwicklung h"oherer Formen stattfindet, bleibt auch jegliche aktive Ver"anderung der effektiven Mutationsraten
+aus. Die L"aufe, bei denen die Evolution komplexer Pflanzenformen beobachtet wurde, zerfallen hinsichtlich der Evolution der
+Mutationsexponenten in zwei Klassen. Im Bereich mit $m_i < 0.0002$ werden sowohl positive als auch negative Durchschnittswerte
+des Mutationsexponenten beobachtet. Bei $m_i \geq 0.0002$ liegen dagegen bei s"amtlichen L"aufen, in denen komplexe Pflanzen
+entstanden, die Durchschnittswerte des Mutationsexponenten im negativen Bereich. Dies ist als Hinweis auf eine im Bereich von
+$m_i = 0.0002$ liegende Grenze zu werten, oberhalb derer die aktive Erniedrigung der effektiven Mutationsraten signifikante
+Selektionsvorteile mit sich bringt. Wegen der intrinsischen Gestaltung der Selektionseinfl"usse, der unterschiedlichen individuellen
+Lebensdauern und der daraus resultierenden unterschiedlich h"aufigen Anwendung der Mutationsoperatoren auf das Genom einer individuellen
+Pflanze kann zu LindEvol-B keine mathematische Absch"atzung der Mutationsfolgen in der Art, wie dies f"ur LindEvol-GA m"oglich
+war (\ref{mutconsequences}), entwickelt werden, auf deren Grundlage diese Grenze mit mathematischen Methoden charakterisiert werden
+k"onnte.
+
+Die DVK zeigt, wie auch in LindEvol-GA, eine deutliche Korrelation zu der Evolution komplexer Pflanzenformen.
+Besonders ausgepr"agt ist die Korrelation zwischen der DVK und der durchschnittlichen Anzahl aktiver Gene,
+die ein Ma"s f"ur die Komplexit"at der Entwicklungsprogramme ist. Die Korrelation zwischen der DVK und den
+Durchschnittswerten von Gr"o"se, Energiegehalt und Alter wird dagegen von den starken Unterschieden zwischen
+beschr"anktem und unbeschr"anktem Wachstum gest"ort. Wie auch bei LindEvol-GA erweist sich die genetische
+Diversit"at als Ma"s, das zur Charakterisierung von L"aufen, bei denen komplexe Formen entstehen, ungeeignet ist; die genetische
+Diversit"at erreicht bei den h"ochsten Mutationsraten ihre Maximalwerte, sie ist nicht geeignet, um Populationen, die im Sequenzraum
+ann"ahernd gleichverteilt sind, von solchen zu unterscheiden, die eine komplex strukturierte Verteilung im Sequenzraum aufweisen.
+
+Das Verhalten von LindEvol-B in Abh"angigkeit von den Mutationsraten entspricht in seiner Charakteristik
+dem Verhalten von Zellularautomaten in Abh"angigkeit von dem $\lambda$-Parameter \cite{Langton90,Langton92}.
+Mithilfe des $\lambda$-Parameters kann das Verhalten von Zellularautomaten abgesch"atzt werden.
+Bei niedrigen Werten des $\lambda$-Parameters wird f"uhrt die Dynamik der Zellularautomaten zu einem Fixpunkt,
+d.h.\ zu einer Konfiguration, bei der beim "Ubergang zum n"achsten Zeitschritt bei keinem Elementarautomaten mehr
+eine Zustands"anderung stattfindet. Bei h"oheren Werten zeigt sich eine periodische
+Dynamik. Bei hohen $\lambda$-Werten entspricht die Dynamik des Automaten einem statistischen Rauschen,
+Korrelationen zwischen den Zust"anden in aufeinanderfolgenden Zeitschritten sind nicht mehr festzustellen.
+Im Bereich des Phasen"ubergangs zwischen Automaten mit periodischer Dynamik und Automaten mit randomisierter
+Dynamik werden Automaten mit einer komplexen Dynamik beobachtet.
+
+Sowohl die Mutationsraten als auch der $\lambda$-Parameter bestimmen den Grad der Randomisierung im jeweiligen
+System. In beiden F"allen sind komplexe Ph"anomene in einem intermedi"aren Bereich des Kontrollparameters
+zu beobachten. Aufgrund dieser Gemeinsamkeit kann die Evolution komplexer Pflanzenformen in LindEvol-B als
+\textsl{life at the edge of chaos} \cite{Langton92} klassifiziert werden.
+
+In LindEvol-B ist das Verhalten des Systems bei geringer und bei hoher Randomisierung auf der
+Ebene der Ph"anotypen sehr "ahnlich, in beiden F"allen dominieren einzellige Pflanzen. Die klare Korrelation
+zwischen hohen DVK-Werten und der Evolution komplexer Pflanzenformen zeigt, da"s auch in LindEvol-B
+hohe DVK-Werte den Bereich der \textsl{edge of chaos} anzeigen. Da zu LindEvol-B keine mathematische
+Mutationsfolgenabsch"atzung m"oglich ist, kann diese \textsl{edge of chaos} nicht mit mathematischen
+Methoden charakterisiert werden, wie dies bei LindEvol-GA geschehen ist (\ref{lndga-parameterscan}).
+
+
+\section[Zusammenfassung]{Zusammenfassende Bewertung der Ergebnisse \\ von LindEvol-B}
+\label{lnd2-summary}
+
+Mit LindEvol-B ist die Entwicklung eines Modells der LindEvol-Familie gelungen, in dem die Selektionsrate nicht
+ein extern vorzugebender Kontrollparameter ist, sondern durch intrinsische Prozesse gestaltet wird. Somit ist
+die Evolution h"oherer Komplexit"at durch eine Anpassung der Lebens- und Generationsdauer m"oglich. Auch die Populationsgr"o"se
+ist nicht, wie in LindEvol-GA, fest vorgegeben, sondern lediglich durch die Breite der Welt beschr"ankt. Infolgedessen
+sind die Pflanzen nicht mit gleichm"a"sigen Abst"anden in der Welt angeordnet, sondern es bildet sich typischerweise
+ein dichter Pflanzenteppich am Boden der Welt aus, und es kommt zu erheblich mehr Kontakten zwischen Pflanzen als in
+den LindEvol-GA--L"aufen, die in Kapitel \ref{lindevol-ga} diskutiert wurden. Von diesem Unterschied abgesehen sind
+die in LindEvol-B und in LindEvol-GA beobachteten Pflanzenformen recht "ahnlich. Die Evolution von Pflanzen globaler
+Ausdehnung kann bei LindEvol-GA ausgeschlossen werden, indem die Breite der Welt gr"o"ser als das Zweifache der Dauer
+einer Vegetationsperiode gew"ahlt wird. In LindEvol-B kann die Entstehung superstabiler Pflanzen durch die Verwendung
+eines ausreichend hohen Wertes f"ur $d_l$ erschwert werden. Dies verschafft vertikal wachsenden Pflanzen einen Vorteil,
+der in LindEvol-GA nicht existiert.
+
+Einzellige, reproduktionsf"ahige Pflanzen haben in LindEvol-B eine erheblich gr"o"sere evolution"are Stabilit"at als
+Einzeller in LindEvol-GA. Es wurde gezeigt, da"s in LindEvol-B sowohl bei sehr niedrigen als auch bei sehr hohen Mutationsraten
+keine Evolution mehrzelliger Formen stattfindet. Nur bei intermedi"aren Mutationsraten kommt es zur Evolution komplexer,
+mehrzelliger Formen. Die Evolution komplexer Pflanzenformen in LindEvol-B wurde somit als \textsl{edge of chaos} Ph"anomen
+charakterisiert. In dem Intervall der Mutationsraten, bei denen mehrzellige Pflanzen evolvieren, befindet sich ein Grenzwert
+der Mutationsraten oberhalb dessen eine deutliche Tendenz zur Evolution negativer Mutationsexponenten beobachtet wird.
+Es wurde, wie bereits in LindEvol-GA, eine Korrelation zwischen hohen DVK-Werten und dem Bereich der
+\textsl{edge of chaos} festgestellt. 
+
+\begin{sloppypar}
+Trotz der erweiterten evolution"aren M"oglichkeiten wurden in keinem Lauf von LindEvol-B Pflanzen beobachtet,
+deren Gestalt sich grundlegend von den mit LindEvol-GA beobachteten Pflanzen unterscheidet. Eine naheliegende
+Vermutung ist, da"s dies auf die Beschr"ankung des Pflanzenwachstums auf zwei Dimensionen zur"uckzuf"uhren ist.
+Daher wurde ein Modell mit dreidimensionaler Welt entwickelt. Da lokale Strukturen bei dreidimensionaler Topologie
+auf Achtzehnbitzahlen abgebildet werden (\ref{celldef}), wurde die blockorientierte Genominterpretation
+erweitert. Bei dieser erweiterten Version wurde als linke Regelseite eine vollst"andig spezifizierte lokale Struktur
+in drei Bytes codiert, sechs Bits blieben dabei unbenutzt. Zusammen mit dem Aktionscode umfa"ste ein Gen somit
+vier Bytes. Es zeigte sich jedoch, da"s mit diesem Modell bei unterschiedlichsten Kontrollparameters"atzen keine
+Evolutionsprozesse eintraten, die Anfangspopulation starb stets aus, ohne Nachkommen zu produzieren. Ebenso kamen
+keine Zellteilungen zustande. Der triviale Grund f"ur diesen Befund ist, da"s bei der erweiterten blockorientierten
+Genominterpretation die Wahrscheinlichkeit f"ur die zufallsgesteuerte Generierung eines Keimzellgens $2^{-18}$
+betr"agt, w"ahrend sie f"ur LindEvol-B bei $2^{-8}$ liegt. Um mit derselben Wahrscheinlichkeit wie im zweidimensionalen
+Modell eine Startpopulation mit vermehrungsf"ahigen Pflanzen zu erzeugen, m"u"sten in dem dreidimensionalen Modell
+demnach rund tausendfach gr"o"sere Startpopulationen erzeugt werden, was die im Rahmen dieser Arbeit verf"ugbaren Rechnerkapazit"aten
+massiv "uberschritten h"atte. Zu diesem technischen Hinderungsgrund gesellt sich die "Uberlegung, da"s die Wahrscheinlichkeit
+f"ur die Aktivierung eines Gens bei Achtzehnbit-Zellzust"anden entsprechend obiger Rechnung erheblich kleiner ist als
+bei Achtbit-Zust"anden. Das Prinzip der blockorientierten Genominterpretation hatte sich somit als ungeeignet f"ur
+die dreidimensionale Topologie erwiesen. Diese Feststellung gab zur Entwicklung der promotororientierten Genominterpretation
+Ansto"s.
+\end{sloppypar}
+
+% Selektionsrate intrinsisch gestaltet: veraenderliche Anzahl abgestorbener / neu gebildeter Pflanzen pro Zeitschritt.
+% Keine Entstehung grundlegend neuer Formen im Vergleich zu LindEvol-GA
+% Beschraenkungen verhindern Entwicklung eines 3D-Modells
+% DVK erweist sich auch hier als Indikator fuer komplexe Phaenomene
+% Evolution hoeherer Komplexitaet moeglich durch Anpassung der Generationsdauer (langsamere Selektion,
+%     komplexere Formen)
+% Nicht mathematisch charakterisierbare Grenze der Mutationsraten
+

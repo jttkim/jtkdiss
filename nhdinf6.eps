@@ -1,0 +1,82 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: Jan T. Kim
+%%Title: 2D-neighborhoods modified by division
+%%BoundingBox: 0.0 0.0 250.0 250.0
+%%EndComments
+%%BeginProlog
+
+/S {
+save
+exch /h exch def
+exch /w exch def
+exch /y0 exch def
+exch /x0 exch def
+exch /s exch def
+/m w h add def
+/x 0 def
+/y y0 def
+gsave
+newpath x0 y0 moveto w 0 rlineto 0 h rlineto w neg 0 rlineto closepath clip
+{
+  /x x s add def
+  x m gt { exit } if
+  newpath x0 y0 x add moveto x0 x add y0 lineto stroke
+} loop
+grestore
+restore
+} bind def
+
+/PQ {
+newpath
+moveto
+dup 0 exch rlineto
+dup 0 rlineto
+0 exch neg rlineto
+closepath stroke
+} bind def
+
+/PQF {
+newpath
+moveto
+dup 0 exch rlineto
+dup 0 rlineto
+0 exch neg rlineto
+closepath gsave setgray fill grestore stroke
+} bind def
+
+/CS {
+save
+exch /y exch def
+exch /x exch def
+exch dup stringwidth .5 mul y exch sub exch .5 mul x exch sub exch moveto show
+restore
+} bind def
+
+%%EndProlog
+
+save
+
+/Courier-Bold findfont 35 scalefont setfont
+1 setlinecap 1 setlinejoin
+
+1 setlinewidth
+.8 150 0 0 PQF
+.2 50 50 50 PQF
+10 0 0 150 150 S
+
+50 0 0 PQ
+50 50 0 PQ
+50 100 0 PQ
+50 0 50 PQ
+50 100 50 PQ
+50 0 100 PQ
+50 50 100 PQ
+4 setlinewidth
+50 50 50 PQ
+(M) 75 65 CS
+50 100 100 PQ
+(T) 125 115 CS
+
+restore
+
+%%EOF

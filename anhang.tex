@@ -1,0 +1,657 @@
+\begin{appendix}
+
+
+\chapter{Elektronisches Quellenverzeichnis}
+\label{electronicsources}
+
+Neben der im Literaturverzeichnis aufgelisteten Literatur wurden bei
+der Erstellung der vorliegenden Arbeit verschiedene durch das
+Internet zug"angliche Informationsquellen intensiv genutzt.
+Die wichtigsten elektronischen Informationsquellen werden in diesem Anhang
+aufgelf"uhrt.
+
+
+\section{\textsl{ftp}}
+\label{ftp-app}
+
+{\slshape ftp} ist die Abk"urzung f"ur engl.\ {\slshape file transfer protocol}, einem
+Protokoll zur "Ubertragung von Dateien "uber das Internet. Im Allgemeinen geh"ort zu {\slshape ftp}
+auch die Identifikation des Benutzers durch die Eingabe seiner
+Kennung und seines Passworts ({\slshape login}). Bei der speziellen Form des {\slshape anonymous ftp}
+l"a"st der Server jedoch den Zugriff auf daf"ur freigegebene Daten durch
+jeden Benutzer zu. Der Benutzer hat dabei \verb|anonymous| oder
+\verb|ftp| als Kennung und seine Email-Adresse als Passwort anzugeben.
+{\slshape Anonymous ftp} ist einer der Hauptverbreitungswege f"ur
+nichtkommerzielle Software. Viele Softwareprodukte, die im Rahmen der
+vorliegenden Arbeit zum Einsatz kamen, wurden "uber {\slshape ftp}
+bezogen. In der folgenden Tabelle sind einige {\slshape ftp}-Server
+aufgef"uhrt, die im Rahmen dieser Arbeit als Bezugsquellen f"ur
+nichtkommerzielle Software und Dokukmentation genutzt wurden.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|l|X|} \hline
+Servername & Angebot \\ \hline
+\verb|alife.santafe.edu|       & Ver"offentlichungen wissenschaftlicher Artikel im Bereich
+                                 des {\slshape Artificial Life} \\
+\verb|atari.archive.umich.edu| & Software f"ur Atari-Computer \\
+\verb|ftp.uni-muenster.de|     & GNU Software f"ur Atari \\ 
+\verb|ftp.uni-paderborn.de|    & Unix-Systemsoftware und Dokumentation, Atari-Soft\-ware \\
+\verb|life.slhs.udel.edu|      & Dokumentation zu Tierra \protect\cite{Ray92} \\
+\verb|prep.ai.mit.edu|         & Prim"arer Server f"ur GNU-Software und Dokumentation \\
+\verb|src.doc.ic.ac.uk|        & Software f"ur Atari-Computer \\ \hline
+\end{tabularx}
+\medskip
+
+
+\section{\textsl{World Wide Web}}
+
+Das \textsl{World Wide Web} (WWW) ist eine Sammlung von Hypertext-Dokumenten, die in HTML
+(\textsl{hypertext markup language}) angelegt sind. HTML-Dokumente werden auf Servern,
+die mit dem Internet verbunden sind, zur Verf"ugung gestellt.
+Mithilfe entsprechender Programme,
+die als \textsl{WWW-Browser} bezeichnet werden, k"onnen die HTML-Dokumente von diesen
+Servern abgerufen und betrachtet werden.  Ein HTML-Dokument kann
+Verweise, die als Hyperlinks bezeichnet werden, auf andere HTML-Dokumente enthalten.
+Dokumente werden dabei durch einen URL (\textsl{universal resource locator}) spezifiziert.
+Damit kann nicht nur auf andere Dokumente, die auf demselben Server sind, verwiesen
+werden, vielmehr sind Verweise auf Dokumente auf beliebigen Servern m"oglich. 
+Im Folgenden sind die URLs einiger Dokumente aufgelistet, die f"ur die vorliegende Arbeit
+relevante Informationen enthalten.
+
+\begin{itemize}
+
+\item \verb|http://alife.santafe.edu/|: Software, Dokumentation und wissenschaftliche Manuskripte
+zum Themenbereich \textsl{Artificial Life}, vom Santa Fe Institute Studies in the Sciences of Complexity (SFI).
+
+\item \verb|http://www.cpsc.ucalgary.ca/projects/bmv/vmm/title.html|: Einf"uhrung in L-Systeme und
+verwandte Modelle der Morphogenese von \textsc{P.\ Prusinkiewicz} und \textsc{M.\ Hammel}.
+
+\item \verb|http://www-personal.engin.umich.edu/~streak/bib/|: Bibliographie zum Themenbereich komplexe
+Systeme von \textsc{T.\ Belding}.
+
+\end{itemize}
+
+
+\section{\textsl{Usenet}}
+
+Das Usenet besteht aus derzeit rund 6000 Diskussionsforen, die {\slshape newsgroups}
+genannt werden. Mithilfe entsprechender Software kann jeder Benutzer eines
+Rechners mit Zugang zum Internet die Beitr"age in den {\slshape newsgroups}
+lesen und selbst Beitr"age verfassen. \textsl{Newsgroups}, in denen Themen mit Bezug
+zu der vorliegenden Arbeit diskutiert werden, sind \verb|comp.ai.alife|, \verb|comp.ai.genetic|,
+\verb|bionet.molbio.evolution|, \verb|bionet.info-theory|, \verb|sci.bio.evolution|, 
+\verb|sci.chaos| und \verb|sci.nonlinear|.
+
+
+
+\chapter{Arbeitsbeschreibung der erstellten Software}
+\label{technicalstuff}
+
+Die Quelltexte s"amtlicher Software, die im Rahmen dieser Arbeit zur Durchf"uhrung von
+Simulationen und ihrer Auswertung erstellt wurde, werden gleichzeitig mit der Ver"offentlichung
+dieser Arbeit im Internet zur Verf"ugung gestellt. Sie kann herabgeladen werden:
+
+\begin{itemize}
+\item "uber \prgname{ftp} von \verb|ftp.mpiz-koeln.mpg.de|, Verzeichnis \verb|/pub/zwdv/kim/diss/|,
+\item "uber das \textsl{world wide web} (WWW) von \\
+    \verb|http://www.mpiz-koeln.mpg.de/~kim/kim.html|.
+\end{itemize}
+
+Mit den Quelltexten werden vollst"andige Anleitungen zur Bedienung der Programme
+zur Verf"ugung gestellt. Zweck dieser Dokumentation ist es, zus"atzliche Einblicke in
+die Implementation der Systeme zu geben, detailliertere Angaben zur Benutzung der Programme
+sind den o.a.\ elektronischen Quellen zu entnehmen.
+
+Alle Programme arbeiten kommandozeilenorientiert, um eine automatische Durchf"uhrung
+von Simulationsprojekten optimal zu unterst"utzen.
+Zur Durchf"uhrung von Simulationsl"aufen dient jeweils ein \introdef{Simulationsprogramm}.
+Die Simulationsprogramme zu den Modellen sind:
+
+\medskip
+\begin{tabular}{ll}
+LindEvol-GA: & \prgname{lnd1v20} \\
+Neutrale Kontrolle zu LindEvol-GA: & \prgname{lnd1c20} \\
+Serien von LindEvol-GA--L"aufen: & \prgname{l1v20loop} \\
+LindEvol-B: & \prgname{lnd2v03} \\
+LindEvol-P: & \prgname{lnd5v00} \\
+LindEvol-P/3D: & \prgname{lnd5x00} \\
+\end{tabular}
+\medskip
+
+Die Kontrollparameter f"ur einen Simulationslauf entnehmen die Simulationsprogramme einer
+\introdef{Parameterdatei}. Der Name der Parameterdatei wird dabei mittels der Option
+\texttt{-f} an das Simulationsprogramm "ubergeben. Die Standardsyntax zur Durchf"uhrung einer
+Simulation lautet somit:
+
+\begin{verbatimcmd}
+\pcodemeta{Programmname} -f \pcodemeta{Parameterdateiname}
+\end{verbatimcmd}
+
+In der Parameterdatei sind s"amtliche Kontrollparameter, die f"ur eine eindeutige Spezifikation
+des Simulationslaufs erforderlich sind, festgelegt. Das Parameterdatei f"ur den Lauf \runname{xlong0105}
+(\ref{xlong0105section}) zeigt beispielhaft das Format der Parameterdateien:
+
+\begin{verbatim}
+    simname = xlong0105
+    srate = 0.5
+    m_replacement = 0.01
+    m_insertion = 0.01
+    m_deletion = 0.01
+    psize = 50
+    recombination = 0
+    m_factor = 2.00
+    world_width = 150
+    world_height = 30
+    num_days = 30
+    glen_init = 20
+    num_generations = 5000
+    dmt_savefreq = 0
+    ddistr_freq = 10
+    phhist_freq = 0
+    num_divide = 224
+    num_mutminus = 16
+    num_mutplus = 16
+    random_seed = 12345
+\end{verbatim}
+
+Neben den jeweils bei der Definition der Modelle angegebenen Kontrollparametern k"onnen die Parameterdateien
+zus"atzliche Parameter enthalten, die Art und Menge der w"ahrend des Laufs zu speichernden Information betreffen.
+Beispielsweise bewirkt die Zeile \verb|ddistr_freq = 10|, da"s alle 10 Generationen eine Distanzverteilungsanalyse
+durchgef"uhrt wird. Die Zeile \verb|phhist_freq = 0| besagt, da"s keine Datens"atze f"ur die Stammbaumrekonstruktion
+angelegt werden sollen.
+
+Die Simulationsprogramme legen ihre Ergebnisse in Dateien unterschiedlichen Typs ab. Die Dateinamen
+werden durch das Anh"angen verschiedener Erweiterungen an den Namen des Simulationslaufs erzeugt.
+Folgende Dateitypen werden dabei verwendet:
+
+\medskip
+\begin{tabular}{ll}
+\verb|*.pro|: & Protokoldatei der numerischen Werte wie Fitness, Populationsgr"o"se usw. \\
+\verb|*.dst|: & Distanzverteilungsdatei. \\
+\verb|*.dat|: & Simulationszustand zu einem bestimmten Zeitschritt \\
+\verb|*.pix|: & "`Pixeldatei"'. \\
+\verb|*.stb|: & Stammbaumdatei, enth"alt die tats"achlichen Stammb"aume. \\
+\end{tabular}
+\medskip
+
+Zur weiteren Verarbeitung dieser Dateien wurden folgende Programme erstellt:
+
+\begin{itemize}
+
+\item Das Programm \prgname{proplot} dient zur Erstellung von Verlaufsgraphiken auf der Grundlage
+von Protokolldateien. Die Protokolldatei enth"alt einen Kopf, in dem die Typen und Bezeichnungen
+der gespeicherten Daten angegeben werden. In einer Layoutdatei (Dateityp \verb|*.lay|) werden die
+Anordnung der Boxen des Verlaufsdiagramm und die in den Boxen darzustellenden Daten beschrieben.
+Durch einen Aufruf der Form
+
+\begin{verbatimcmd}
+proplot -i \pcodemeta{Protokolldatei} -o \pcodemeta{PostScript-Datei} -l \pcodemeta{Layoutdatei}
+\end{verbatimcmd}
+
+wird ein Verlaufsdiagramm in der Seitenbeschreibungssprache PostScript \cite{PostScript} erstellt.
+Der Kopf der Protokolldatei enth"alt einen Verweis auf ggfs.\ angelegte Distanzverteilungsdateien,
+damit k"onnen auch Distanzverteilungen in Verlaufsdiagrammen dargestellt werden.
+
+\item Aus den Simulationszustandsdateien k"onnen mithilfe eines \prgname{stplot}-Programms Darstellungen
+der Welt, Genomlistings und Darstellungen einzelner Pflanzen erstellt werden. Zu jedem Simulationsprogramm
+gibt es ein eigenes Programm dieser Art. F"ur LindEvol-GA ist \prgname{stplot1}, f"ur LindEvol-B \prgname{stplot2},
+f"ur LindEvol-P \prgname{stplot5} und f"ur LindEvol-P/3D \prgname{stplot5x} zu verwenden. Ferner unterst"utzen
+die Simulationsprogramme die Option \verb|-r| zur Fortsetzung von Simulationen auf der Basis von Zustandsdateien
+mit einem Aufruf der Form:
+
+\begin{verbatimcmd}
+lnd1v20 -r \pcodemeta{Simulationslaufname}
+\end{verbatimcmd}
+
+\item Mit den Pixeldateien ist die Betrachtung der Abl"aufe der ph"anotypischen Prozesse in der Welt
+in einer Animation m"oglich. Zur Darstellung dieser Animationen dient das Programm \prgname{xlmovie},
+das unter X-Windows l"auft.
+
+\item \begin{sloppypar} Das Programm \prgname{treechk} dient dazu, die \textsl{dT scores} zwischen den tats"achlichen Stammb"aumen
+in der Stammbaumdatei und rekonstruierten Stammb"aumen zu berechnen.
+\end{sloppypar}
+
+\end{itemize}
+
+% \section{Programm \prgname{lnd1v20}: Simulationsprogramm zum Modell LindEvol-GA}
+% 
+% Das Programm \prgname{lnd1v20} dient zur Durchf"uhrung von Simulationen des Modells
+% LindEvol-GA (Kap.\ \ref{lindevol-ga}). Das Programm entnimmt seine Eingabeparameter
+% aus der Kommandozeile, insbesondere wird hier auch der Name der Parameterdatei, aus
+% der die Kontrollparameter gelesen werden, angegeben. Die Kommandozeilenschnittstelle
+% entspricht den bei UNIX "ublichen Standards, Optionen werden durch Buchstaben mit
+% einem vorangestellten Minuszeichen angegeben; bei manchen Optionen mu"s ein weiteres
+% Argument folgen. Die Optionen sind:
+% 
+% \noindent\begin{tabularx}{\linewidth}{|l|X|} \hline
+% {\bfseries Option} & {\bfseries Bedeutung} \\ \hline
+% \mycodestyle{-q} & Aktiviert den {\slshape quiet}-Modus. Diese Option unterdr"uckt
+%     die Ausgabe einer Darstellung der Welt in ASCII-Zeichen nach jeder Generation
+%     auf dem Terminal. \\
+% \mycodestyle{-t} & Eine Testsimulation mit fest in das Programm eingebauten
+%     Kontrollparametern wird ausgef"uhrt. Dies dient zur Kontrolle von Installationen
+%     auf neuen Plattformen. \\
+% \mycodestyle{-w} & Eine "`Welt"'-Datei, in der die Welt am Ende jeder Vegetationsperiode
+%     in ASCII-Zeichen dargestellt wird, wird erzeugt. \\
+% \mycodestyle{-p} & Eine Pixeldatei wird beim Simulationslauf erzeugt. In dieser ist
+%     eine Beschreibung der Welt am Ende jeden Tages enthalten. Anhand der Pixeldatei
+%     kann das Wachstum der Pflanzen mit dem Programm \prgname{xlmovie} als Animation
+%     angezeigt werden. \\
+% \mycodestyle{-f} \pcodemeta{file} & Die Kontrollparameter des Simulationslaufs werden
+%     aus der Datei \pcodemeta{file} gelesen. \\
+% \mycodestyle{-r} \pcodemeta{name} & Der Simulationslauf \pcodemeta{name} wird fortgesetzt.
+%     Dies hat zur Voraussetzung, da"s der fortzusetzende Simulationslauf ordnungsgem"a"s
+%     beendet wurde, wobei eine Zustandsdatei erzeugt wurde. \\
+% \mycodestyle{-r} \pcodemeta{file} & Aus der Datei \pcodemeta{file} werden Generationen
+%     gelesen, bei denen eine Zustandsdatei erzeugt werden soll. Diese Zustandsdateien
+%     dienen zur weitergehenden Analyse einzelnger Genotypen und Ph"anotypen. \\ \hline
+% \end{tabularx}
+% 
+% Neben den in (\ref{lndga-controlparams}) zusammengefa"sten Kontrollparametern k"onnen
+% in den Kontrollparameterdateien einige weitere Parameter spezifiziert werden, die zur
+% Steuerung der Art und der Menge der erzeugten Daten dienen. Der Verlauf der Simulation
+% selbst wird durch diese Parameter nicht beeinflu"st:
+% 
+% \begin{tabularx}{\linewidth}{|l|X|} \hline
+% {\bfseries Parametername}  & {\bfseries Funktion} \\ \hline
+% \verb|dmt_savefreq| & H"aufigkeit (in Generationen), mit der die Matrix der Editierabst"ande
+%     der Population abgespeichert wird. Wird hier 0 angegeben, findet keine
+%     Speicherung von Distanzmatrizen statt. \\
+% \verb|ddistr_freq|  & H"aufigkeit, mit der Distanzverteilungen und DVK berechnet
+%     werden. Bei 0 unterbleibt die Distanzverteilungsanalyse. \\
+% \verb|phhist_freq|  & H"aufigkeit, mit der die Genome der Population und der
+%     korrekte Stammbaum der Population abgespeichert werden. Wird dieser Parameter auf
+%     0 gesetzt, werden keine Genome und B"aume gespeichert. \\ \hline
+% \end{tabularx}
+% 
+% \section{Programm \prgname{lnd2v03}: Simulationsprogramm zum Modell LindEvol-B}
+% 
+% \section{Programm \prgname{lnd5v00}: Simulationsprogramm zum Modell LindEvol-P}
+% 
+% \section{Programm \prgname{lnd5x00}: Simulationsprogramm zum Modell LindEvol-P/3D}
+% 
+% 
+% \section{Programm \prgname{proplot} zur graphischen Ausgabe von Simulationsergebnissen}
+% \label{proplot-doc}
+% 
+% Das Programm \prgname{proplot} dient zur Erstellung von Graphiken aus Verlaufsdaten von Simulationen
+% 
+% 
+% \section{Programm \prgname{xlmovie} zur Anzeige von Animationen des Pflanzenwachstums}
+% 
+% % \section{Funktionsbibliothek {\tt gnlib} zur Protokollierung der Abstammung}
+% 
+% % \section{Funktionsbibliothek {\tt ptlib} zur Analyse und Ausgabe von Stammb"aumen}
+
+
+\chapter{Referenz der Symbole und Formelbuchstaben}
+\label{symbolref}
+
+\noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+Formel-      & Bezeichner               & Beschreibung \\
+buchstabe    &                          & \\ \hline
+$A(m, s, l)$ & -                        & Ausbreitungszahl eines Genoms der L"ange $l$ bei der Mutationsrate $m$
+                                          und der Selektionsrate $s$ (\ref{mutconsequences}) \\
+$A_E(m, s, r)$ & -                      & Ausbreitungszahl eines Entwicklungsprogramms aus $r$ aktiven Genen bei der Mutationsrate $m$
+                                          und der Selektionsrate $s$ (\ref{mutconsequences}) \\
+$C_d$        & -                        & Distanzverteilungskomplexit"at (DVK) (\ref{ddc-method}) \\
+$C_i$        & -                        & $i$-te Zelle einer Pflanze (\ref{celldef}) \\
+$D(g_i,g_j)$ & -                        & Distanz zwischen den Sequenzen $g_i$ und $g_j$ \\
+$d$          & \verb|p_random_death|    & Basiswahrscheinlichkeit f"ur Absterben (\ref{lnd2-def}) \\
+$d_e$        & \verb|rdeath_f_energy|   & Modifikator f"ur Absterbewahrscheinlichkeit in Abh"angigkeit
+                                          von der Gesamtenergie einer Pflanze (\ref{lnd2-def}) \\
+$d_n$        & \verb|rdeath_f_numcells| & Modifikator f"ur Absterbewahrscheinlichkeit in Abh"angigkeit von Anzahl Zellen 
+					  einer Pflanze (\ref{lnd2-def}) \\
+$d_l$        & \verb|leanover_penalty|  & Modifikator f"ur Absterbewahrscheinlichkeit in Abh"angigkeit vom "Uberhang 
+					  einer Pflanze (\ref{lnd2-def}) \\
+$E(C)$       & -                        & Energieparameter einer Zelle $C$, energielos (0) oder energiereich (1)
+					  (\ref{celldef}) \\
+$F(d)$       & -                        & H"aufigkeit des Distanzwerts $d$ in der Distanzmatrix einer
+					  Population (\ref{ddistr-method})\\
+$f(d)$       & -                        & relative H"aufigkeit des Distanzwerts $d$ in der Distanzmatrix
+					  einer Population (\ref{ddc-method}) \\
+$h$          & \verb|world_height|      & H"ohe der Welt (\ref{topodef}) \\
+$L$          & -                        & "Uberhangskoeffizient (\ref{lnd2-def}) \\
+$l$          & \verb|genome_length|     & L"ange eines Genoms in Bytes (\ref{genomedef}) \\
+$l_s$        & \verb|glen_init|         & L"ange der am Simulationsstart zuf"allig generierten Genome (\ref{genomedef}) \\ \hline
+\end{tabularx}
+
+\noindent\begin{tabularx}{\linewidth}{|c|l|X|} \hline
+Formel-      & Bezeichner               & Beschreibung \\
+buchstabe    &                          & \\ \hline
+$M_r$        & \verb|m_replacement|     & Basiswert der Austauschrate (\ref{mutationdef}) \\
+$M_i$        & \verb|m_insertion|       & Basiswert der Insertionsrate (\ref{mutationdef}) \\
+$M_d$        & \verb|m_deletion|        & Basiswert der Deletionsrate (\ref{mutationdef}) \\
+$M_{\mathit{dup}}$  & \verb|m_duplication|     & Basiswert der Duplikationsrate (\ref{mutationdef}) \\
+$m_f$        & \verb|m_factor|          & Modifikationsfaktor f"ur Mutationsraten (\ref{mutationdef}) \\
+$N_C$        & -                        & Nachbarzellfunktion der Zelle $C$ (\ref{celldef}) \\
+$n_c$        & \verb|num_cells|         & Anzahl Zellen einer Pflanze, ihre Gr"o"se (\ref{plantdef}) \\
+$n_e$        & \verb|total_energy|      & Anzahl energiereicher Zellen einer Pflanze, ihre Gesamtenergie \\
+$P_d$        & -                        & effektive Absterbewahrscheinlichkeit pro Zeitschritt (\ref{lnd2-def}) \\
+$P_{\mathit{kill}}$ & -                        & Erfolgswahrscheinlichkeit eines Angriffs (\ref{lnd2-def}) \\
+$p$          & \verb|psize|             & Populationsgr"o"se \\
+$p_s$        & \verb|psize_init|        & Populationsgr"o"se beim Simulationsstart \\
+$S(C)$       & -                        & Abbildung des lokalen Zustands einer Zelle $C$ auf eine ganze Zahl (\ref{celldef}) \\
+$s$          & \verb|srate|             & Selektionsrate (\ref{lndga-def}) \\
+$t(s,l)$     & -                        & kritische Fehlergrenze f"ur die Ausbreitung eines Genoms der L"ange $l$
+                                          bei der Selektionsrate $s$ (\ref{mutconsequences}) \\
+$t_E(s,r)$   & -                        & kritische Fehlergrenze f"ur die Ausbreitung eines Entwicklungsprogramms aus $r$ aktiven Genen
+                                          bei der Selektionsrate $s$ (\ref{mutconsequences}) \\
+$w$          & \verb|world_width|       & Breite der Welt (\ref{topodef}) \\
+$x(C)$       & -                        & X-Koordinate der Zelle $C$ (\ref{celldef}) \\
+$y(C)$       & -                        & Y-Koordinate der Zelle $C$ (\ref{celldef}) \\
+$Z(C)$       & -                        & Zustand einer Zelle $C$ (\ref{celldef}) \\
+$Z_i(C)$     & -                        & interner Zustand einer Zelle $C$ (\ref{celldef}) \\
+$z(C)$       & -                        & Z-Koordinate der Zelle $C$ (\ref{celldef}) \\
+$\mu$        & \verb|mut_counter|       & Mutationsexponent einer Pflanze (\ref{mutationdef}) \\
+-            & \verb|num_days|          & Anzahl Tage pro Vegetationsperiode in LindEvol-GA (\ref{lndga-def}) \\
+-            & \verb|num_divide|        & Anzahl Codewerte f"ur \verb|divide| (\ref{interpreterdef}) \\
+-            & \verb|num_flyingseed|    & Anzahl Codewerte f"ur \verb|flyingseed| (\ref{interpreterdef}) \\
+-            & \verb|num_localseed|     & Anzahl Codewerte f"ur \verb|localseed| (\ref{interpreterdef}) \\
+-            & \verb|num_mutminus|      & Anzahl Codewerte f"ur \verb|mut-| (\ref{interpreterdef}) \\
+-            & \verb|num_mutplus|       & Anzahl Codewerte f"ur \verb|mut+| (\ref{interpreterdef}) \\
+-            & \verb|num_statebit|      & Anzahl Codewerte f"ur \verb|statebit| (\ref{interpreterdef}) \\
+-            & \verb|random_seed|       & {\slshape seed} zur Initialisierung des Zufallsgenerators (\ref{rndgeneratordef}) \\ \hline
+\end{tabularx}
+
+
+% \chapter{Parameterdateien}
+% \label{paramfile-appendix}
+
+\chapter{Erkl"arung}
+
+Ich versichere, da"s ich die von mir vorgelegte Dissertation selbst"andig angefertigt, die benutzten Quellen
+und Hilfsmittel vollst"andig angegeben und die Stellen der Arbeit -- einschlie"slich Tabellen, Karten und
+Abbildungen --, die anderen Werken im Wortlaut oder dem Sinn nach entnommen sind, in jedem Einzelfall
+als Entlehnung kenntlich gemacht habe; da"s diese Dissertation noch keiner anderen Fakult"at oder Universit"at
+zur Pr"ufung vorgelegen hat; da"s sie -- abgesehen von unten angegebenen Teilpublikationen --
+noch nicht ver"offentlicht worden ist sowie, da"s ich eine solche Ver"offentlichung vor Abschlu"s des
+Promotionsverfahrens nicht vornehmen werde.
+
+Die Bestimmungen dieser Promotionsordnung sind mir bekannt. Die von mir vorgelegte Dissertation ist von
+Prof.\ Dr.\ Heinz Saedler betreut worden.
+
+\vspace*{3cm}
+\noindent (Jan Tai Tsung Kim)
+
+\vspace*{1cm}
+
+\noindent Teilpublikationen:
+
+\begin{itemize}
+
+\item Kim, J.T. 1995. "`Emergente taxonomische Strukturen in einem Modell koevolvierender Pflanzen."'
+    In \textsl{GWDG-Bericht} \textbf{40:} 91-113. Gesellschaft f"ur wissenschaftliche Datenverarbeitung, G"ottingen.
+
+\item Kim, J.T. 1995. "`Using Distance Distributions to Measure Complexity of Populations."'
+    In \textsl{1993 Lectures in Complex Systems,} herausgegeben von D.L.\ Stein und L.\ Nadel.
+    Santa Fe Institute Studies in the Sciences of Complexity, Lectures Volume VI.
+    Addison-Wesley, Redwood City, CA.
+
+\item Kim, J.T. 1995. "`Distanzverteilungskomplexit"at: Ein Ma"s f"ur die strukturierte Diversit"at
+    evolvierender Populationen."' In \textsl{Proceedings des Workshops "`Artificial Life "'},
+    herausgegeben von K.\ Dautenhahn, T.\ Christaller, J.\ Heistermann, R.\ Hofest"adt, J.\ Kaiser,
+    H.-G.\ Lipinski, C.\ M"uller-Schloer, W.\ Schiffmann und D.\ Sch"utt. GMD-Studien, Nr.\ 271, Sankt Augustin.
+
+\end{itemize}
+
+
+\chapter{Lebenslauf}
+
+\begin{description}
+
+\item[Name:] Kim.
+
+\item[Vornamen:] \underline{Jan} Tai Tsung.
+
+\item[Familienstand:] ledig.
+
+\item[Geburtsdatum und -ort:] 27.\ Apr.\ 1965, Holzlar, Rhein-Sieg-Kreis (heute Stadt Bonn).
+
+\item[Staatsangeh"origkeit:] deutsch.
+
+\item[Grundschule:] 1971--1974, Martin-Luther-Schule, Br"uhl.
+
+\item[Gymnasium:] \begin{sloppypar} 1974--1981, St"adtisches Gymnasium Br"uhl;
+    1981--1984, K"o\-nig\-in-Lu\-ise-Schu\-le in K"oln.
+    \end{sloppypar}
+
+\item[Abitur:] 14.\ Jun.\ 1984, Abitur an der K"onigin-Luise-Schule, K"oln.
+
+\item[Universit"at:] 1984--1991, Studium der Biologie an der Universit"at
+    zu K"oln.
+
+\item[Vordiplom:] 18.\ Apr.\ 1986 im Fach Biologie an der Universit"at zu K"oln.
+
+\item[Diplom:] 26.\ Aug.\ 1991 im Fach Biologie an der Universit"at zu K"oln.
+%    Hauptfach: Genetik, Nebenf"acher: Biochemie und Organische Chemie.
+%    Diplomarbeit am Max-Planck-Institut f"ur Z"uchtungsforschung, K"oln,
+%    "uber Computersimulationen der Evolution.
+
+\item[Promotionsstudium:] 1991--heute, an der Universit"at zu K"oln.
+%    Arbeit am Max-Planck-Institut f"ur Z"uchtungsforschung, Fortsetzung
+%    der Arbeit an Computersimulationen der Evolution. Voraussichtlicher
+%    Abschlu"s im Herbst 1995.
+
+\item[Derzeitige] {\bf Anschrift:}
+{\flushleft
+  Jan T.\ Kim \\
+  Moltkestra"se 91-95 \\
+  50674 K"oln
+
+  Tel.: (0221) 51 34 54 \\
+%   \vspace{1ex}
+%   {\bf Institutsadresse:} \\
+%   Jan T.\ Kim \\
+%   Max-Planck-Institut f"ur Z"uchtungsforschung \\
+%   Carl-von-Linn{\'e}-Weg 10 \\
+%   50829 K"oln \\
+% 
+%   Tel.:: +49-221-50 62-538 \\
+%   Fax: +49-221-5062-513 \\
+%   \vspace{1ex}
+%   email: {\tt kim@mpiz-koeln.mpg.de}, {\tt a1624091@smail.rrz.uni-koeln.de} \\
+%   WWW: \verb|http://www.mpiz-koeln.mpg.de/~kim/kim.html|
+}
+
+\end{description}
+
+\chapter{Farbige Abbildungen}
+\label{colorplates}
+
+% \cleardoublepage
+
+\begin{figure}[p]
+
+\unitlength1cm
+\begin{picture}(16,21)
+\put(0,20.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0000004w.eps}}}
+\put(0,20){\makebox(16,0.5){{\bfseries a:} Generation 4}}
+\put(0,18.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0000040w.eps}}}
+\put(0,17.5){\makebox(16,0.5){{\bfseries b:} Generation 40}}
+\put(0,15.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0000120w.eps}}}
+\put(0,15){\makebox(16,0.5){{\bfseries c:} Generation 120}}
+\put(0,13.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0000500w.eps}}}
+\put(0,12.5){\makebox(16,0.5){{\bfseries d:} Generation 500}}
+\put(0,10.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0002200w.eps}}}
+\put(0,10){\makebox(16,0.5){{\bfseries e:} Generation 2200}}
+\put(0,8.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0002207w.eps}}}
+\put(0,7.5){\makebox(16,0.5){{\bfseries f:} Generation 2207}}
+\put(0,5.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0002400w.eps}}}
+\put(0,5){\makebox(16,0.5){{\bfseries g:} Generation 2400}}
+\put(0,3.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0003608w.eps}}}
+\put(0,2.5){\makebox(16,0.5){{\bfseries h:} Generation 3608}}
+\put(0,0.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0004999w.eps}}}
+\put(0,0){\makebox(16,0.5){{\bfseries i:} Generation 4999}}
+\end{picture}
+
+\caption{\label{xlong0105worlds}
+Gesamtaufnahmen der Welt in verschiedenen Abschnitten des Laufs \runname{xlong0105}. Es wurde jeweils
+die gesamte Welt am Ende der Vegetationsperiode dargestellt.
+}
+\end{figure}
+
+% \cleardoublepage
+
+\begin{figure}[p]
+
+\unitlength1cm
+\begin{picture}(16,20)
+\put(0,18.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0000050w.eps}}}
+\put(0,17.5){\makebox(16,0.5){{\bfseries a:} Generation 50}}
+\put(0,15.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0000500w.eps}}}
+\put(0,15){\makebox(16,0.5){{\bfseries b:} Generation 500}}
+\put(0,13.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0001400w.eps}}}
+\put(0,12.5){\makebox(16,0.5){{\bfseries c:} Generation 1400}}
+\put(0,10.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0001700w.eps}}}
+\put(0,10){\makebox(16,0.5){{\bfseries d:} Generation 1700}}
+\put(0,8.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0002200w.eps}}}
+\put(0,7.5){\makebox(16,0.5){{\bfseries e:} Generation 2200}}
+\put(0,5.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0002400w.eps}}}
+\put(0,5){\makebox(16,0.5){{\bfseries f:} Generation 2400}}
+\put(0,3.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0003000w.eps}}}
+\put(0,2.5){\makebox(16,0.5){{\bfseries g:} Generation 3000}}
+\put(0,0.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0004999w.eps}}}
+\put(0,0){\makebox(16,0.5){{\bfseries h:} Generation 4999}}
+\end{picture}
+
+\caption{\label{xlong1008worlds}
+Gesamtaufnahmen der Welt in verschiedenen Abschnitten des Laufs \runname{xlong1008}. Es wurde jeweils
+die gesamte Welt am Ende der Vegetationsperiode dargestellt.
+}
+\end{figure}
+
+% \cleardoublepage
+
+\begin{figure}[p]
+
+\unitlength1cm
+\begin{picture}(16,15)
+\put(0,13.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong00105-0004999w.eps}}}
+\put(0,12.5){\makebox(16,0.5){{\bfseries a:} Generation 4999 von Lauf \runname{xlong00105}}}
+\put(0,10.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong00108-0004999w.eps}}}
+\put(0,10.0){\makebox(16,0.5){{\bfseries b:} Generation 4999 von Lauf \runname{xlong00108}}}
+\put(0,8.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0105-0004999w.eps}}}
+\put(0,7.5){\makebox(16,0.5){{\bfseries c:} Generation 4999 von Lauf \runname{xlong0105}}}
+\put(0,5.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong0108-0004999w.eps}}}
+\put(0,5.0){\makebox(16,0.5){{\bfseries d:} Generation 4999 von Lauf \runname{xlong0108}}}
+\put(0,3.0){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1005-0004999w.eps}}}
+\put(0,2.5){\makebox(16,0.5){{\bfseries e:} Generation 4999 von Lauf \runname{xlong1005}}}
+\put(0,0.5){\makebox(16,2)[b]{\epsfxsize=10cm \epsffile{xlong1008-0004999w.eps}}}
+\put(0,0){\makebox(16,0.5){{\bfseries f:} Generation 4999 von Lauf \runname{xlong1008}}}
+\end{picture}
+
+\caption{\label{xlongworlds}
+Aufnahmen der Welt jeweils am Ende der Simulationsl"aufe.
+}
+\end{figure}
+
+% \cleardoublepage
+
+\begin{figure}[p]
+
+\unitlength1cm
+\begin{picture}(16,13)
+\put(0,10.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{lnd2-w01000.eps}}}
+\put(0,10){\makebox(16,0.5){Generation 1000}}
+\put(0,8.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{lnd2-w10000.eps}}}
+\put(0,7.5){\makebox(16,0.5){Generation 10000}}
+\put(0,5.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{lnd2-w20000.eps}}}
+\put(0,5){\makebox(16,0.5){Generation 20000}}
+\put(0,3.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{lnd2-w30000.eps}}}
+\put(0,2.5){\makebox(16,0.5){Generation 30000}}
+\put(0,0.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{lnd2-w45000.eps}}}
+\put(0,0){\makebox(16,0.5){Generation 45000}}
+\end{picture}
+
+\caption[Weltdarstellungen aus einer LindEvol-B--Simulation]
+{\label{lnd2-worlds}
+Weltdarstellungen aus dem LindEvol-B--Lauf \runname{m00007n000e25l15}
+}
+\end{figure}
+
+
+\begin{figure}[p]
+
+\unitlength1cm
+\begin{picture}(16,5)
+\put(0,3.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l02w.eps}}}
+\put(0,2.5){\makebox(16,0.5){\textbf{a:} $d_l = 0.02$}}
+\put(0,0.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l10w.eps}}}
+\put(0,0){\makebox(16,0.5){\textbf{b:} $d_l = 0.1$}}
+\end{picture}
+
+\caption[Weltdarstellungen aus einer LindEvol-B--Simulation]
+{\label{lnd2-otherworlds}
+Weltdarstellungen aus LindEvol-B--L"aufen, jeweils nach dem Zeitschritt 49999. Bei $d_l = 0.02$
+entsteht eine Pflanze, die die gesamte Welt "uberspannt. Bei $d_l = 0.1$ weisen diagonal
+wachsende Pflanzen bereits eine ausreichende Stabilit"at auf, um das "Uberleben als Art
+zu gew"ahrleisten. Buschf"ormig verzweigte Pflanzen sind jedoch erheblich stabiler und k"onnen
+somit bis zur vollen H"ohe der Welt heranwachsen.
+}
+\end{figure}
+
+% \cleardoublepage
+
+\begin{figure}[p]
+
+\unitlength1cm
+\begin{picture}(16,21)
+
+\put(0,20.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0000100w.eps}}}
+\put(0,20.0){\makebox(16,0.5){\textbf{a:} Zeitschritt 100}}
+\put(0,18.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0001200w.eps}}}
+\put(0,17.5){\makebox(16,0.5){\textbf{b:} Zeitschritt 1200}}
+\put(0,15.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0003800w.eps}}}
+\put(0,15.0){\makebox(16,0.5){\textbf{c:} Zeitschritt 3800}}
+\put(0,13.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0009995w.eps}}}
+\put(0,12.5){\makebox(16,0.5){\textbf{d:} Zeitschritt 9995}}
+\put(0,10.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0010110w.eps}}}
+\put(0,10){\makebox(16,0.5){\textbf{e:} Zeitschritt 10110}}
+\put(0,8.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0010265w.eps}}}
+\put(0,7.5){\makebox(16,0.5){\textbf{f:} Zeitschritt 10265}}
+\put(0,5.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0028250w.eps}}}
+\put(0,5){\makebox(16,0.5){\textbf{g:} Zeitschritt 28250}}
+\put(0,3.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0036585w.eps}}}
+\put(0,2.5){\makebox(16,0.5){\textbf{h:} Zeitschritt 36585}}
+\put(0,0.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0039040w.eps}}}
+\put(0,0){\makebox(16,0.5){\textbf{i:} Zeitschritt 39040}}
+\end{picture}
+
+\caption[Weltdarstellungen aus einer LindEvol-P--Simulation]
+{\label{lnd5-worlds}
+Weltdarstellungen aus dem LindEvol-P--Lauf \runname{m02n000e25l15}
+}
+\end{figure}
+
+% \cleardoublepage
+
+\begin{figure}[p]
+\unitlength1cm
+\begin{picture}(16,20)
+\put(0,15.5){\makebox(8,4.5)[b]{\epsfysize=3.7cm \epsffile{m02n000e25l30i-0008000w.eps}}}
+\put(0,15){\makebox(8,0.5){\textbf{a:} Zeitschritt 8000}}
+\put(8,15.5){\makebox(8,4.5)[b]{\epsfysize=3.7cm \epsffile{m02n000e25l30i-0016000w.eps}}}
+\put(8,15){\makebox(8,0.5){\textbf{b:} Zeitschritt 16000}}
+\put(0,10.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0020000w.eps}}}
+\put(8,10.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0020000wt.eps}}}
+\put(0,10){\makebox(16,0.5){\textbf{c:} Zeitschritt 20000, Vorderansicht und Vogelperspektive}}
+\put(0,5.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0024000w.eps}}}
+\put(8,5.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0024000wt.eps}}}
+\put(0,5){\makebox(16,0.5){\textbf{d:} Zeitschritt 24000, Vorderansicht und Vogelperspektive}}
+\put(0,0.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0040000w.eps}}}
+\put(8,0.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0040000wt.eps}}}
+\put(0,0){\makebox(16,0.5){\textbf{e:} Zeitschritt 40000, Vorderansicht und Vogelperspektive}}
+\end{picture}
+
+\caption[Weltdarstellungen des LindEvol-P/3D--Laufs \runname{m02n000e25l30i}]
+{\label{lnd53d-worlds}
+Darstellungen der Welt in \runname{m02n000e25l30i} bei verschiedenen Zeitschritten. Welten mit komplexeren Pflanzen
+sind sowohl in der Ansicht von der Seite als auch in der Ansicht von oben (Vogelperspektive) dargestellt.
+}
+\end{figure}
+
+% \cleardoublepage
+
+\end{appendix}
+

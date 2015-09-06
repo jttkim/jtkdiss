@@ -1,0 +1,424 @@
+\chapter[LindEvol-P]{LindEvol-P: Asynchrone Generationen und promotororientierte Genominterpretation}
+\label{lindevol-5}
+
+
+\section[Definition]{Definition von LindEvol-P}
+\label{lnd5-def}
+
+Bei der Entwicklung von LindEvol-P wurden folgende Komponenten (\ref{modeldef}) verwendet:
+
+\begin{itemize}
+\item Topologie: Zweidimensionales Gitter (\protect\ref{topo2d}).
+\item Zellparameter: Die Zellen haben einen internen Zustandsparameter von
+    16 Bit Breite (\protect\ref{celldef}).
+\item \begin{sloppypar}Zellaktionen: \verb|divide|, \verb|flyingseed|, \verb|localseed|,
+    \verb|mut-|, \verb|mut+| sowie \verb|statebit| (\protect\ref{cellactiondef}).
+    \end{sloppypar}
+\item Genominterpretation: LindEvol-P arbeitet mit promotororientierter
+    Genominterpretation (\protect\ref{prominterdef}).
+\item Mutation: Die in LindEvol-P implementierten Mutationstypen sind
+    bitweise Austauschmutationen, byteweise Insertionen und Deletionen
+    sowie Genduplikationen (\protect\ref{mutationdef}).
+\end{itemize}
+
+Die Mechanismen der Vermehrung, des Absterbens und des Angriffs sind wie in
+LindEvol-B (\ref{lnd2-def}). LindEvol-P unterscheidet sich nur in der
+Genominterpretation von LindEvol-B, der Ablaufplan enspricht also vollst"andig
+dem Flu"sdiagramm in Abb.\ \ref{lnd2-flowchart}. Tabelle \ref{lnd5-controlparams}
+zeigt die Kontrollparameter von LindEvol-P.
+
+
+% \subsection{Kontrollparameter von LindEvol-P}
+
+\begin{table}[tb]
+
+\noindent\begin{tabularx}{\linewidth}{|l|l|X|} \hline
+Formel- & Bezeichner              & Beschreibung \\
+buchstabe &                       & \\ \hline
+$p_s$ & \verb|psize_init|         & Populationsgr"o"se am Anfang der Simulation \\
+$l_s$ & \verb|glen_init|          & L"ange der am Simulationsstart zuf"allig generierten Genome \\
+$M_r$ & \verb|m_replacement|      & Basiswert der Austauschrate \\
+$M_i$ & \verb|m_insertion|        & Basiswert der Insertionsrate \\
+$M_d$ & \verb|m_deletion|         & Basiswert der Deletionsrate \\
+$M_{\mathit{dup}}$ & \verb|m_duplication| & Basiswert der Duplikationsrate \\
+$m_f$ & \verb|m_factor|           & Modifikationsfaktor f"ur Mutationsraten \\
+$d$   & \verb|p_random_death|     & Basiswahrscheinlichkeit f"ur Absterben pro Zeitschritt \\
+$d_n$ & \verb|rdeath_f_numcells|  & Modifikationskoeffizient f"ur die Absterbewahrscheinlichkeit
+                                    in Abh"angigkeit von der Gr"o"se der Pflanze \\
+$d_e$ & \verb|rdeath_f_energy|    & Modifikationskoeffizient f"ur die Absterbewahrscheinlichkeit
+                                    in Abh"angigkeit von der Gesamtenergie der Pflanze \\
+$d_l$ & \verb|leanover_penalty|   & Maximalwert der Erh"ohung der Absterbewahrscheinlichkeit
+                                    bei "uberh"angender Wuchsform \\
+$w$   & \verb|world_width|        & Breite der Welt \\
+$h$   & \verb|world_height|       & H"ohe der Welt \\
+      & \verb|num_days|           & Anzahl Tage pro Vegetationsperiode \\
+      & \verb|num_divide|         & Anzahl Codewerte f"ur \verb|divide| \\
+      & \verb|num_flyingseed|     & Anzahl Codewerte f"ur \verb|flyingseed| \\
+      & \verb|num_localseed|      & Anzahl Codewerte f"ur \verb|localseed| \\
+      & \verb|num_mutminus|       & Anzahl Codewerte f"ur \verb|mut-| \\
+      & \verb|num_mutplus|        & Anzahl Codewerte f"ur \verb|mut+| \\
+      & \verb|num_statebit|       & Anzahl Codewerte f"ur \verb|statebit| \\
+      & \verb|random_seed|        & {\slshape seed} zur Initialisierung des Zufallsgenerators \\ \hline
+\end{tabularx}
+
+\caption{\label{lnd5-controlparams}
+Kontrollparameter von LindEvol-P.
+}
+\end{table}
+
+\section{Ergebnisse}
+\label{lnd5-results}
+
+Bei der Untersuchung verschiedener L"aufe von LindEvol-P zeigte sich, da"s sich bei diesem Modell in vielen
+F"allen eine erheblich komplexere Dynamik entwickelt, als dies in LindEvol-GA und LindEvol-B der Fall war.
+Innerhalb eines Laufs k"onnen nacheinander unterschiedlichste Lebensgemeinschaften entstehen, was erhebliche
+Schwankungen bei vielen der ermittelten Me"sgr"o"sen nach sich zieht. Zur Ermittlung von Korrelationen der verschiedenen
+beobachteten Gr"o"sen untereinander und zu den Kontrollparametern sind daher erheblich umfangreichere Simulationsserien
+erforderlich als bei den zuvor besprochenen Modellen. Da
+die promotororientierte Genominterpretation erheblich zeitaufwendiger ist als die blockorientierte Genominterpretation,
+war die Durchf"uhrung entsprechend gro"ser Serien jedoch nicht m"oglich. Aus diesem Grund beschr"ankt sich der
+Ergebnisteil zu LindEvol-P auf die Darstellung und Besprechung des Laufs \runname{m02n000e25l15}, anhand dessen die
+Vielfalt der evolution"aren Prozesse in LindEvol-P gut ersichtlich ist.
+Dieser Lauf wurde mit den folgenden Kontrollparametern durchgef"uhrt:
+
+\medskip
+\begin{tabular}{ll}
+Populationsgr"o"se am Anfang: & 50 \\
+Mutationsraten: & $m_r=0.002$, $m_i=0.0004$, \\
+		& $m_d=0.0004$, $m_{\mathit{dup}}=0.0$ \\
+Mutationsfaktor: & 1.5 \\
+Absterbewahrscheinlichkeit: & 0.35 \\
+Modifikatoren d.\ Absterbewahrscheinlichk.: & $d_e=-2.5$, $d_n=0.0$, $d_l=0.15$ \\
+Breite der Welt: & 500 \\
+H"ohe der Welt: & 50  \\
+Genoml"ange der Startpopulation: & 50 Bytes \\
+Anzahl Zeitschritte:             & 50000 \\
+\verb|num_divide| & 32 \\
+\verb|num_mutminus| & 4 \\
+\verb|num_mutplus| & 4 \\
+\verb|num_flyingseed| & 4 \\
+\verb|num_localseed| & 4 \\
+\verb|num_statebit| & 16 \\
+\verb|random_seed| & 12345 \\
+\end{tabular}
+\medskip
+
+\begin{sloppypar}
+Abb.\ \ref{lnd5-result} zeigt das Verlaufsdiagramm des LindEvol-P--Si\-mu\-la\-tions\-laufs \runname{m02n000e25l15},
+in Abb.\ \ref{lnd5-worlds} (Seite \pageref{lnd5-worlds}) ist die Welt in verschiedenen Phasen der Evolution in \runname{m02n000e25l15}
+dargestellt.
+\end{sloppypar}
+
+
+\begin{figure}
+\unitlength1cm
+\begin{picture}(16,20)
+\put(0,0){\makebox(16,20)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15.eps}}}
+\end{picture}
+
+\caption[Verlaufsdaten eines LindEvol-P--Laufs]
+{\label{lnd5-result}
+Verlaufsdiagramm des LindEvol-P--Laufs \runname{m02n000e25l15}. Einige Boxen enthalten
+zwei Kurven. In der Beschriftung dieser Boxen sind jeweils die Bezeichnungen f"ur beide
+Me"sgr"o"sen, getrennt durch zwei Schr"agstriche, angegeben. Bei allen Boxen dieser Art
+ist einer der beiden Werte stets kleiner oder gleich dem anderen Wert: Die Anzahl verschiedener
+Genotypen kann maximal der Populationsgr"o"se entsprechen; der Energiegehalt einer Pflanze
+ist durch ihre Gr"o"se nach oben beschr"ankt; und die Anzahl der fliegenden Samen kann die
+Gesamtzahl der Samen nicht "ubersteigen.
+}
+\end{figure}
+
+% \begin{figure}
+% 
+% \unitlength1cm
+% \begin{picture}(16,21)
+% 
+% \put(0,20.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0000100w.eps}}}
+% \put(0,20.0){\makebox(16,0.5){\textbf{a:} Zeitschritt 100}}
+% \put(0,18.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0001200w.eps}}}
+% \put(0,17.5){\makebox(16,0.5){\textbf{b:} Zeitschritt 1200}}
+% \put(0,15.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0003800w.eps}}}
+% \put(0,15.0){\makebox(16,0.5){\textbf{c:} Zeitschritt 3800}}
+% \put(0,13.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0009995w.eps}}}
+% \put(0,12.5){\makebox(16,0.5){\textbf{d:} Zeitschritt 9995}}
+% \put(0,10.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0010110w.eps}}}
+% \put(0,10){\makebox(16,0.5){\textbf{e:} Zeitschritt 10110}}
+% \put(0,8.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0010265w.eps}}}
+% \put(0,7.5){\makebox(16,0.5){\textbf{f:} Zeitschritt 10265}}
+% \put(0,5.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0028250w.eps}}}
+% \put(0,5){\makebox(16,0.5){\textbf{g:} Zeitschritt 28250}}
+% \put(0,3.0){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0036585w.eps}}}
+% \put(0,2.5){\makebox(16,0.5){\textbf{h:} Zeitschritt 36585}}
+% \put(0,0.5){\makebox(16,2)[b]{\epsfxsize=16cm \epsffile{m02n000e25l15-0039040w.eps}}}
+% \put(0,0){\makebox(16,0.5){\textbf{i:} Zeitschritt 39040}}
+% \end{picture}
+% 
+% \caption[Weltdarstellungen aus einer LindEvol-P--Simulation]
+% {\label{lnd5-worlds}
+% Weltdarstellungen aus dem LindEvol-P--Lauf \runname{m02n000e25l15}
+% }
+% \end{figure}
+
+
+\subsection{Unterschiede zwischen der Evolution bei blockorientierter und bei promotororientierter Genominterpretation}
+\label{lnd5-blockprodiffs}
+
+Nach dem Start der Simulation bildet sich zun"achst ein dichter Teppich einzelliger Pflanzen aus (Abb.\ \ref{lnd5-worlds}a).
+Nach etwas mehr als 1000 Zeitschritten treten die ersten mehrzelligen Pflanzen auf. Im Zeitschritt 1200 sind bereits
+etliche unbeschr"ankt wachsende Pflanzen zu sehen (Abb.\ \ref{lnd5-worlds}b). Wie in LindEvol-B sind auch hier die ersten
+unbeschr"ankt wachsenden Formen zun"achst steril, die Evolution reproduktionsf"ahiger, unbeschr"ankt wachsender Pflanzen
+erfolgt jedoch erheblich z"ugiger als in LindEvol-B, weil dadurch, da"s bei der promotororientierten Genominterpretation
+unspezifizierte Bits m"oglich sind, der zur Entwicklung unbeschr"ankt wachsender, reproduktionsf"ahiger Pflanzen erforderliche
+evolution"are Schritt erheblich einfacher ist. Bei der blockorientierten Genominterpretation, die in LindEvol-B eingesetzt
+wird, ist das Entwicklungsprogramm einer einzelligen, reproduktionsf"ahigen Pflanze:
+
+\begin{verbatim}
+  1: 00000000 -> flyingseed
+\end{verbatim}
+
+Das Entwicklungsprogramm einer typischen unbeschr"ankt wachsenden, reproduktionsf"ahigen Pflanze bei blockorientierter
+Genominterpretation lautet:
+
+\begin{verbatim}
+  1: 00000000 -> divide 6
+  2: 00000010 -> divide 6
+  3: 01000010 -> flyingseed
+\end{verbatim}
+
+Um von dem Entwicklungsprogramm einer einzelligen, reproduktionsf"ahigen Pflanze zu dem einer unbeschr"ankt wachsenden,
+reproduktionsf"ahigen Pflanze zu gelangen, ist also die "Anderung des Keimzellgens sowie die Bereitstellung zweier weiterer
+Gene erforderlich.
+Bei der promotororientierten Genominterpretation reicht ein konstitutiv exprimiertes Gen aus, um eine einzellige,
+reproduktionsf"ahige Pflanze zu realisieren:
+
+\begin{verbatim}
+  1: **************** -> flyingseed
+\end{verbatim}
+
+Durch die Erg"anzung eines weiteren Gens, das alle Zellen, die nicht bereits eine Nachbarzelle unmittelbar "uber sich
+haben, zur Produktion einer solchen Zelle instruiert, kann das Entwicklungsprogramm einer unbeschr"ankt wachsenden,
+reproduktionsf"ahigen Pflanze entstehen:
+
+\begin{verbatim}
+  1: *********0****** -> divide 6
+  2: **************** -> flyingseed
+\end{verbatim}
+
+Somit zeigt sich, da"s die variable Spezifizit"at der Gene bei promotororientierter Genominterpretation zu einer
+deutlich verbesserten Evolvierbarkeit \cite{Ray92} f"uhrt. Durch den Verzicht auf die Spezifikation irrelevanter
+Bits kann die Funktion zweier Gene, die bei blockorientierter Genominterpretation f"ur die Initiierung des vertikalen
+Wachstums und f"ur seine Fortsetzung ben"otigt werden, bei promotororientierter Genominterpretation in einem Gen
+vereinigt werden. Gene mit geringer Spezifizit"at k"onnen innerhalb eines Entwicklungsprogramms unterschiedliche
+Funktionen "ubernehmen, wie das Beispiel des konstitutiv exprimierten Gens zeigt.
+
+
+\subsection{Pleiotrope Mutanten eines buschf"ormigen Grundmusters}
+\label{lnd5-pleiotropy}
+
+\begin{figure}
+
+\unitlength1cm
+\begin{picture}(16,20)
+
+\put(0,15.5){\makebox(5,4.5)[b]{\epsfxsize=5cm \epsffile{lnd5-09995_p243.eps}}}
+\put(5,15.5){\makebox(11,4.5)[b]{\epsfxsize=11cm \epsffile{lnd5-09995_243.eps}}}
+\put(0,15){\makebox(16,0.5){\textbf{a:} Pflanze aus Zeitschritt 9995 mit Entwicklungsprogramm}}
+
+\put(0,10.5){\makebox(5,4.5)[b]{\epsfxsize=5cm \epsffile{lnd5-10110_p020.eps}}}
+\put(5,10.5){\makebox(11,4.5)[b]{\epsfxsize=11cm \epsffile{lnd5-10110_020.eps}}}
+\put(0,10){\makebox(16,0.5){\textbf{b:} Pflanze aus Zeitschritt 10110 mit Entwicklungsprogramm}}
+
+\put(0,5.5){\makebox(5,4.5)[b]{\epsfxsize=5cm \epsffile{lnd5-10110_p105.eps}}}
+\put(5,5.5){\makebox(11,4.5)[b]{\epsfxsize=11cm \epsffile{lnd5-10110_105.eps}}}
+\put(0,5){\makebox(16,0.5){\textbf{c:} Pflanze aus Zeitschritt 10110 mit Entwicklungsprogramm}}
+
+\put(0,0.5){\makebox(5,4.5)[b]{\epsfxsize=5cm \epsffile{lnd5-10265_p186.eps}}}
+\put(5,0.5){\makebox(11,4.5)[b]{\epsfxsize=11cm \epsffile{lnd5-10265_186.eps}}}
+\put(0,0){\makebox(16,0.5){\textbf{d:} Pflanze aus Zeitschritt 10265 mit Entwicklungsprogramm}}
+\end{picture}
+
+\caption[LindEvol-P: Pflanzen mit Entwicklungsprogrammen]{
+\label{lnd5-plants}
+Verschiedene busch- oder baumf"ormig wachsende Pflanzen mit den \textsl{listings} ihrer Entwicklungsprogramme.
+Nach den Index eines Gens ist in runden Klammern der Index des Promotors im Genom angegeben.
+Die ph"anotypisch recht unterschiedlichen Pflanzen erweisen sich als genetisch eng verwandt.
+}
+\end{figure}
+
+Auf die Evolution unbeschr"ankt wachsender Pflanzen folgt bald ein weiterer evolution"arer Schritt, bei dem Pflanzen
+mit einer Ausdehnung in die Breite auftreten, die sich zun"achst nur nach links erstreckt (Abb.\ \ref{lnd5-worlds}c).
+Diese Entwicklung ist mit einem signifikanten Anstieg der durchschnittlichen Absterbewahrscheinlichkeit
+verbunden, denn der "Uberhangkoeffizient ist bei den einseitig in die Breite wachsenden Pflanzen erheblich gr"o"ser
+als 0. Viele der in die Breite wachsenden Pflanzen bilden zun"achst einen vertikalen Stamm aus und beginnen erst
+sp"ater mit der Erzeugung seitlicher Ausw"uchse. Auf diese Weise bleibt der "Uberhang im Verh"altnis zur Gesamtzellmasse
+geringer.
+
+Die in die Breite wachsenden Pflanzen etablieren sich in der Population. Im Zeitraum bis etwa zum Zeitschritt 10000
+entwickeln sie sich von den baumartigen Formen im Zeitschritt 3800 zu gedrungenen Zellhaufen, die nur eine geringe
+H"ohe erreichen, was sich in einem R"uckgang der maximalen und der durchschnittlichen Gr"o"se niederschl"agt.
+
+Kurz vor dem Zeitschritt 10000 tritt die erste Pflanze auf, die eine sich beidseitig ausbreitende Struktur ausbildet
+(Abb.\ \ref{lnd5-worlds}d). Diese Pflanzen sind erheblich besser ausbalanciert als die einseitig nach links wachsenden
+Formen. Die Gr"o"se der Pflanzen erreicht dadurch neue Maximalwerte. Aus dem Grundmotiv der beidseitig in die Breite
+wachsenden Pflanze entwickelt sich innerhalb weniger hundert Zeitschritte eine erstaunliche Vielfalt von Variationen.
+Abb.\ \ref{lnd5-plants} zeigt einige Vertreter dieser Formen mit ihren Entwicklungsprogrammen.
+
+Abb.\ \ref{lnd5-plants}a zeigt eine Pflanze mit dem urspr"unglichen Entwicklungsprogramm f"ur ein stark in beide
+Richtungen breitenorientiertes Wachstum. Gen 0 bewirkt das H"ohenwachstum, wenn sich unmittelbar oberhalb einer
+Zelle keine Nachbarzelle befindet, wird an dieser Position eine Zelle produziert, sofern die Zelle, die Gen 0 exprimiert,
+energiereich ist. Gen 2 bewirkt in entsprechender Weise, da"s eine Zelle, die keine linke Nachbarzelle hat, an dieser
+Position eine Tochterzelle produziert. Dieses Gen kann nur erfolgreich exprimiert werden, wenn Gen 0 nicht aktiviert
+wurde, da beide Gene energieverbrauchende Teilungsaktionen herbeif"uhren. Aufgrund von Gen 4 produzieren energiereiche
+Zellen, die einen rechten Nachbarn besitzen, einen Samen. Wurden die Gene 0, 2 und 4 nicht exprimiert, tritt Gen 6
+in Aktion und f"uhrt zur Produktion einer Tochterzelle rechts neben der aktuellen Zelle.
+
+Die vergleichsweise geringe Auspr"agung des H"ohenwachstums im Vergleich zum Breitenwachstum kommt durch die Aktivit"at
+des Gens 5 zustande. Die linke Seite dieses Gens spezifiziert ein gel"oschtes Energiebit. Somit bewirkt es, da"s im
+Zustand einer energielosen Zelle im folgenden Zeitschritt (in dem die Zelle wieder energiereich sein kann) das Bit
+6 gesetzt ist, auch wenn die Zelle keinen direkt "uber ihr gelegenen Nachbarn hat. In einer Zelle, die in einem Zeitschritt
+energielos war, wird daher im folgenden Zeitschritt das Gen 0 reprimiert; sie wird, wenn sie wieder energiereich ist,
+durch die Expression der Gene 2, 4 oder 6 seitliche Zellen oder einen Samen produzieren. Die Expression von Gen 0 bleibt
+auf solche Zellen, die in zwei aufeinanderfolgenden Zeitschritten energiereich sind, beschr"ankt.
+
+Abb.\ \ref{lnd5-plants}b zeigt eine Pflanze aus dem Zeitschritt 10110, die ein erheblich schlankeres, buschf"ormiges
+Erscheinungsbild aufweist. In ihrem Entwicklungsprogramm ist das Grundprinzip des H"ohen- und beidseitigen Breitenwachstums
+erhalten, im Vergleich zu Abb.\ \ref{lnd5-plants}a ist lediglich die Repression von Gen 0 in energielosen Zellen entfallen.
+Das neu hinzugekommene Gen 10 bleibt ohne Auswirkungen auf den Ablauf der Entwicklung, weil das durch seine Aktivit"at
+gesetzte Bit 8 in keinem Gen spezifiziert ist.
+
+Bei der in Abb.\ \ref{lnd5-plants}c gezeigten Pflanze wurde das Entwicklungsprogramm w"ahrend des Wachstums durch eine
+Mutation ver"andert. Der Repressor f"ur das vertikale Wachstum spezifiziert hier ein gel"oschtes Bit 11, was im Kontext
+des Entwicklungsprogramms einer konstitutiven Expression gleichkommt, weil Bit 11 durch kein Gen gesetzt werden kann.
+Das vertikale Wachstum wird somit vollst"andig unterdr"uckt. Da die Pflanze aber eine betr"achtliche H"ohe hat, kann
+dies offensichtlich nicht vom Anfang des Lebens der Pflanze an der Fall gewesen sein. Auch die Aktivierungsh"aufigkeiten
+belegen dies. Das Gen 1, welches ebenfalls konstitutiv exprimiert wird, wurde rund dreimal so h"aufig aktiviert wie
+Gen 5; wenn beide von Anfang an konstitutiv exprimiert worden w"aren, h"atten sie die gleiche Aktivierungsh"aufigkeit.
+
+Leider kann mithilfe der derzeit implementierten Simulationssoftware nicht gekl"art werden, ob eine Mutation im Gen 5
+zur Abschaltung des vertikalen Wachstums gef"uhrt hat. Es ist auch denkbar, da"s ein Gen, das das Setzen von Bit 11
+bewirkte, durch eine Mutation zerst"ort wurde und erst dadurch die faktisch konstitutive Expression von Gen 5 zustandekam.
+
+Abb.\ \ref{lnd5-plants}d zeigt eine Pflanze, deren Gestalt zun"achst vermuten lassen k"onnte, da"s ihr Entwicklungsprogramm
+sich von denen der bisher besprochenen Pflanzen grundlegend unterscheidet. Das \textsl{listing} zeigt jedoch ein
+Entwicklungsprogramm, das dieselbe Grundstruktur wie die restlichen Entwicklungsprogramme in Abb.\ \ref{lnd5-plants} aufweist.
+Neu ist lediglich ein zus"atzlicher Operator in Gen 0, der f"ur Bit 2 den gel"oschten Zustand spezifiziert. Damit wird
+Gen 0 nur in Zellen exprimiert, die keinen rechtsunteren Nachbarn haben. Dies ist einerseits am rechten Rand
+der Pflanze regelm"a"sig der Fall, hier findet dementsprechend haupts"achlich das H"ohenwachstum statt. Von dem nach rechts
+tendierenden Hauptspro"s aus werden durch die Aktivit"at des Gens 2 nach links weisende, seitliche Strukturen ausgebildet.
+Gen 6 bewirkt dagegen die Verschiebung des Hauptsprosses nach rechts.
+
+Die seitlichen Strukturen zeigen ein geringes Ma"s an H"ohenwachstum. Auch dieses kommt durch Gen 0 zustande. Das Wachstum
+der nach links ragenden Strukturen findet durch die Aktivierung von Gen 2 am Ende dieser Strukturen statt.
+Da die oberen Zellschichten mehr Licht empfangen, w"achst die oberste Zellschicht einer solchen Struktur am schnellsten nach
+links. Am linksoberen Ende kommt es so zur Ausbildung einer seitlichen Spitze von der Dicke einer Zellschicht. Die "au"serste
+Zelle an so einer Spitze hat nur einen rechten Nachbarn, aber keinen rechtsunteren Nachbarn. Somit exprimiert sie Gen 0. Von
+der dabei produzierten Zelle ausgehend w"achst dann eine neue Zellschicht der seitlichen Struktur, an deren links"au"sersten
+Ende schlie"slich eine weitere Aktivierung des Gens 0 erfolgen kann.
+
+
+\subsection{Weitere Pflanzenformen und Evolutionsprozesse}
+
+Die Klasse der busch- und baumartigen Pflanzen stirbt noch vor dem Zeitschritt 11000 aus. Diese Pflanzen werden von Formen verdr"angt,
+die ausschlie"slich horizontal am Boden entlangwachsen. Bei dieser Wachstumsstrategie finden viele Angriffe statt. Gleichzeitig kommt
+es zu einer Verknappung der zur Produktion neuer Pflanzen verf"ugbaren Positionen und somit zu einem erheblichen R"uckgang
+der Populationsgr"o"se.
+
+Bei Zeitschritt 22000 erscheinden Pflanzen, die diagonal nach rechts in die H"ohe wachsen. Durch die Ausbildung nach links
+auswachsender, seitlicher Strukturen wird eine Verringerung des "Uberhangskoeffizienten erreicht. Diese Strukturen k"onnen
+sehr unterschiedlich stark ausgepr"agt sein. Verschiedene Formen dieser Art sind in Abb.\ \ref{lnd5-worlds}g zu sehen.
+Nach dem Zeitschritt 36000 treten regelm"a"sig Riesenformen mit extrem umfangreichen, nach links weisenden seitlichen
+Strukturen auf. Die Abbildungen \ref{lnd5-worlds}h und \ref{lnd5-worlds}i zeigen Beispiele f"ur solche Pflanzen. Die Pflanze
+in Abb.\ \ref{lnd5-worlds}i "uberschattet einen sehr gro"sen Teil der Welt und l"ost dadurch eine Energiekrise aus. Die
+anderen Pflanzen erhalten nur wenig Energie und k"onnen somit pro Zeitschritt nicht soviele Samen produzieren, wie Pflanzen
+absterben. Damit kommt es zu einem deutlichen R"uckgang der Populationsgr"o"se. Bei wesentlich l"angerer Lebensdauer
+dieser Riesenpflanze h"atte sie sich zu einer superstabilen Pflanze entwickeln k"onnen (vgl.\ \ref{leanover-discussion})
+
+Die Tendenz zur Entstehung von Riesenpflanzen geht nach dem Zeitschritt 45000 deutlich zur"uck. Mit diesem Proze"s
+ist auch eine Abnahme der Anzahl der Angriffe verbunden. Dieser Vorgang kann somit als Evolution kooperativeren
+Wachstumsverhaltens eingeordnet werden.
+
+Die durchschnittliche Spezifit"at der Gene bleibt w"ahrend des gesamten Laufs gering. Insbesondere nimmt sie im Verlauf der
+Simulation nicht in signifikanter Weise zu. Der Grund daf"ur ist vermutlich, da"s Entwicklungsprogramme komplexer Pflanzen
+mit wenigen Genen geringer Spezifit"at realisiert werden k"onnen, wie in (\ref{lnd5-pleiotropy}) deutlich wurde.
+In LindEvol-P besteht demnach kein Selektionsdruck, der zur Evolution von Genen mit hoher Spezifit"at f"uhren k"onnte.
+Die Tendenz zur Evolution von Genen geringer Spezifit"at beim Fehlen eines solchen Selektionsdrucks kann dadurch erkl"art
+werden, da"s Gene geringer Spezifit"at mit geringerer Wahrscheinlichkeit durch Mutationen ver"andert werden, weil sie
+weniger Operatoren haben und somit k"urzer sind.
+
+Auffallend im Vergleich zu den Ergebnissen der Modelle mit blockorientierter Genominterpretation ist, da"s die Anzahl der
+aktiven Gene bei der Evolution komplexer Pflanzenformen nur geringf"ugig ansteigt. Der Grund hierf"ur ist, da"s ein Gen
+geringer Spezifit"at unterschiedliche Funktionen "ubernehmen kann, f"ur die bei der blockorientierten Genominterpretation
+mehrere Gene erforderlich sind. Dies wurde in (\ref{lnd5-blockprodiffs}) anhand eines Beispiels demonstriert.
+
+In der Kurve der Durchschnittswerte des Alters fallen bei den Zeitschritten 13000 und  38000 zwei Phasen auf, in denen das
+Durchschnittsalter signifikant ansteigt. Das Minimum der Genoml"ange f"allt in diesen Phasen auf sehr kleine Werte. Diese
+sehr kurzen Genome kommen zustande, wenn der Aktionsteil eines h"aufig exprimierten Gens so mutiert, da"s er den Befehl
+\verb|mut+| codiert. Bei einer Pflanze signifikanter Gr"o"se wird die effektive Deletionsrate dann bis auf 1.0 erh"oht,
+was bedeutet, da"s s"amtliche Bytes bei der Mutation deletiert werden. Danach besitzt die Pflanze keine Gene mehr, die
+exprimiert werden k"onnten. Ihr Energiegehalt wird dadurch sehr hoch. Bei einer gut ausbalancierten Pflanze wird damit
+die Absterbewahrscheinlichkeit sehr gering, so da"s die Pflanze mehrere tausend Zeitschritte lang "uberlebt, was zu den
+beobachteten Peaks des durchschnittlichen Alters f"uhrt. In Abb.\ \ref{lnd5-worlds}i ist die Pflanze, die zum zweiten
+Peak dieser Art f"uhrt, links von der Riesenpflanze zu sehen. Das sporadische Auftreten von Pflanzen, die ein sehr hohes
+Alter erreichen, ist als Effekt der Modellierung von Mutation und Absterbewahrscheinlichkeit zu werten, der keine
+Entsprechung in der Natur hat.
+
+
+\section[Zusammenfassung]{Zusammenfassende Bewertung der Ergebnisse \\ von LindEvol-P}
+
+Der Verlauf des Evolutionsgeschehens in LindEvol-P erwies sich als im Vergleich zu LindEvol-B "uberraschend komplex.
+Einer der Gr"unde daf"ur ist, da"s bei promotororientierter Genominterpretation "Uberg"ange zwischen verschiedenen
+Wuchsformen erheblich leichter sind als bei blockorientierter Genominterpretation. Daher kommt es zu einer schnelleren
+Abfolge evolution"arer Schritte. Ein weiterer Grund ist, da"s Entwicklungsprogramme insbesondere komplexerer Pflanzen
+bei promotororientierter Genominterpretation erheblich kompakter codierbar sind als bei blockorientierter Genominterpretation
+(man vergleiche z.B.\ Abb.\ \ref{xlong0108genomes}f auf Seite \pageref{xlong0108genomes} mit Abb.\ \ref{lnd5-plants}b).
+Formal betrachtet k"onnen in der linken Seite einer Regel bei blockorientierter Genominterpretation nur Minterme
+der Zustandsbits spezifiziert werden, w"ahrend bei der promotororientierten Genominterpretation dadurch, da"s
+auch unspezifizierte Bits m"oglich sind, beliebige Monome in der linken Seite einer Regel stehen k"onnen
+(vgl.\ \cite{Oberschelp92,Schmidt77}). Da komplexe Evolutionsgeschehen in LindEvol-P zeigt, da"s es durch
+die hier entwickelte Methode der promotororientierten Codierung von Regeln gelungen ist, diesen erweiterten Funktionsraum
+in einer f"ur die evolution"are Entwicklung und Optimierung geeigneten Weise zu repr"asentieren. Das Prinzip der
+promotororientierten Regelcodierung kann generell verwendet werden, um Boolesche Funktionen so zu codieren, da"s
+ihre Entwicklung durch evolution"are Methoden m"oglich ist.
+
+In LindEvol-P konnten verschiedene pleiotrope Transformationen von Ph"anotypen beobachtet werden. Bei den Modellen mit
+blockorientierter Genominterpretation waren solche Mutationen nicht festzustellen. Der Grund daf"ur ist, da"s bei der
+blockorientierten Genominterpretation ein Gen nur bei genau einem Zellzustand exprimiert wird. "Andert sich die linke
+Seite der in einem Gen codierten Regel durch eine Mutation, hat das Muster der Zellen innerhalb der Pflanze, in denen
+das Gen nach der Mutation exprimiert wird, keine "Uberlappung mit dem Expressionsmuster vor der Mutation. Bei der
+promotororientierten Genominterpretation sind dagegen Erweiterungen oder Einschr"ankungen des Expressionsmusters
+eines Gens durch Mutationen im Operatorbereich m"oglich. Durch solche \textsl{gain-of-function}-Mutationen k"onnen
+in LindEvol-P durch geringf"ugige Ver"anderungen auf genetischer Ebene unterschiedlichste Varianten aus einer Grundform
+entstehen. Pleiotrope Mutationen dieser Art werden in molekularen Systemen insbesondere bei Genen, die bei der Steuerung
+morphogenetischer Prozesse mitwirken, beobachtet (vgl.\ \cite{Carroll95}, \cite{Watson}). Besonders auff"allig sind
+die Gemeinsamkeiten zwischen den in \runname{m02n000e25l15} beobachteten Modifikationen der Kontrolle des vertikalen Wachstums und
+den bei nat"urlichen Pflanzen beobachteten pleiotropen Effekten der Beeinflussung der apikalen Dominanz. KNOTTED-1,
+ein Hom"oobox-Gen aus Mais (\textsl{Zea mays}), bewirkt bei seiner "Uberexpression in Tabak (\textsl{Nicotiana tabacum})
+den Verlust der apikalen Dominanz, die transformierten Pflanzen sind erheblich kleiner als Tabakpflanzen des Wildtyps \cite{Sinha95}.
+Diese Modifikationen sind hinsichtlich ihres Ausma"ses und bis zu einem gewissen Grad auch
+hinsichtlich ihrer Art mit den Unterschieden zwischen den in Abb.\ \ref{lnd5-plants}b und \ref{lnd5-plants}d gezeigten
+Pflanzen vergleichbar.
+
+Bei der in Abb.\ \ref{lnd5-plants}c dargestellten Pflanze wurde eine Mutation festgestellt, durch die ein Zustandsbit,
+das sonst nur bei Anwesenheit einer Nachbarzelle gesetzt ist, nun unabh"angig von der Existenz einer solchen Zelle immer
+gesetzt wird. Infolge dieser Mutation befinden sich die Zellen dieser Pflanze konstitutiv in einem Zustand, in dem sie sich ohne
+die Mutation nur bei bestimmten externen Bedingungen bef"anden. Diese Art von Mutation erinnert stark an den Mechanismus
+mancher Onkogene wie z.B.\ \textsl{src}, \textsl{erbB} und \textsl{fms} (vgl.\ \cite{Watson}, Kapitel 26). Eine Tumorbildung
+kann mit LindEvol-P jedoch nicht naturgetreu simuliert werden, weil ein Genom die Aktivit"aten aller Zellen einer Pflanze
+steuert. Eine Weiterentwicklung des Modells, bei der jede Zelle ein individuelles Genom besitzt, k"onnte leicht realisiert
+werden; ein solches Modell h"atte jedoch einen um mehr als das Zehnfache vergr"o"serten Speicherplatzbedarf f"ur die Genome,
+auch der Rechenzeitbedarf f"ur die Manipulation dieser Genome w"are erheblich.
+
+Mit dem im Ergebnisteil diskutierten Lauf \runname{m02n000e25l15} konnten viele Prozesse in LindEvol-P nur angedeutet
+werden. Von der Durchf"uhrung und Auswertung verschiedener Serien von L"aufen sind interessante Einblicke in das
+Evolutionsgeschehen von LindEvol-P zu erwarten. Von besonderem Interesse ist dabei die Charakterisierung der Evolution
+der Spezifit"at in Abh"angigkeit von verschiedenen Evolutionsbedingungen.
+
+Zur Weiterentwicklung von LindEvol-P kommt zun"achst eine Neuentwicklung der Mutationskomponente in Betracht, um die
+Entstehung extrem langlebiger, genloser Pflanzen zu verhindern. Eine andere interessante Richtung der Weiterentwicklung
+ist die Gestaltung von Lebensbedingungen, an die keine gute Adaptation mit wenigen Genen geringer Spezifit"at m"oglich ist.
+Diese komplexen Adaptationsanforderungen sollten dabei nicht von au"sen vorgegeben
+oder gar fest in das Modell eingebaut sein, sondern sich vielmehr intrinsisch in Abh"angigkeit des
+pflanzlichen Wachstumsverhalten als emergentes Ph"anomen entwickeln. Ein Schritt zur Erweiterung des Raumes
+f"ur eine intrinsische Gestaltung komplexer Adaptationsanforderungen ist die Entwicklung eines Modells mit
+dreidimensionaler Topologie. Dies ist Gegenstand des folgenden Kapitels.
+

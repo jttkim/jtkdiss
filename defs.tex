@@ -1,0 +1,305 @@
+\chapter{Konventionen und Glossar}
+\label{preliminaries}
+
+\section{Konventionen}
+\label{conventions}
+
+In dieser Arbeit werden folgende Konventionen verwendet:
+
+\begin{itemize}
+\item Werte in hexadezimaler Schreibweise werden durch das Voranstellen eines \$ (Dollarzeichen) gekennzeichnet.
+
+\item Anstelle des im deutschen Sprachraum "ublichen Dezimalkommas wird ein Dezimalpunkt verwendet.
+Dies dient der Einheitlichkeit mit maschinenlesbaren bzw.\ maschinengenerierten Daten.
+
+\item F"ur die elementare Boolesche Funktion der Konjunktion ("`und"') wird das
+Symbol $\wedge$ verwendet, die Disjunktion ("`oder"') wird durch das Symbol $\vee$ bezeichnet
+(vgl.\ \cite{Oberschelp92}). F"ur die Durchf"uhrung der entsprechenden Funktionen werden die
+Verbformen "`undieren"' bzw.\ "`oderieren"' verwendet.
+
+\item Die Anwendung Boolescher Operatoren auf ganzzahlige Operanden versteht sich als bitweise
+Ausf"uhrung der entsprechenden Operation mit den Operanden in der Zweierkomplementdarstellung.
+
+\item Das arithmetische Mittel einer Me"sgr"o"se in einer Population wird in dieser Arbeit stets als
+Durchschnittswert bezeichnet. Im Unterschied dazu wird das arithmetische Mittel der im Verlauf eines
+Zeitabschnitts gemessenen Werte einer Me"sgr"o"se als Mittelwert bezeichnet. Diese Konvention dient
+lediglich als zus"atzliche Verst"andnishilfe; die Methode, mit der ein Wert berechnet wurde, wird stets
+so beschrieben, da"s sie auch ohne diese Konvention verst"andlich ist.
+
+\end{itemize}
+
+\section{Abk"urzungen}
+
+\begin{description}
+\item[DNA] \textsl{Desoxyribonucleic acid} (Desoxyribonucleins"aure).
+% \item[KB] Kilobyte, $2^{10} = 1024$ Bytes.
+% \item[MB] Megabyte, $2^{20} = 1048576$ Bytes.
+\item[RNA] \textsl{Ribonucleic acid} (Ribonucleins"aure).
+\end{description}
+
+
+\section{Glossar}
+\label{glossary}
+
+\begin{description}
+
+% \item{Baum.] Ein Baum ist ein zyklenfreier, vollst"andig verbundener Graph.
+% Er besteht aus einer Menge von Knoten und aus einer Menge von Kanten, die
+% jeweils zwei Knoten miteinander verbinden. 
+% interne Knoten
+% terminale Knoten = Blaetter
+% vollstaendig aufgeloeste Baeume
+
+\item[Bit.] Ein Bit ist eine Informationseinheit, die von zwei m"oglichen
+Zust"anden einen genau spezifiziert. In der Programmierpraxis werden
+die beiden Zust"ande mit \verb|0| und \verb|1| bezeichnet.
+Ist in einem Bit der Wert \verb|1| gespeichert, wird es als gesetzt
+bezeichnet, anderenfalls bezeichnet man es als gel"oscht.
+
+\item[Byte.] Ein Byte ist eine aus acht Bits bestehende Einheit, eine
+Achtbit-Zahl. Ein Byte kann somit $2^8=256$ verschiedene Zust"ande
+annehmen. Die einzelnen Bits $b_i$ eines Bytes k"onnen "uber Indices $i \in \{0, 1, \ldots, 7\}$
+spezifiziert werden. Auf der Grundlage dieser Indizierung kann dem Zustand eines
+Bytes die ganze Zahl $\sum_{i=0}^7 2^i b_i$ zugeordnet werden, die zwischen 0
+und 255 einschlie"slich liegt. Diese eindeutige Zuordnung von Bytes und
+ganzen Zahlen wird in dieser Arbeit stets f"ur die Bezeichnung von
+Bytewerten verwendet
+
+\item[Distanzma"s.] Ein Distanzma"s ist eine Funktion $d(x, y): (x, y) \mapsto 
+\mbox{\bfseries R}^+$, die Paare von Objekten aus einer bestimmten Menge $M$auf skalare
+Werte abbildet. Ein Distanzma"s ist symmetrisch:
+
+\begin{displaymath}
+\forall x, y \in M :  d(x, y) = d(y, x)
+\end{displaymath}
+
+und es erf"ullt die Dreiecksungleichung:
+
+\begin{displaymath}
+\forall x, y \in M : \forall z \in M : d(x, y) \leq d(x, z) + d(z, y)
+\end{displaymath}
+
+In der vorliegenden Arbeit werden die auf Sequenzvergleichen basierenden
+Distanzma"se Editierabstand, Hammingdistanz
+sowie der auf B"aumen operierende \textsl{dT score} verwendet.
+
+\item[{\slshape dT score}.] Der {\slshape dT score} ist ein Ma"s zur Quantifizierung
+der "Ahnlichkeit von Stammb"aumen.
+Er ist folgenderma"sen definiert (nach \cite{KuhnerFelsenstein}):
+Sei $T$ ein Stammbaum, und $S$
+die Menge der Species, die in diesem Stammbaum miteinander verkn"upft sind. Jede Kante
+in $T$ induziert eine Aufteilung von $S$ in zwei Teilmengen $R_1$ und $R_2$: Seien
+$n_1$ und $n_2$ die Knoten, die durch die fragliche Kante $k_i$ verbunden sind, dann geh"ort
+eine Species $s \in S$ zu $R_1$, wenn der Pfad zwischen $s$ und $n_1$ k"urzer ist als
+der Pfad zwischen $s$ und $n_2$, anderenfalls geh"ort $s$ zu $R_2$. Die Aufteilung von $S$
+in $R_1$ und $R_2$ wird als die der Kante $k_i$ zugeordnete Partition $p_i$ bezeichnet.
+
+Zu jedem Baum $T$ geh"ort somit eine Menge von Partitionen $P = \{p_1, p_2, \ldots, p_n\}$.
+Seien nun $T$ und $T'$ zwei B"aume mit derselben Speciesmenge $S$, die Partitionsmenge
+von $T$ sei $P$, die von $T'$ sei $P'$. Dann ist der {\slshape dT score} zwischen $T$
+und $T'$ die Gr"o"se der Ausschlu"smenge von $P$ und $P'$:
+
+\begin{displaymath}
+dT(T, T') = | P \cup P' | - |P \cap P'|
+\end{displaymath}
+
+B"aume mit identischer Topologie haben einen {\slshape dT score} von 0. Je gr"o"ser der {\slshape dT score}
+zwischen zwei B"aumen ist, desto geringer ist die "Ahnlichkeit der beiden B"aume.
+
+\item[Editierabstand.] (auch als Levenshtein-Distanz bezeichnet) Ein
+Distanzma"s f"ur Zeichenketten. Der Editierabstand $E(X,Y)$ zwichen
+zwei Zeichenketten $X$ und $Y$ ist
+definiert als die minimale Anzahl von Editieroperationen, die erforderlich
+ist, um $X$ in $Y$ zu transformieren. Die m"oglichen Editieroperationen
+sind hierbei das "Uberschreiben, das Einf"ugen und das L"oschen jeweils
+einzelner Zeichen. Technisch wird der Editierabstand durch den 
+Needleman-Wunsch-Algorithmus \cite{NeedlemanWunsch} berechnet.
+
+% \item[Emergenz.] 
+
+% \item[Fitnesslandschaft.]
+
+% \item[Komplexit"at, Komplexit"atsma"s.]
+
+
+% \item[B"aume, additive B"aume, ultrametrische B"aume.]
+
+
+% \item[genetischer Algorithmus.]
+
+
+\item[Kontrollparameter.] Bei einem Simulationsmodell sind zur Durchf"uhrung eines
+Laufs verschiedene Parameter anzugeben. Diese werden als Kontrollparameter ({\slshape control parameters})
+bezeichnet. Typische Kontrollparameter von Evolutionssimulationen sind die Gr"o"se der Anfangspopulation,
+die Selektionsrate, verschiedene Mutationsraten usw.
+
+\item[Minterm.] Ein Minterm ist eine Boolesche Funktion, die f"ur genau eine Kombination ihrer Eingangswerte
+den Ausgangswert 1 liefert. Minterme sind Ausdr"ucke, in denen s"amtliche Eingangswerte entweder in unver"anderter
+oder in negierter Form undiert werden. Dabei mu"s jeder Eingangswert genau einmal vorkommen.
+Ein Beispiel f"ur einen Minterm mit den Eingangsvariablen $x_1, x_2, x_3$ ist
+$x_1 \wedge \overline{x_2} \wedge x_3$. Die Bezeichnung Minterm r"uhrt daher, da"s sich durch die Oderierung
+mehrerer Minterme komplexere Boolesche Funktionen darstellen lassen. Weitergehende Informationen sind in
+der Fachliteratur zu finden (z.B.\ \cite{Oberschelp92,Schmidt77}).
+
+\item[Monom.] Ein Monom ist eine Boolesche Funktion, die durch die Undierung einer Teilmenge ihrer
+Eingangswerte in unver"anderter oder in negierter Form dargestellt werden kann. Anders als bei einem
+Minterm m"ussen bei einem Monom nicht alle Eingangswerte in dem Ausdruck vorkommen. Ein Beispiel
+f"ur ein Monom der Eingangsvariablen $x_1, x_2, x_3$ ist $x_1 \wedge \overline{x_2}$, dies ist
+jedoch kein Minterm, weil $x_3$ nicht in dem Ausdruck vorkommt. Wie Minterme k"onnen auch aus Monomen
+komplexere Boolesche Funktionen aufgebaut werden. Weiterf"uhrende Informationen sind der Fachliteratur
+zu entnehmen (z.B. \cite{Schmidt77}).
+
+\item[Neutrale Evolution.] Eine Mutation, die den Ph"anotyp eines Organismus, oder zumindest seine "Uber\-le\-bens-
+und Vermehrungschancen, nicht ver"andert, wird als \introdef{neutrale Mutation} bezeichnet. Bei neutraler
+Evolution sind alle Mutationen neutral. Neutrale Evolution ist somit ein Proze"s, in dem Mutationsprozesse
+eine Diffusion der Genome im Sequenzraum bewirken, die durch keinerlei Selektionseinfl"usse eingeschr"ankt
+wird. Neue Species entstehen durch Aufspaltungen von bestehenden Arten. Unmittelbar nach solchen Aufspaltungen
+sind die beiden entstandenen Schwesterspecies genetisch sehr "ahnlich. Diese "Ahnlichkeit verliert sich infolge
+der Akkumulation unterschiedlicher Mutationen im Laufe der Zeit.
+
+\item[Operator.] In der Genetik versteht man unter einem Operator einen Sequenzmotiv, an das regulatorische
+Proteine sequenzspezifisch binden k"onnen, was die Transkription des Gens aktiviert oder reprimiert.
+In der Informatik und der Mathematik bezeichnet man Verfahren zur Verrechnung (allgemeiner: Transformation)
+von Objekten als Operatoren. In der vorliegenden Arbeit spielen sowohl Operatoren im genetischen Sinne
+als auch Operatoren im Sinne der Informatik eine Rolle. Sofern sich dies nicht aus dem Zusammenhang klar
+ergibt, wird explizit angegeben, ob ein Operator im Sinne der Genetik oder der Informatik gemeint ist.
+% \item[Opcode.]
+
+\item[Relativer Editierabstand.] Der relative Editierabstand $e(X,Y)$ zwischen zwei Zeichenketten $X$ und $Y$
+ist definiert als der Editierabstand dividiert durch die L"ange der l"angeren von beiden Sequenzen:
+
+\begin{displaymath}
+e(X, Y) := \frac{E(X, Y)}{\max\{\mbox{L"ange von $X$}, \mbox{ L"ange von $Y$}\}}
+\end{displaymath}
+
+
+\end{description}
+
+% \section{Liste der verwendeten Abk"urzungen}
+% 
+% \begin{description}
+% \item[\$] Pr"afix zur Kennzeichnung hexadezimaler Zahlen.
+% \item[$E(X,Y)$] Editierabstand zwischen den Zeichenketten $X$ und $Y$.
+% \item[FPU.] {\slshape floating point unit}, ein Coprozessor eines Computers zur
+%     Durchf"uhrung von Rechenoperationen mit Flie"skommazahlen.
+% \end{description}
+% 
+
+\section{Pseudocode}
+
+Zur Beschreibung von Algorithmen wird in dieser Arbeit ein an die
+Programmiersprache Pascal angelehnter Pseudocode verwendet. Pseudocode
+wird stets in nichtproportionaler Schreibmaschinenschrift gesetzt.
+Schl"usselworte
+und Operatoren werden dabei in Gro"sbuchstaben, Variablen in Kleinbuchstaben
+geschrieben. Funktionsnamen werden ebenfalls in Kleinbuchstaben geschrieben,
+wobei die Argumentliste der Funktion dem Funktionsnamen in runden Klammern
+nachgestellt wird. Um auch bei Funktionen, die keine Argumente erhalten,
+die Unterscheidbarkeit von Variablen zu gew"ahrleisten, wird bei solchen
+Funktionen ein leeres Klammerpaar nachgestellt, welches eine leere Argumentliste
+darstellt.
+
+Sofern dies der Verst"andlichkeit und "Ubersichtlichkeit
+dient, werden Bedingungen und Operationen nicht durch logische
+Ausdr"ucke bzw.\ durch Anweisungsbl"ocke, sondern in nat"urlicher
+Sprache beschrieben. Diese Teile werden in kursiver Proportionalschrift
+gesetzt.
+
+Im Interesse der "Ubersichtlichkeit, werden die Anweisungsbl"ocke unter der Kontrolle
+von Schleifen und \verb|IF|-Abfragen nicht unterschiedslos durch ein Paar von
+Schl"usselworten wie \verb|BEGIN| und \verb|END| eingeschlossen. Auf ein Schl"usselwort
+wie \verb|BEGIN| wird verzichtet, das jeweilige Programmsteuerungselement
+(\verb|IF|, \verb|WHILE|, \verb|FOR|) dient gleichzeitig zur Markierung des
+Blockanfangs. Den einzelnen Steuerungselementen sind individuelle Schl"usselworte
+zur Beendigung des zugeh"origen Anweisungsblocks zugeordnet. Auch Bl"ocke von
+nur einer Anweisung werden durch ein solches schlie"sendes Element abgeschlossen.
+Durch diese dem Basic entlehnten Notation wird die Zuordnung der "offnenden
+und schlie"senden Elemente der Programmflu"skontrolle und damit auch die
+Identifikation der zugeh"origen Bl"ocke erheblich erleichtert.
+
+Die wesentlichen Elemente des Pseudocodes sind:
+
+\begin{itemize}
+\item Bedingung mit der M"oglichkeit mehrerer Verzweigungen:
+\begin{verbatimcmd}
+IF \pcodemeta{Bedingung 1}
+  \pcodemeta{Block 1}
+ELSEIF \pcodemeta{Bedingung 2}
+  \pcodemeta{Block 2}
+ELSE
+  \pcodemeta{Block 3}
+ENDIF
+\end{verbatimcmd}
+Bei diesem Konstrukt wird, wenn \pcodemeta{Bedingung 1} erf"ullt ist,
+\pcodemeta{Block 1} abgearbeitet und danach mit der Bearbeitung des
+Codes nach \verb|ENDIF| fortgefahren. Wenn \pcodemeta{Bedingung 1}
+nicht erf"ullt, \pcodemeta{Bedingung 2} hingegen erf"ullt ist, wird
+\pcodemeta{Block 2} prozessiert und danach zum Ende des Konstrukts
+gesprungen. Ist keine der Bedingungen erf"ullt, wird \pcodemeta{Block 3}
+bearbeitet. \verb|ELSEIF|-Anweisung k"onnen in beliebiger Anzahl vor
+dem abschlie"senden \verb|ELSE| erscheinen. Die Verzweigung mittels
+\verb|ELSEIF| und \verb|ELSE| ist optional, wenn die zugeh"origen
+Programmbl"ocke leer sind, k"onnen auch die Anweisungen \verb|ELSEIF|
+und \verb|ELSE| entfallen.
+
+\item Z"ahlschleife:
+\begin{verbatimcmd}
+FOR \pcodemeta{Schleifenvariable} = \pcodemeta{Anfangswert} TO \pcodemeta{Endwert}
+  \pcodemeta{Block}
+NEXT \pcodemeta{Schleifenvariable}
+\end{verbatimcmd}
+\pcodemeta{Schleifenvariable} wird bei der \verb|FOR|-Schleife
+zun"achst auf \pcodemeta{Anfangswert} gesetzt. Danach wird
+getestet, ob der Wert von \pcodemeta{Schleifenvariable} den von \pcodemeta{Endwert}
+"ubersteigt. Ist dies der Fall, wird die Bearbeitung nach
+der \verb|NEXT|-Anweisung fortgesetzt. Anderenfalls wird
+\pcodemeta{Block} abgearbeitet und anschlie"send
+\pcodemeta{Schleifenvariable} um 1 erh"oht. Die Abarbeitung des
+Blocks und die Erh"ohung der Schleifenvariablen werden so oft wiederholt,
+bis der Wert der Schleifenvariablen schlie"slich gr"o"ser als der
+Endwert ist. Die Angabe der Schleifenvariablen als Parameter der
+\verb|NEXT|-Anweisung erm"oglicht eine eindeutige Zuordnung zu
+der entsprechenden \verb|FOR|-Anweisung.
+
+Bei der Variante der \verb|FOR|-Schleife 
+\begin{verbatimcmd}
+FOR \pcodemeta{Schleifenvariable} = \pcodemeta{Anfangswert} DOWNTO \pcodemeta{Endwert}
+  \pcodemeta{Block}
+NEXT \pcodemeta{Schleifenvariable}
+\end{verbatimcmd}
+wird die Schleifenvariable dekrementiert statt inkrementiert, und die
+Schleife wird verlassen, wenn der Wert der Schleifenvariablen den
+Entwert unterschreitet.
+
+\item \verb|WHILE|-Schleife:
+\begin{verbatimcmd}
+WHILE \pcodemeta{Bedingung}
+  \pcodemeta{Block}
+WEND
+\end{verbatimcmd}
+Durch diese Schleife wird \pcodemeta{Block} so oft abgearbeitet, bis
+\pcodemeta{Bedingung} nicht erf"ullt ist. Wenn die Bedingung bei
+der erstmaligen Bearbeitung der \verb|WHILE|-Anweisung nicht erf"ullt
+ist, wird \pcodemeta{Block} nicht bearbeitet, sondern mit dem Code nach
+der \verb|WEND|-Anweisung fortgefahren.
+
+\item Operatoren: Die arithmetischen Operatoren \verb|+|, \verb|-|, \verb|*| und \verb|/|
+bezeichnen die Addition, die Subtraktion, die Multiplikation bzw.\ die
+Division. \verb|^| ist der Exponentiationsoperator, \verb|MOD| bezeichnet
+die ganzzahlige modulo-Division. Die Operatoren \verb|AND|, \verb|OR| und
+\verb|XOR| (Exclusiv-Oder) bezeichnen die jeweils entsprechende bitweise
+Verkn"upfung ganzzahliger Operanden.
+
+An Vergleichsoperatoren werden \verb|<| f"ur "`kleiner als"', 
+\verb|<=| f"ur "`kleiner oder gleich"', \verb|==| f"ur "`gleich"', 
+\verb|<>| f"ur "`ungleich"',
+\verb|>=| f"ur "`gr"o"ser oder gleich"' sowie \verb|>| f"ur "`gr"o"ser als"', 
+verwendet. Als Zuweisungsoperator, mit dem Ergebnisse arithmetischer
+Ausdr"ucke in Variablen gespeichert werden, wird \verb|=| eingesetzt.
+
+Die Indizierung von Feldern (\textsl{arrays}) erfolgt durch die Nachstellung
+des in eckigen Klammern eingeschlossenen Index hinter den Namen des Feldes.
+\verb|x[i]| bezeichnet also das i-te Element des Feldes \verb|x|.
+
+\end{itemize}
+

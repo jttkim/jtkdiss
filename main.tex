@@ -1,0 +1,138 @@
+%format latex
+
+\documentclass[12pt, a4paper, fleqn]{book}
+\usepackage[T1]{fontenc}
+\usepackage[german]{babel}
+\usepackage{din_a4}
+\usepackage{epsf}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{moreverb}
+
+\clubpenalty=1000
+\widowpenalty=1000
+
+% \setlength{\captionmargin}{1cm}
+\renewcommand{\captionfont}{\scriptsize\bfseries}
+
+
+\newcommand{\introdef}[1]{{\bfseries #1}}
+\newcommand{\pcodemeta}[1]{{\normalfont\itshape #1}}
+\newcommand{\regel}[1]{{\sffamily\slshape #1}}
+\newcommand{\prgname}[1]{{\ttfamily #1}}
+\newcommand{\runname}[1]{{\ttfamily #1}}
+\newcommand{\mycodestyle}[1]{{\ttfamily #1}}
+% \newcommand{\prgname}[1]{{\normalshape\ttfamily #1}}
+% \newcommand{\runname}[1]{{\normalshape\ttfamily #1}}
+% \newcommand{\mycodestyle}[1]{{\normalshape\ttfamily #1}}
+
+\hyphenation{pro-mo-tor-orien-tiert Re-kom-bi-na-tions-oper-a-to-ren}
+
+\setcounter{secnumdepth}{5}
+
+\includeonly{einleit,defs,material,simspecs,methoden,lndga,lnd2,lnd5,lnd53d,zfassung,lit,anhang}
+% \includeonly{lndga}
+
+
+\begin{document}
+
+\title{\textbf{Untersuchungen zur Evolution von morphologischer und taxonomischer Diversit"at
+und Komplexit"at anhand von Computermodellen}}
+
+\author{Inaugural-Dissertation \\
+\vspace*{0.2cm} \\
+zur \\
+\vspace*{0.2cm} \\
+Erlangung des Doktorgrades \\
+\vspace*{0.2cm} \\
+der Mathematisch-Naturwissenschaftlichen Fakult"at \\
+der Universit"at zu K"oln \\
+\vspace*{1.3cm} \\
+vorgelegt von \\
+\vspace*{0.3cm} \\
+{\Large Jan Tai Tsung Kim} \\
+\vspace*{0.2cm} \\
+aus Holzlar \\
+\vspace*{1cm} \\
+K"oln 1996
+\vspace*{0.4cm} \\
+{\footnotesize Druck: SDK Systemdruck K"oln GmbH, K"oln}}
+\date{}
+\maketitle
+
+
+{
+\pagestyle{empty}
+\thispagestyle{empty}
+
+\cleardoublepage
+
+\vspace*{17cm}
+
+\begin{tabbing}
+Berichterstatter: \= Prof.\ Dr.\ Heinz Saedler \\
+                  \> Prof.\ Dr.\ Rainer Schrader \\
+\end{tabbing}
+
+\vspace*{2cm}
+
+\noindent Tag der letzten m"undlichen Pr"ufung: 29.\ Januar 1996
+
+\pagebreak
+
+\thispagestyle{empty}
+
+\vspace*{5cm}
+
+\vfill
+
+Die vorliegende Arbeit wurde in der Zeit vom September 1991 bis zum November 1995 in
+unter der Betreuung von Herrn Prof.\ Dr.\ Heinz Saedler in der Arbeitsgruppe von Herrn Dr.\ Kurt St"uber
+angefertigt. Ich danke Herrn Prof.\ Dr.\ Saedler f"ur die M"oglichkeit zur Durchf"uhrung dieser interessanten
+Untersuchungen und f"ur sein stetes Interesse. Herrn Dr.\ Kurt St"uber danke ich f"ur die partnerschaftliche
+Anleitung. Meinen Kollegen, Herrn Dr.\ Peter Reinert, Herrn Hilmar Rauhe und Herrn Fuad Abdallah danke
+ich f"ur ihre st"andige Hilfs- und Gespr"achsbereitschaft.
+
+Herrn Guido G"obel danke ich f"ur die Administration der Alpha-Workstations, auf denen ich meine Experimente
+durchf"uhren konnte. Herrn Stephan B.\ Webanck danke ich f"ur die Beratung bei der Anwendung von \LaTeXe{}.
+
+Mein besonderer Dank gilt meiner Freundin Luzie Ursula Wingen.
+
+% \begin{center}\begin{slshape}
+% When you can't hear the rhyme \\
+% And you can't see the reason \\
+% Why should the hope remain?
+% 
+% For a man will be tired \\
+% And his soul will grow weary \\
+% Living his life in vain.
+% 
+% \vspace{2cm}
+% {\normalfont\textsc{Alan Parsons Project: Ammonia Avenue}}
+% \end{slshape}\end{center}
+
+\cleardoublepage
+}
+
+
+\pagenumbering{roman}
+\tableofcontents
+\cleardoublepage
+\pagenumbering{arabic}
+
+\include{einleit}
+\include{defs}
+\include{material}
+\include{simspecs}
+\include{methoden}
+\include{lndga}
+\include{lnd2}
+\include{lnd5}
+\include{lnd53d}
+\include{zfassung}
+\include{lit}
+\include{anhang}
+
+\end{document}
+
+

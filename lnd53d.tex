@@ -1,0 +1,313 @@
+\chapter[LindEvol-P/3D]{LindEvol-P/3D: Dreidimensionale Version von LindEvol-P}
+\label{lnd5-3d}
+
+
+\section{Definition}
+
+LindEvol-P/3D ist eine Weiterentwicklung von LindEvol-P, bei der das Pflanzenwachstum
+in einem dreidimensionalen anstatt in einem zweidimensionalen Raum stattfindet.
+LindEvol-P/3D wurde unter Verwendung folgender Komponenten (vgl.\ \ref{modeldef}) erstellt:
+
+\begin{itemize}
+\item Topologie: Dreidimensionales Gitter (\protect\ref{topo3d}).
+\item Zellparameter: Die Zellen haben einen internen Zustandsparameter von
+    32 Bit Breite (\protect\ref{celldef}).
+\item \begin{sloppypar} Zellaktionen: \verb|divide|, \verb|flyingseed|, \verb|localseed|,
+    \verb|mut-|, \verb|mut+| sowie \verb|statebit| (\protect\ref{cellactiondef}).
+    \end{sloppypar}
+\item Genominterpretation: LindEvol-P arbeitet mit promotororientierter
+    Genominterpretation (\protect\ref{prominterdef}).
+\item Mutation: Die in LindEvol-P/3D implementierten Mutationstypen sind
+    bitweise Austauschmutationen, byteweise Insertionen und Deletionen
+    sowie Genduplikationen (\protect\ref{mutationdef}).
+\end{itemize}
+
+Unterschiede zwischen LindEvol-P und LindEvol-P/3D ergaben sich aus Anpassungen an die
+dreidimensionale Topologie. Die bin"are Repr"asentation der lokalen Struktur
+einer Zelle ist bei der dreidimensionalen Topologie 18 Bit breit. Um, wie bei der zweidimensionalen
+Version LindEvol-P, innerhalb des Zellzustands einen Bereich zur Verf"ugung zu stellen, der
+ausschlie"slich durch den internen Zustand bestimmt wird, wurde f"ur den internen Zustand
+eine Breite von 32 Bit gew"ahlt. Die Berechnung zur Berechnung des
+"Uberhangskoeffizienten  $L$ (s.\ Gl.\ \ref{leanover-eq}) wurde erweitert,
+um beide Horizontaldimensionen zu ber"ucksichtigen. Zu diesem Zweck werden
+die komponentenweisen "Uberhangskoeffizienten $L_x$ und $L_y$ wie bei
+der zweidimensionalen Topologie (Gl.\ \ref{leanover-eq}) berechnet:
+
+\begin{displaymath}
+L_x = = \frac{2}{n_c(n_c - 1)} \left| \sum_{i=0}^{n_c-1} \frac{w}{2} - ((\frac{3w}{2} + x(C_i) - x(C_0)) \mbox{ mod } w) \right|
+\end{displaymath}
+
+\begin{displaymath}
+L_y = = \frac{2}{n_c(n_c - 1)} \left| \sum_{i=0}^{n_c-1} \frac{w}{2} - ((\frac{3w}{2} + y(C_i) - y(C_0)) \mbox{ mod } w) \right|
+\end{displaymath}
+
+Der effektive "Uberhangskoeffizient, der in die Berechnung der Absterbewahrscheinlichkeit
+eingeht, ist das arithmetische Mittel der komponentenweisen "Uberhangskoeffizienten:
+
+\begin{equation}
+\label{leanover3d-eq}
+L = \frac{L_x + L_y}{2}
+\end{equation}
+
+Bei LindEvol-P/3D werden also die "Uberhangwerte in X- und in Y-Richtung
+gleicherma"sen ber"ucksichtigt. Au"ser der Bitbreite des internen Zellzustands und der
+Erweiterung der Berechnungsmethode f"ur den "Uberhangskoeffizienten wurde der
+Modellaufbau unver"andert von LindEvol-P "ubernommen. Eine Auflistung der Kontrollparameter
+von LindEvol-P/3D findet sich in Tabelle \ref{lnd5x-controlparams}.
+
+
+% \subsection{Kontrollparameter von LindEvol-P/3D}
+
+\begin{table}[tb]
+
+\noindent\begin{tabularx}{\linewidth}{|l|l|X|} \hline
+Formel- & Bezeichner              & Beschreibung \\
+buchstabe &                       & \\ \hline
+$p_s$ & \verb|psize_init|         & Populationsgr"o"se am Anfang der Simulation \\
+$l_s$ & \verb|glen_init|          & L"ange der am Simulationsstart zuf"allig generierten Genome \\
+$M_r$ & \verb|m_replacement|      & Basiswert der Austauschrate \\
+$M_i$ & \verb|m_insertion|        & Basiswert der Insertionsrate \\
+$M_d$ & \verb|m_deletion|         & Basiswert der Deletionsrate \\
+$M_{\mathit{dup}}$ & \verb|m_duplication| & Basiswert der Duplikationsrate \\
+$m_f$ & \verb|m_factor|           & Modifikationsfaktor f"ur Mutationsraten \\
+$d$   & \verb|p_random_death|     & Basiswahrscheinlichkeit f"ur Absterben pro Zeitschritt \\
+$d_n$ & \verb|rdeath_f_numcells|  & Modifikationskoeffizient f"ur die Absterbewahrscheinlichkeit
+                                    in Abh"angigkeit von der Gr"o"se der Pflanze \\
+$d_e$ & \verb|rdeath_f_energy|    & Modifikationskoeffizient f"ur die Absterbewahrscheinlichkeit
+                                    in Abh"angigkeit von der Gesamtenergie der Pflanze \\
+$d_l$ & \verb|leanover_penalty|   & Maximalwert der Erh"ohung der Absterbewahrscheinlichkeit
+                                    bei "uberh"angender Wuchsform \\
+$w$   & \verb|world_width|        & Kantenl"ange der Grundfl"ache der Welt \\
+$h$   & \verb|world_height|       & H"ohe der Welt \\
+      & \verb|num_days|           & Anzahl Tage pro Vegetationsperiode \\
+      & \verb|num_divide|         & Anzahl Codewerte f"ur \verb|divide| \\
+      & \verb|num_flyingseed|     & Anzahl Codewerte f"ur \verb|flyingseed| \\
+      & \verb|num_localseed|      & Anzahl Codewerte f"ur \verb|localseed| \\
+      & \verb|num_mutminus|       & Anzahl Codewerte f"ur \verb|mut-| \\
+      & \verb|num_mutplus|        & Anzahl Codewerte f"ur \verb|mut+| \\
+      & \verb|num_statebit|       & Anzahl Codewerte f"ur \verb|statebit| \\
+      & \verb|random_seed|        & {\slshape seed} zur Initialisierung des Zufallsgenerators \\ \hline
+\end{tabularx}
+
+\caption{\label{lnd5x-controlparams}
+Kontrollparameter von LindEvol-P/3D.
+}
+\end{table}
+
+\section{Ergebnisse}
+
+In L"aufen von LindEvol-P/3D ist, wie bei LindEvol-P, eine komplexe Dynamik zu beobachten. Da Simulationen mit LindEvol-P/3D
+noch erheblich zeitaufwendiger als L"aufe mit LindEvol-P sind, beschr"ankt sich auch dieser Ergebnisteil auf die
+Diskussion eines Laufs. Die Kontrollparameter bei diesem Lauf \runname{m02n000e25l30i} wurden soweit wie m"oglich
+von dem in (\ref{lnd5-results}) besprochenen Lauf \runname{m02n000e25l15} "ubernommen:
+
+\medskip
+\begin{tabular}{ll}
+Populationsgr"o"se am Anfang: & 500 \\
+Mutationsraten: & $m_r=0.002$, $m_i=0.0004$, \\
+		& $m_d=0.0004$, $m_{\mathit{dup}}=0.0$ \\
+Mutationsfaktor: & 1.5 \\
+Absterbewahrscheinlichkeit: & 0.35 \\
+Modifikatoren d.\ Absterbewahrscheinlichk.: & $d_e=-2.5$, $d_n=0.0$, $d_l=0.30$ \\
+Grundfl"ache der Welt: & 50 * 50 \\
+H"ohe der Welt: & 20 \\
+Genoml"ange der Startpopulation: & 50 Bytes \\
+Anzahl Zeitschritte:             & 50000 \\
+\verb|num_divide| & 20 \\
+\verb|num_mutminus| & 2 \\
+\verb|num_mutplus| & 2 \\
+\verb|num_flyingseed| & 4 \\
+\verb|num_localseed| & 4 \\
+\verb|num_statebit| & 32 \\
+\verb|random_seed| & 12345 \\
+\end{tabular}
+\medskip
+
+Die Konfiguration des Genominterpreters mu"ste angepa"st werden, damit ausreichend viele Aktionscodes f"ur
+\verb|statebit| verf"ugbar sind, um alle 32 Bits des internen Zustands adressieren zu k"onnen. Da insgesamt nur
+64 verschiedene Aktionscodes zur Verf"ugung stehen, mu"sten die anderen Werte entsprechend verkleinert werden,
+wobei zu beachten war, da"s auch f"ur \verb|num_divide| mindestens der Wert 18 gew"ahlt werden mu"s, damit
+alle verf"ugbaren Zielpositionen f"ur die Tochterzelle bei der Teilung adressierbar sind.
+
+Ferner wurde der Wert f"ur $d_l$ doppelt so hoch wie in den zweidimensionalen Modellen gew"ahlt. Der Grund f"ur
+diese Auswahl ist, da"s bei einem Wachstum, das auch in die H"ohe geht, sich aufgrund der Gestaltung der
+Nachbarschaft bei dreidimensionaler Topologie (\ref{topo3d}) eine Entfernung von der Keimzellposition nur entweder
+in X- oder in Y-Richtung von der Keimzellposition stattfinden kann, nicht jedoch in beide Dimensionen gleichzeitig.
+Die "Uberhangskoeffizienten sind daher bei in die H"ohe wachsenden Pflanzen in einer dreidimensionalen Welt nur
+ungef"ahr halb so gro"s wie im zweidimensionalen Fall. Durch die Auswahl eines gr"o"seren $d_l$ wurde dieser Effekt
+ausgeglichen.
+
+\begin{figure}
+\unitlength1cm
+\begin{picture}(16,20)
+\put(0,0){\makebox(16,20)[b]{\epsfxsize=16cm \epsffile{m02n000e25l30i.eps}}}
+\end{picture}
+
+\caption[Verlaufsdaten des LindEvol-P/3D--Laufs \runname{m02n000e25l30i}]
+{\label{lnd53d-result}
+Verlaufsdiagramm des LindEvol-P/3D--Laufs \runname{m02n000e25l30i}. In der auch bei LindEvol-B
+und LindEvol-P verwendeten Weise sind in einigen Boxen zwei Kurven dargestellt (vgl. \protect\ref{lnd5-result}
+}
+\end{figure}
+
+% \begin{figure}
+% \unitlength1cm
+% \begin{picture}(16,20)
+% \put(0,15.5){\makebox(8,4.5)[b]{\epsfysize=3.7cm \epsffile{m02n000e25l30i-0008000w.eps}}}
+% \put(0,15){\makebox(8,0.5){\textbf{a:} Zeitschritt 8000}}
+% \put(8,15.5){\makebox(8,4.5)[b]{\epsfysize=3.7cm \epsffile{m02n000e25l30i-0016000w.eps}}}
+% \put(8,15){\makebox(8,0.5){\textbf{b:} Zeitschritt 16000}}
+% \put(0,10.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0020000w.eps}}}
+% \put(8,10.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0020000wt.eps}}}
+% \put(0,10){\makebox(16,0.5){\textbf{c:} Zeitschritt 20000, Vorderansicht und Vogelperspektive}}
+% \put(0,5.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0024000w.eps}}}
+% \put(8,5.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0024000wt.eps}}}
+% \put(0,5){\makebox(16,0.5){\textbf{d:} Zeitschritt 24000, Vorderansicht und Vogelperspektive}}
+% \put(0,0.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0040000w.eps}}}
+% \put(8,0.5){\makebox(8,4.5)[b]{\epsfysize=4cm \epsffile{m02n000e25l30i-0040000wt.eps}}}
+% \put(0,0){\makebox(16,0.5){\textbf{e:} Zeitschritt 40000, Vorderansicht und Vogelperspektive}}
+% \end{picture}
+% 
+% \caption[Weltdarstellungen des LindEvol-P/3D--Laufs \runname{m02n000e25l30i}]
+% {\label{lnd53d-worlds}
+% Darstellungen der Welt in \runname{m02n000e25l30i} bei verschiedenen Zeitschritten. Welten mit komplexeren Pflanzen
+% sind sowohl in der Ansicht von der Seite als auch in der Ansicht von oben (Vogelperspektive) dargestellt.
+% }
+% \end{figure}
+
+
+Abb.\ \ref{lnd53d-result} zeigt das Verlaufsdiagramm von \runname{m02n000e25l30i}. Wie bei LindEvol-B und bei LindEvol-P
+etabliert sich zun"achst eine Population einzelliger Pflanzen.
+Etwa bei Zeitschritt 3500 treten zweizellige Pflanzen auf, die die Einzeller verdr"angen. Aus den zweizelligen Formen
+entstehen durch Mutationen regelm"a"sig unbeschr"ankt wachsende Formen (s.\ Abb.\ \ref{lnd53d-worlds}a, Seite \pageref{lnd53d-worlds}),
+die jedoch steril sind. Reproduktionsf"ahige,
+unbeschr"ankt wachsende Formen, die die zweizelligen Pflanzen verdr"angen, treten jedoch erst bei Zeitschritt 11800 auf.
+Diese Formen, die in Abb.\ \ref{lnd53d-worlds}b dargestellt sind, dominieren bis zum Zeitschritt 18000. Hier treten
+Pflanzen auf, die aus zwei in X-Richtung benachbarten, vertikalen Zellreihen aufgebaut sind.
+Die Wachstumsstrategie mit zwei Zellreihen erm"oglicht bei einem minimal erh"ohtem
+"Uberhangskoeffizienten eine Verdopplung der Effektivit"at der Samenproduktion.
+
+\begin{sloppypar}
+Die evolution"are Sukzession von einzelligen Pflanzen "uber zweizellige und unbeschr"ankt wachsende, vertikale Formen
+bis hin zum Auftreten von Pflanzen mit seitlicher Ausdehnung wurde auch in LindEvol-P beobachtet. Im zweidimensionalen
+Modell lief dieser Proze"s jedoch erheblich schneller ab. Der Grund f"ur diese Beobachtung ist in der Erweiterung
+der Menge unterschiedlicher Aktionen zu suchen. Bei LindEvol-P besteht der Satz der Aktionen aus \verb|divide| mit
+acht verschiedenen Parametern, \verb|statebit| mit 16 verschiedenen Parametern, \verb|flyingseed|, \verb|localseed|,
+\verb|mut-| und \verb|mut+|, also aus insgesamt 28 verschiedenen Aktionen. Bei LindEvol-P/3D gibt es dagegen 18
+verschiedene Parameter f"ur \verb|divide| und 32 verschiedene Parameter f"ur \verb|statebit|, so da"s es insgesamt
+54 verschiedene Aktionen gibt. Die Wahrscheinlichkeit einer Mutation, die zu einem evolution"aren Schritt f"uhrt,
+ist dementsprechend geringer.
+\end{sloppypar}
+
+Im Zeitschritt 20000 (Abb.\ \ref{lnd53d-worlds}c) stehen die zweireihigen Pflanzen bereits in Konkurrenz zu Pflanzenformen,
+die unbeschr"ankt in Y-Richtung wachsen. Durch die Koexistenz dieser beiden Formen kommt es zu einer Zunahme der
+Angriffe. Die unbeschr"ankt in Y-Richtung wachsenden Pflanzen verschwinden jedoch wieder, was zu einem R"uckgang
+der Angriffsh"aufigkeit f"uhrt.
+
+Ein wesentlich st"arkerer Anstieg der Anzahl der Angriffe ist beim Zeitschritt 21000 zu verzeichnen. Abb.\ \ref{lnd53d-worlds}d
+zeigt, da"s hier Pflanzenformen mit genetisch nicht beschr"ankterm Wachstum in X-Richtung entstanden sind.
+Das Wachstum dieser Pflanzen wird durch Kollisionen mit den jeweils rechten Nachbarn gestoppt, was zu den vielen
+beobachteten Angriffen f"uhrt. Die gro"sen, nach rechts unbeschr"ankt wachsenden Pflanzen "uberdecken teilweise mehrere
+Gitterpositionen am Boden der Welt. Daraus resultiert eine Abnahme der Populationsgr"o"se.
+
+Die Anzahl der Angriffe geht zwischen den Zeitschritten 26000 und 28000 wieder deutlich zur"uck. Hier etablieren sich Formen,
+die nur von einem Bereich aus, den sie am Boden der Welt "uberdecken, diagonal in die H"ohe wachsen (s.\ Abb.\ \ref{lnd53d-worlds}e).
+Dadurch werden Kollisionen oberhalb des Bodens der Welt vermieden. Gleichzeitig "uberdecken gro"se Pflanzen bei dieser Wuchsform
+einen ausgedehnteren Bereich des Bodens, wodurch es zu einer Verringerung der Keimpositionen und somit zu einem weiteren R"uckgang
+der Populationsgr"o"se kommt.
+
+
+\begin{figure}[t]
+{
+\scriptsize
+\begin{verbatim}
+   1 (p=   1) [  9]: ******** ******** 1******* ******** -> flyingseed     9e 2f 54
+   4 (p=  14) [ 44]: ******** ******** ******** ******** -> statebit 16    ae f0
+   5 (p=  15) [ 44]: ******** ******** ******** ******** -> statebit 16    f0 f0
+   8 (p=  18) [  3]: ******** ******** ******1* ******** -> divide 15      81 29 cf
+  10 (p=  25) [ 29]: ******** ******** ******** ******** -> statebit 25    bc f9
+  11 (p=  26) [ 44]: ******** ******** ******** ******** -> statebit 30    f9 fe
+  13 (p=  28) [ 15]: ******** ******** *0****** ******** -> divide 14      a8 0e 4e
+  14 (p=  31) [  9]: ******** ******** ******** *****0** -> divide 9       e0 02 49
+  15 (p=  36) [  8]: ******** ******** ******** ******** -> mut-           a2 db
+  16 (p=  37) [ 35]: ******** ******** 0******* ******** -> statebit 3     db 0f e3
+  17 (p=  39) [ 44]: ******** ******** ******** ******** -> statebit 11    e3 6b
+  18 (p=  43) [ 36]: ******** ******** ******** ******** -> statebit 26    c3 fa
+  21 (p=  48) [ 36]: ***1**** ******** ******** ******** -> statebit 5     d5 3c 65
+  28 (p=  59) [ 44]: ******** ******** ******** ******** -> statebit 8     dd e8
+  29 (p=  60) [ 44]: ******** ******** ******** ******** -> statebit 8     e8 68
+  34 (p=  73) [ 44]: ******** **0***** ******** ******** -> statebit 23    d9 15 f7
+  35 (p=  75) [ 39]: ****0**1 ******** ******** ******** -> statebit 30    f7 38 1b fe
+  37 (p=  81) [ 44]: ******** ******** ******** ******** -> statebit 22    a1 f6
+  38 (p=  82) [ 44]: ******** ******** ******** ******** -> statebit 28    f6 7c
+  44 (p=  94) [ 44]: ******** ******** ******** ******** -> statebit 30    a2 7e
+  46 (p=  98) [ 44]: ******** ******** ******** ******** -> statebit 19    90 73
+  52 (p= 113) [ 44]: ******** ******** ******** ******** -> statebit 24    b1 f8
+  57 (p= 118) [ 44]: ******** ******** ******** ******** -> statebit 22    86 f6
+  65 (p= 136) [ 44]: ******** ******** ******** ******** -> statebit 4     98 e4
+  66 (p= 137) [ 44]: ******** ******** ******** ******** -> statebit 0     e4 60
+  69 (p= 141) [ 44]: ******** ******** ******** ******** -> statebit 5     8d e5
+  70 (p= 142) [ 44]: ******** ******** ******** ******** -> statebit 12    e5 6c
+\end{verbatim}
+}
+
+\caption[\textsl{Listing} einer Pflanze aus LindEvol-P/3D]
+{\label{lnd53d-listing}
+\textsl{Listing} einer Pflanze aus dem Zeitschritt 40000 des LindEvol-P/3D-Laufs \runname{m02n000e25l30i}.
+Nur die aktiven Gene sind aufgef"uhrt. Die Zustandsteile der
+Regeln wurden im Interesse der "Ubersichtlichkeit in vier Bl"ocke zu je acht Bits eingeteilt.
+}
+\end{figure}
+
+Mit diesem letzten evolution"aren Schritt ist ein deutliches Absinken der durchschnittlichen Mutationsexponenten
+verbunden. Da dieses Ph"anomen nicht in LindEvol-P beobachtet wurde, wird in Abb.\ \ref{lnd53d-listing} das \textsl{listing}
+des Genoms einer Pflanze aus dem Zeitschritt 40000 gezeigt. Wie in den \textsl{listing} von in LindEvol-P evolvierten
+Genomen (\ref{lnd5-plants}) zeigt sich, da"s nur Gene mit geringer Spezifit"at aktiv sind. Gen 0 veranla"st alle Zellen,
+die einen vertikal oberen Nachbarn (Position 15 bez"uglich der Zellen) haben, zur Produktion fliegender Samen.
+Wenn eine Zelle keinen oberen Nachbarn hat,
+f"uhrt Gen 8 zur Produktion eines solchen Nachbarn, wenn die Zelle einen rechten Nachbarn
+(an Position 9 bez"uglich der Zelle) hat. Bei Zellen, die keinen
+rechten Nachbarn haben, veranla"st Gen 13 die Produktion einer Zelle links oberhalb dieser Zellen (Position 14 bez"uglich der
+Zellen), sofern sich dort nicht bereits eine Nachbarzelle befindet. Gen 14 bewirkt, da"s eine Zelle, die keinen unteren
+Nachbarn (Position 2) besitzt, eine Teilung nach rechts ausf"uhrt. Sind f"ur alle vorausgehenden Gene die Aktivierungsbedingungen
+nicht erf"ullt, wird die in Gen 15 codierte Aktion \verb|mut-| ausgef"uhrt.
+
+Zusammenfassend f"uhrt Gen 8 zu einem H"ohenwachstum im linken Bereich der Pflanze; Gen 13 bewirkt ein in die H"ohe
+orientiertes Wachstum nach links; und Gen 14 veranla"st ein Wachstum nach rechts auf dem Boden der Welt. Daraus ergibt
+sich die aus mehreren Zellreihen bestehende, diagonale Pflanzenform. Zellen im Innern der Pflanze produzieren Samen.
+Die am rechten, oberen Rand der Pflanze gelegenen Zellen f"uhren den Befehl \verb|mut-| aus.
+
+\begin{sloppypar}
+Beim Vergleich von Abb.\ \ref{lnd53d-listing} mit den \textsl{listings} der Entwicklungsprogramme in LindEvol-P
+(Abb.\ \ref{lnd5-plants}) f"allt eine erheblich gr"o"sere Anzahl konstitutiv exprimierter Gene, die \verb|statebit|-Aktionen ausl"osen,
+auf. In allen F"allen werden Bits gesetzt, die in keinem Zustandsteil einer f"ur die Entwicklung der Pflanze
+relevanten Regel spezifiziert sind. Das vermehrte Auftreten solcher Gene in LindEvol-P/3D kann dem Umstand
+zugeschrieben werden, da"s die Menge der bei der Pflanzenentwicklung relevanten Bits im Verh"altnis zur Breite
+des Zellzustands bei LindEvol-P/3D kleiner als bei LindEvol-P ist. Daher ist die Wahrscheinlichkeit, da"s eine
+Mutation an einem solchen Gen Auswirkungen auf die Morphogenese einer Pflanze hat, bei LindEvol-P/3D geringer;
+und eine gr"o"sere Menge solcher Gene kann akkumuliert werden, ohne da"s es zu einer signifikanten Erh"ohung
+des Risikos einer pleiotropen Mutation kommt.
+\end{sloppypar}
+
+
+\section[Zusammenfassung]{Zusammenfassende Bewertung der Ergebnisse \\ von LindEvol-P/3D}
+
+W"ahrend die Entwicklung eines Modells mit dreidimensionaler Topologie mit blockorientierter Genominterpretation
+auf der Basis von LindEvol-B scheiterte, ist sie mit LindEvol-P/3D mit promotororientierter Genominterpretation
+gelungen. Dadurch, da"s bei promotororientierter Genominterpretation die Aktivit"at von Genen nicht durch
+maximal spezifische Minterme, sondern durch Monome beliebiger Spezifit"at reguliert werden kann, ist die Entstehung
+netzwerkartiger regulatorischer Beziehungen zwischen Genen auch bei 32 Bit breiten Zellzust"anden m"oglich.
+
+Abgesehen von der Evolution der aktiven Verringerung der effektiven Mutationsraten wurden bei LindEvol-P/3D keine
+evolution"aren Prozesse beobachtet, die bei LindEvol-P nicht festzustellen waren. Insbesondere entwickelten sich
+keine Pflanzen, die sich in alle drei Dimensionen des Raums ausdehnen. Die Vermutung, da"s solche Formen auftreten
+w"urden, wenn der Simulationslauf \runname{m02n000e25l30i} l"anger fortgesetzt worden w"are, liegt nahe. Ein Indiz
+hierf"ur ist die im Vergleich zu LindEvol-P erheblich langsamere Sukzession evolution"arer Schritte. Es ist
+auch m"oglich, da"s bei einer gr"o"seren Ausdehnung der Welt komplexere Pflanzenformen entstehen. Denkbar ist aber auch,
+da"s die Beschr"ankung auf zwei Dimensionen als emergente Evolution kooperativen Wachstumsverhaltens zu werten ist.
+Wegen des erheblichen Rechenzeitbedarfs f"ur Simulationen vom Umfang des Laufs \runname{m02n000e25l30i}  -- seine Durchf"uhrung
+dauerte l"anger als 24 Stunden auf der Alpha-Plattform (\ref{material-hardware}) -- war die Kl"arung der Ursachen
+f"ur das Ausbleiben der Evolution von Pflanzen mit dreidimensionaler r"aumlicher Ausdehnung durch die Durchf"uhrung
+entsprechender L"aufe jedoch im Rahmen dieser Arbeit nicht m"oglich.
+
+

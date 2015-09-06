@@ -1,0 +1,79 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: Jan T. Kim
+%%Title: 3D-neighborhood,compact:
+%%BoundingBox: 0.0 0.0 256.06602 256.06602
+%%EndComments
+%%BeginProlog
+/plotrect {
+newpath
+0 0 moveto 0 50 lineto 50 50 lineto 50 0 lineto closepath
+gsave 1 setgray fill grestore
+stroke
+dup stringwidth .5 mul 25 exch sub 5 sub exch .5 mul 25 exch sub exch moveto show
+} bind def
+
+/plotbox {
+dup plotrect
+save
+exch
+50 0 translate
+[0.70710678 0.70710678 0.0 1.0 0.0 0.0] concat
+dup plotrect
+exch
+restore
+save
+exch 0 50 translate
+[1.0 0.0 0.70710678 0.70710678 0.0 0.0] concat
+plotrect
+restore
+} bind def
+
+%%EndProlog
+
+save
+2 setlinewidth
+/Courier-Bold findfont 18 scalefont setfont
+1 setlinecap 1 setlinejoin
+% 150 30 translate
+
+save
+70.710678 70.710678 translate
+50 0 translate (04) plotbox
+-35.355339 -35.355339 translate
+-50 0 translate (01) plotbox
+50 0 translate (02) plotbox
+50 0 translate (03) plotbox
+-35.355339 -35.355339 translate
+-50 0 translate (00) plotbox
+restore
+
+0 50 translate
+save
+70.710678 70.710678 translate (10) plotbox
+50 0 translate (11) plotbox
+50 0 translate (12) plotbox
+-35.355339 -35.355339 translate
+-100 0 translate (08) plotbox
+50 0 translate (C) plotbox
+50 0 translate (09) plotbox
+-35.355339 -35.355339 translate
+-100 0 translate (05) plotbox
+50 0 translate (06) plotbox
+50 0 translate (07) plotbox
+restore
+
+0 50 translate
+save
+70.710678 70.710678 translate
+50 0 translate (17) plotbox
+-35.355339 -35.355339 translate
+-50 0 translate (14) plotbox
+50 0 translate (15) plotbox
+50 0 translate (16) plotbox
+-35.355339 -35.355339 translate
+-50 0 translate (13) plotbox
+restore
+
+restore
+
+%%EOF
